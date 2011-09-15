@@ -1,6 +1,7 @@
 <?php
+namespace Markdown\Filter;
 
-class Markdown_Filter_Emphasis extends Markdown_Filter
+class Emphasis extends \Markdown\Filter
 {
     public function filter($text)
     {

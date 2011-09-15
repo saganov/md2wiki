@@ -1,6 +1,7 @@
 <?php
+namespace Markdown\Filter;
 
-class Markdown_Filter_Bulleted extends Markdown_Filter
+class List_Bulleted extends \Markdown\Filter
 {
     public function filter($text)
     {

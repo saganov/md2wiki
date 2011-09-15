@@ -1,6 +1,7 @@
 <?php
+namespace Markdown\Filter;
 
-class Markdown_Filter_Img extends Markdown_Filter
+class Img extends \Markdown\Filter
 {
     public function filter($text)
     {

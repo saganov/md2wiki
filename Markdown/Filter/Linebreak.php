@@ -1,6 +1,7 @@
 <?php
+namespace Markdown\Filter;
 
-class Markdown_Filter_Linebreak extends Markdown_Filter
+class Linebreak extends \Markdown\Filter
 {
     public function filter($text)
     {

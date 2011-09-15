@@ -1,6 +1,7 @@
 <?php
+namespace Markdown\Filter;
 
-class Markdown_Filter_Blockquote extends Markdown_Filter
+class Blockquote extends \Markdown\Filter
 {
     public function filter($text)
     {

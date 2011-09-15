@@ -1,6 +1,7 @@
 <?php
+namespace Markdown\Filter;
 
-class Markdown_Filter_List_Numbered extends Markdown_Filter
+class List_Numbered extends \Markdown\Filter
 {
     public function filter($text)
     {

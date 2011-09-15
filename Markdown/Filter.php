@@ -1,6 +1,7 @@
 <?php
+namespace Markdown;
 
-abstract class Markdown_Filter
+abstract class Filter
 {
     abstract public function filter($text);
 

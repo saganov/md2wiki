@@ -1,6 +1,9 @@
 <?php
+namespace Markdown;
 
-class Markdown_Text
+require __DIR__ . '/Filter.php';
+
+class Text
 {
     protected $_src;
     protected $_html;
@@ -40,7 +43,7 @@ class Markdown_Text
     public function addFilters($filters = null)
     {
         if ($filters === null) {
-            $this->addFilters(Markdown_Filter::all());
+            $this->addFilters(Filter::all());
         }
         else if (is_array($filters)) {
             foreach ($filters as $filter) {
@@ -57,5 +60,15 @@ class Markdown_Text
         }
 
         return $this;
+    }
+
+    public function setFilters(array $filters)
+    {
+        return $this;
+    }
+
+    public function getFilters()
+    {
+        return array();
     }
 }
