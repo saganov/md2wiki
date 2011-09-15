@@ -17,7 +17,7 @@ class Text
         return $obj;
     }
 
-    public function __contruct($src = null)
+    public function __construct($src = null)
     {
         if ($src !== null) {
             $this->setSrc($src);
