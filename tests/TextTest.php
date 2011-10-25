@@ -1,9 +1,7 @@
 <?php
-namespace Markdown;
-
 require_once __DIR__ . '/../Markdown/Text.php';
 
-class TextTest extends \PHPUnit_Framework_TestCase
+class TextTest extends PHPUnit_Framework_TestCase
 {
     protected static $_md   = array();
     protected static $_html = array();
@@ -25,52 +23,32 @@ class TextTest extends \PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $text = new Text(self::$_md['syntax']);
+        $text = new Markdown_Text(self::$_md['syntax']);
         $this->assertEquals(self::$_md['syntax'], $text->getSource());
-        $this->assertEquals(Filter::getDefaultFilters(), $text->getFilters());
-
-        $filters = array(
-            new Filter\Hr(),
-            new Filter\Img()
-        );
-        $text = new Text(self::$_md['syntax'], $filters);
-        $this->assertEquals($filters, $text->getFilters());
     }
 
     public function testSetGetSource()
     {
-        $text = new Text(self::$_md['syntax']);
-        $this->assertEquals(self::$_md['syntax'], $text->getSource());
+        $text = new Markdown_Text();
         $text->setSource(self::$_md['basics']);
         $this->assertEquals(self::$_md['basics'], $text->getSource());
     }
 
-    public function testSetFilters()
+    /**
+     * @todo atomic tests for each element (text on input, html on output)
+     */
+    public function testGetHtml()
     {
-        Filter::useOriginalFilter(false);
-
-        $text = new Text('');
-
-        $filters = array(
-            new Filter\Hr(),
-            new Filter\Img()
+        $text = new Markdown_Text(self::$_md['syntax']);
+        $this->assertEquals(
+            self::$_html['syntax'],
+            (string) $text,
+            'Resulting html does not match produced by original Markdown.pl 1.0.1'
         );
-        $text->setFilters($filters);
-        $this->assertEquals($filters, $text->getFilters());
-
-        $newFilter = new Filter\Blockquote();
-        $text->appendFilter($newFilter);
-        $this->assertEquals(array_merge($filters, $newFilter), $text->getFilters());
-
-        $text->setFilters($filters);
-        $text->prependFilter($newFilter);
-        $this->assertEquals(array_merge($newFilter, $filters), $text->getFilters());
-    }
-
-    public function testTransformation()
-    {
-        $text = new Text(self::$_md['syntax']);
-        $this->assertEquals(self::$_md['syntax'], (string) $text);
-        $this->assertEquals(self::$_md['syntax'], $text->getHtml());
+        $this->assertEquals(
+            self::$_html['syntax'],
+            $text->getHtml(),
+            'Resulting html does not match produced by original Markdown.pl 1.0.1'
+        );
     }
 }
