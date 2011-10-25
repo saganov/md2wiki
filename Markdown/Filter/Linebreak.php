@@ -2,7 +2,7 @@
 
 class Markdown_Filter_Linebreak extends Markdown_Filter
 {
-    public function filter($text)
+    public function transform($text)
     {
         return $text;
     }

@@ -2,7 +2,7 @@
 
 class Markdown_Filter_Hr extends Markdown_Filter
 {
-    public function filter($text)
+    public function transform($text)
     {
         return $text;
     }

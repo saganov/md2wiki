@@ -1,61 +1,46 @@
 <?php
 
+require_once __DIR__ . '/Filter.php';
+
 class Markdown_Text
 {
-    protected $_src;
+    protected $_source;
     protected $_html;
-    protected $_filters = array();
 
-    public static function factory($src = null)
+    public function __construct($source = '')
     {
-        $obj = new self($src);
-        $obj->addFilters();
-
-        return $obj;
-    }
-
-    public function __construct($src = null)
-    {
-        if ($src !== null) {
-            $this->setSrc($src);
-        }
+        $this->setSource($source);
     }
 
     public function __toString()
     {
+        return $this->getHtml();
+    }
+
+    public function getSource()
+    {
+        return $this->_source;
+    }
+
+    public function setSource($source)
+    {
+        $source = (string) $source;
+
+        // do not flush html cache if nothing is changed
+        if ($source !== $this->_source) {
+            $this->_source = $source;
+            $this->_html   = null;
+        }
+
+        return $this;
+    }
+
+    public function getHtml()
+    {
+        if ($this->_html === null) {
+            $this->_html = Markdown_Filter::run($this->getSource());
+        }
+
         return $this->_html;
-    }
-
-    public function getSrc()
-    {
-        return $this->_src;
-    }
-
-    public function setSrc($src)
-    {
-        $this->_src = (string) $src;
-        return $this;
-    }
-
-    public function addFilters($filters = null)
-    {
-        if ($filters === null) {
-            $this->addFilters(Markdown_Filter::all());
-        }
-        else if (is_array($filters)) {
-            foreach ($filters as $filter) {
-                $this->addFilters($filter);
-            }
-        }
-        else if ($filters instanceof Markdown_Filter) {
-            $this->_filters[get_class($filters)] = $filters;
-        }
-        else {
-            throw new InvalidArgumentException(
-                'Filter must be an instance of Markdown_Filter.'
-            );
-        }
-
-        return $this;
     }
 }

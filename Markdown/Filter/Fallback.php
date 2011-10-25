@@ -1,6 +1,6 @@
 <?php
 
-class Markdown_Filter_Paragraph extends Markdown_Filter
+class Markdown_Filter_Fallback extends Markdown_Filter
 {
     public function transform($text)
     {
