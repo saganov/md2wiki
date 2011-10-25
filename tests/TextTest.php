@@ -42,12 +42,12 @@ class TextTest extends PHPUnit_Framework_TestCase
         $text = new Markdown_Text(self::$_md['syntax']);
         $this->assertEquals(
             self::$_html['syntax'],
-            (string) $text,
+            $text->getHtml(),
             'Resulting html does not match produced by original Markdown.pl 1.0.1'
         );
         $this->assertEquals(
             self::$_html['syntax'],
-            $text->getHtml(),
+            (string) $text,
             'Resulting html does not match produced by original Markdown.pl 1.0.1'
         );
     }
