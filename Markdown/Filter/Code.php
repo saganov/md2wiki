@@ -1,7 +1,6 @@
 <?php
-namespace Markdown\Filter;
 
-class Code extends \Markdown\Filter
+class Markdown_Filter_Code extends Markdown_Filter
 {
     public function filter($text)
     {

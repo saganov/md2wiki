@@ -1,7 +1,6 @@
 <?php
-namespace Markdown\Filter;
 
-class Paragraph extends \Markdown\Filter
+class Markdown_Filter_Paragraph extends Markdown_Filter
 {
     public function filter($text)
     {

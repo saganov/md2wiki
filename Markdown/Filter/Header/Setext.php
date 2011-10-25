@@ -1,7 +1,6 @@
 <?php
-namespace Markdown\Filter;
 
-class Header_Setext extends \Markdown\Filter
+class Markdown_Filter_Header_Setext extends Markdown_Filter
 {
     public function filter($text)
     {
