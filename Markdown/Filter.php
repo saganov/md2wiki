@@ -21,13 +21,106 @@
  * THE SOFTWARE.
  */
 
-
+/**
+ * Superclass of all filters.
+ *
+ * Provides static methods to configure and use filtering system.
+ *
+ * @package markdown-oo-php
+ * @subpackage Filter
+ * @author Max Tsepkov <max@garygolden.me> http://garygolden.me
+ * @version 0.9
+ *
+ */
 abstract class Markdown_Filter
 {
-    protected static $_defaultFilters;
-
+    /**
+     * Flag indicates whether to append Markdown_Filter_Fallback to filter list.
+     *
+     * @var bool
+     */
     protected static $_useFallbackFilter = true;
 
+    /**
+     *
+     * @var array
+     */
+    protected static $_defaultFilters = array(
+        'Blockquote',
+        'Code',
+        'Emphasis',
+        'HeaderAtx',
+        'HeaderSetext',
+        'Hr',
+        'Img',
+        'Linebreak',
+        'ListBulleted',
+        'ListNumbered',
+        'Paragraph'
+    );
+
+    /**
+     * Lookup Markdown_Filter_{$filtername} class and return its instance.
+     * $filtername is lowercased and capitalized prior to loading.
+     *
+     * @throws InvalidArgumentException
+     * @param string $filtername
+     * @return Markdown_Filter
+     */
+    public static function factory($filtername)
+    {
+        if (is_string($filtername) && ctype_alnum($filtername)) {
+            $file  = __DIR__ . '/Filter/' . ucfirst(strtolower($filtername)) . '.php';
+            $class = 'Markdown_Filter_'   . ucfirst(strtolower($filtername));
+
+            if (is_readable($file)) {
+                require_once $file;
+
+                if (class_exists($class)) {
+                    return new $class;
+                }
+                else {
+                    throw new InvalidArgumentException(
+                        'Could not find class ' . $class
+                    );
+                }
+            }
+            else {
+                throw new InvalidArgumentException($file . ' is not readable');
+            }
+        }
+        else {
+            throw new InvalidArgumentException(sprintf(
+                '$filtername must be an alphanumeric string, <%s> given.',
+                gettype($filtername)
+            ));
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getDefaultFilters()
+    {
+        return self::$_defaultFilters;
+    }
+
+    /**
+     * @param array $filters
+     * @return Markdown_Filter
+     */
+    public static function setDefaultFilters(array $filters)
+    {
+        self::$_defaultFilters = $filters;
+    }
+
+    /**
+     * Enable/disable original markdown perl script usage.
+     * Returns current settings if called without parameter.
+     *
+     * @param bool $flag optional
+     * @return boolean
+     */
     public static function useFallbackFilter($flag = null)
     {
         if ($flag === null) {
@@ -39,78 +132,41 @@ abstract class Markdown_Filter
         }
     }
 
-    public static function getDefaultFilters()
+    /**
+     * Pass given $text through $filters chain and return result.
+     * Use default filters in no $filters given.
+     *
+     * @param string $text
+     * @param array $filters optional
+     * @return string
+     */
+    public static function run($text, array $filters = null)
     {
-        if (!is_array(self::$_defaultFilters)) {
-
-            // load default filter set
-            require_once __DIR__ . '/Filter/Blockquote.php';
-            self::$_defaultFilters[] = new Markdown_Filter_Blockquote();
-
-            require_once __DIR__ . '/Filter/Code.php';
-            self::$_defaultFilters[] = new Markdown_Filter_Code();
-
-            require_once __DIR__ . '/Filter/Emphasis.php';
-            self::$_defaultFilters[] = new Markdown_Filter_Emphasis();
-
-            require_once __DIR__ . '/Filter/HeaderAtx.php';
-            self::$_defaultFilters[] = new Markdown_Filter_HeaderAtx();
-
-            require_once __DIR__ . '/Filter/HeaderSetext.php';
-            self::$_defaultFilters[] = new Markdown_Filter_HeaderSetext();
-
-            require_once __DIR__ . '/Filter/Hr.php';
-            self::$_defaultFilters[] = new Markdown_Filter_Hr();
-
-            require_once __DIR__ . '/Filter/Img.php';
-            self::$_defaultFilters[] = new Markdown_Filter_Img();
-
-            require_once __DIR__ . '/Filter/Linebreak.php';
-            self::$_defaultFilters[] = new Markdown_Filter_Linebreak();
-
-            require_once __DIR__ . '/Filter/ListBulleted.php';
-            self::$_defaultFilters[] = new Markdown_Filter_ListBulleted();
-
-            require_once __DIR__ . '/Filter/ListNumbered.php';
-            self::$_defaultFilters[] = new Markdown_Filter_ListNumbered();
-
-            require_once __DIR__ . '/Filter/Paragraph.php';
-            self::$_defaultFilters[] = new Markdown_Filter_Paragraph();
-        }
-
-        return self::$_defaultFilters;
-    }
-
-    public static function setDefaultFilters(array $filters)
-    {
-        foreach ($filters as $filter) {
-            if (!$filter instanceof self) {
-                throw new InvalidArgumentException(
-                    'Invalid filter. Must be an instance of ' . __CLASS__
-                );
+        if ($filters === null) {
+            $filters = self::getDefaultFilters();
+            if (self::useFallbackFilter()) {
+                $filters[] = self::factory('Fallback');
             }
         }
 
-        self::$_defaultFilters = $filters;
-    }
+        foreach ($filters as $filter) {
+            if ($filter instanceof Markdown_Filter) {
+                // do nothing
+            }
+            elseif (is_string($filter)) {
+                $filter = self::factory($filter);
+            }
+            else {
+                throw new InvalidArgumentException(
+                    '$filters must be an array which elements ' .
+                    'is either a string or Markdown_Filter'
+                );
+            }
 
-    public static function run($text)
-    {
-        $html = $text;
-
-        $filters = self::getDefaultFilters();
-
-        // fallback filter
-        if (self::useFallbackFilter()) {
-            require_once __DIR__ . '/Filter/Fallback.php';
-            $filters[] = new Markdown_Filter_Fallback();
+            $text = $filter->transform($text);
         }
 
-        foreach($filters as $filter) {
-            $html = $filter->transform($html);
-        }
-
-        return $html;
+        return $text;
     }
 
     abstract public function transform($text);

@@ -26,9 +26,58 @@ require_once __DIR__ . '/../Markdown/Text.php';
 
 class FilterTest extends PHPUnit_Framework_TestCase
 {
-    public function testUseFallbackFilter()
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testFactoryNonAlnum()
     {
-        // enabled by default
+        Markdown_Filter::factory('/etc/passwd');
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testFactoryNonExistent()
+    {
+        Markdown_Filter::factory('suchfilterdoesntexists');
+    }
+
+    public function testFactory()
+    {
+        $this->assertInstanceOf('Markdown_Filter', Markdown_Filter::factory('Hr'));
+    }
+
+    public function testGetDefaultFiltersNonEmpty()
+    {
+        $this->assertNotEmpty(Markdown_Filter::getDefaultFilters());
+    }
+
+    /**
+     * @depends testGetDefaultFiltersNonEmpty
+     */
+    public function testSetDefaultFilters()
+    {
+        $filters = array('Linebreak', 'Hr');
+        Markdown_Filter::setDefaultFilters($filters);
+        $this->assertEquals(Markdown_Filter::getDefaultFilters(), $filters);
+    }
+
+    public function testUseFallbackFilterIsEnabledByDefault()
+    {
         $this->assertTrue(Markdown_Filter::useFallbackFilter());
+    }
+
+    public function testUseFallbackFilterCanBeDisabled()
+    {
+        Markdown_Filter::useFallbackFilter(false);
+        $this->assertFalse(Markdown_Filter::useFallbackFilter());
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testRunWithInvalidFiltersParameter()
+    {
+        Markdown_Filter::run('', array('Filter', 1, false, true));
     }
 }
