@@ -21,6 +21,7 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../Filter.php';
 
 /**
  * This filter spawns original Markdown perl script as a subprocess,

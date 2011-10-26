@@ -21,6 +21,7 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../Filter.php';
 
 class Markdown_Filter_Paragraph extends Markdown_Filter
 {
