@@ -61,7 +61,6 @@ abstract class Markdown_Filter
 
     /**
      * Lookup Markdown_Filter_{$filtername} class and return its instance.
-     * $filtername is lowercased and capitalized prior to loading.
      *
      * @throws InvalidArgumentException
      * @param string $filtername
@@ -70,8 +69,8 @@ abstract class Markdown_Filter
     public static function factory($filtername)
     {
         if (is_string($filtername) && ctype_alnum($filtername)) {
-            $file  = __DIR__ . '/Filter/' . ucfirst(strtolower($filtername)) . '.php';
-            $class = 'Markdown_Filter_'   . ucfirst(strtolower($filtername));
+            $file  = __DIR__ . '/Filter/' . $filtername . '.php';
+            $class = 'Markdown_Filter_'   . $filtername;
 
             if (is_readable($file)) {
                 require_once $file;
