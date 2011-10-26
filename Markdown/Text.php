@@ -21,17 +21,37 @@
  * THE SOFTWARE.
  */
 
-
 require_once __DIR__ . '/Filter.php';
 
+/**
+ * Represents a piece of text which can be both markdown and html.
+ *
+ * @package markdown-oo-php
+ * @subpackage Text
+ * @author Max Tsepkov <max@garygolden.me> http://garygolden.me
+ * @version 0.9
+ */
 class Markdown_Text
 {
-    protected $_source;
+    /**
+     *
+     * @var string
+     */
+    protected $_markdown;
+
+    /**
+     *
+     * @var string
+     */
     protected $_html;
 
-    public function __construct($source = '')
+    /**
+     *
+     * @param string $markdown
+     */
+    public function __construct($markdown = '')
     {
-        $this->setSource($source);
+        $this->setMarkdown($markdown);
     }
 
     public function __toString()
@@ -39,30 +59,43 @@ class Markdown_Text
         return $this->getHtml();
     }
 
-    public function getSource()
-    {
-        return $this->_source;
-    }
-
-    public function setSource($source)
-    {
-        $source = (string) $source;
-
-        // do not flush html cache if nothing is changed
-        if ($source !== $this->_source) {
-            $this->_source = $source;
-            $this->_html   = null;
-        }
-
-        return $this;
-    }
-
+    /**
+     *
+     * @return string
+     */
     public function getHtml()
     {
         if ($this->_html === null) {
-            $this->_html = Markdown_Filter::run($this->getSource());
+            $this->_html = Markdown_Filter::run($this->getMarkdown());
         }
 
         return $this->_html;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getMarkdown()
+    {
+        return $this->_markdown;
+    }
+
+    /**
+     *
+     * @param string $markdown
+     * @return Markdown_Text
+     */
+    public function setMarkdown($markdown)
+    {
+        $markdown = (string) $markdown;
+
+        // do not flush html cache if nothing is changed
+        if ($markdown !== $this->_markdown) {
+            $this->_markdown = $markdown;
+            $this->_html     = null;
+        }
+
+        return $this;
     }
 }

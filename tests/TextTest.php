@@ -46,14 +46,14 @@ class TextTest extends PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $text = new Markdown_Text(self::$_md['syntax']);
-        $this->assertEquals(self::$_md['syntax'], $text->getSource());
+        $this->assertEquals(self::$_md['syntax'], $text->getMarkdown());
     }
 
-    public function testSetGetSource()
+    public function testSetGetMarkdown()
     {
         $text = new Markdown_Text();
-        $text->setSource(self::$_md['basics']);
-        $this->assertEquals(self::$_md['basics'], $text->getSource());
+        $text->setMarkdown(self::$_md['basics']);
+        $this->assertEquals(self::$_md['basics'], $text->getMarkdown());
     }
 
     /**
