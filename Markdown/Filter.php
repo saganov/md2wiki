@@ -60,6 +60,16 @@ abstract class Markdown_Filter
     );
 
     /**
+     * List of characters which copies as is after \ char.
+     *
+     * @var array
+     */
+    protected static $_escapableChars = array(
+        '\\', '`', '*', '_', '{', '}', '[', ']',
+        '(' , ')', '#', '+', '-', '.', '!'
+	);
+
+    /**
      * Lookup Markdown_Filter_{$filtername} class and return its instance.
      *
      * @throws InvalidArgumentException
