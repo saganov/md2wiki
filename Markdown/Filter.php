@@ -39,7 +39,7 @@ abstract class Markdown_Filter
      *
      * @var bool
      */
-    protected static $_useFallbackFilter = true;
+    protected static $_useFallbackFilter = false;
 
     /**
      *
