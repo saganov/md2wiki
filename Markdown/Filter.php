@@ -49,6 +49,7 @@ abstract class Markdown_Filter
         'Blockquote',
         'Code',
         'Emphasis',
+        'Entities',
         'HeaderAtx',
         'HeaderSetext',
         'Hr',
