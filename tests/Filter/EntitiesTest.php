@@ -34,6 +34,12 @@ class FilterEntitiesTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('<head>', $f->transform('<head>'));
     }
 
+    public function testCodeSpan()
+    {
+        $f = new Markdown_Filter_Entities();
+        $this->assertEquals('foo\\`<bar>`', $f->transform('foo\\`<bar>`'));
+    }
+
     public function testCommon()
     {
         $f = new Markdown_Filter_Entities();

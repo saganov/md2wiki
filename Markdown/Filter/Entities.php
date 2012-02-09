@@ -44,7 +44,7 @@ class Markdown_Filter_Entities extends Markdown_Filter
         // always escape within code blocks and spans
         $text = preg_replace_callback(
             array('/^( {4,}|\t+).*?$/mu',
-                  '/`.*?`/u'
+                  '/(?<!\\\\)`.*?(?<!\\\\)`/u'
             ),
             function ($match) {
                 return htmlspecialchars($match[0], ENT_NOQUOTES);
