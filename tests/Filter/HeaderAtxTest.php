@@ -21,39 +21,33 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
+require_once __DIR__ . '/../../Markdown/Filter/HeaderAtx.php';
 
-/**
- * Translates atx-style headers to <h#>
- *
- * Rules from markdown definition:
- *
- *   *  use 1-6 hash characters at the start of the line
- *   *  number of opening hashes determines the header level
- *   *  closing hashes don’t even need to match the number of hashes used to open
- *
- * @author Igor Gaponov <jiminy96@gmail.com>
- *
- */
-class Markdown_Filter_HeaderAtx extends Markdown_Filter
+class FilterHeaderAtxTest extends PHPUnit_Framework_TestCase
 {
-    public function transform($text)
+    public function testCommon()
     {
-        $text = preg_replace_callback('/^(?P<level>\#{1,6}) *(?P<text>.+?) *\#*\n+/m',
-            array($this, 'transformHeaderAtx'), $text);
-        return $text;
-    }
+        $f = new Markdown_Filter_HeaderAtx();
+        $this->assertEquals(
+'This text is not header.
 
-    /**
-     * Takes a signle markdown header
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformHeaderAtx($values)
-    {
-        $level = min(strlen($values['level']), 6);
-        return sprintf("<h%1\$d>%2\$s</h%1\$d>\n\n", $level, $values['text']);
+<h1>This is first-level header</h1>
+
+<h4>This is fourth-level header</h4>
+
+<h6>#This is sixth-level header</h6>
+
+not header',
+        $f->transform(
+'This text is not header.
+
+# This is first-level header
+
+####This is fourth-level header     #######
+
+#######This is sixth-level header #
+
+not header'
+    ));
     }
 }
