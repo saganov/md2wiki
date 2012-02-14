@@ -21,39 +21,30 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
+require_once __DIR__ . '/../../Markdown/Filter/HeaderSetext.php';
 
-/**
- * Translates setext-style headers to <h#>
- *
- * Rules from markdown definition:
- *
- *   *  first-level headers are "underlined" using =
- *   *  second-level headers are "underlined" using -
- *   *  any number of underlining =’s or -’s will work.
- *
- * @author Igor Gaponov <jiminy96@gmail.com>
- *
- */
-class Markdown_Filter_HeaderSetext extends Markdown_Filter
+class FilterHeaderSetextTest extends PHPUnit_Framework_TestCase
 {
-    public function transform($text)
+    public function testCommon()
     {
-        $text = preg_replace_callback('/^(?P<text>.+) *\n(?P<level>=|-)+ *\n+/m',
-            array($this, 'transformHeaderSetext'), $text);
-        return $text;
-    }
+        $f = new Markdown_Filter_HeaderSetext();
+        $this->assertEquals(
+'This text is not header.
 
-    /**
-     * Takes a signle markdown header
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformHeaderSetext($values)
-    {
-        $level = $values['level'] == '=' ? 1 : 2;
-        return sprintf("<h%1\$d>%2\$s</h%1\$d>\n\n", $level, $values['text']);
+<h1>This is first-level header</h1>
+
+<h2>This is second-level header</h2>
+
+not header',
+        $f->transform(
+'This text is not header.
+
+This is first-level header
+========
+This is second-level header
+---------------------------------
+
+not header'
+    ));
     }
 }
