@@ -21,38 +21,49 @@
  * THE SOFTWARE.
  */
 
-/**
- * Implements <em> and <strong>
- *
- * Rules form markdown definition:
- *
- *   *  to produce <em> a string must be surrounded with * or _
- *   *  double * or _ used to produce <strong>
- *   *  if * and _ surrounded by spaces, it's treated as literals
- *   *  * and _ are backslash (/) escapeable
- *
- */
+require_once __DIR__ . '/../../Markdown/Filter/Emphasis.php';
 
-require_once __DIR__ . '/../Filter.php';
-
-class Markdown_Filter_Emphasis extends Markdown_Filter
+class FilterBlockquoteTest extends PHPUnit_Framework_TestCase
 {
-    public function transform($text)
+    public function testCommon()
     {
-        // strong
-        $text = preg_replace(
-            '/((?<!\\\\)[*_]){2}(.*?)((?<!\\\\)[*_]){2}/s',
-            '<strong>$2</strong>',
-        $text
-        );
+        $f = new Markdown_Filter_Emphasis();
+        $this->assertEquals(
+'This is plain text.
 
-        // emphasis
-        $text = preg_replace(
-            '/(?<!\\\\)[*_](?!\s)(.*?)(?<!\\\\)[*_]/s',
-            '<em>$1</em>',
-            $text
-        );
+This is <em>empasis</em> word.
+Another <em>empasis</em> word.
+<em>Whole sentense is emphasis</em>
+<em>Even
+multiline works!</em>
 
-        return $text;
+I can also do <strong>bolded</strong> words.
+<strong>Really</strong>, markdown is amazing!
+
+All this can be done with * and _ characters, yes * and _
+
+Just surround word like this \\*word\\* or \\_word\\_ for <em>.
+Or \\*\\*word\\*\\* or \\_\\_word\\_\\_ for <strong>
+',
+
+        $f->transform(
+'This is plain text.
+
+This is *empasis* word.
+Another _empasis_ word.
+_Whole sentense is emphasis_
+_Even
+multiline works!_
+
+I can also do **bolded** words.
+__Really__, markdown is amazing!
+
+All this can be done with * and _ characters, yes * and _
+
+Just surround word like this \\*word\\* or \\_word\\_ for <em>.
+Or \\*\\*word\\*\\* or \\_\\_word\\_\\_ for <strong>
+'
+    ));
+
     }
 }
