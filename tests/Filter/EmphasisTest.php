@@ -21,29 +21,49 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
+require_once __DIR__ . '/../../Markdown/Filter/Emphasis.php';
 
-/**
- * Translates emphasis to <em> or <strong>
- *
- * Rules from markdown definition:
- *
- *   *  text wrapped with one * or _ will be wrapped with an HTML <em> tag
- *   *  double *’s or _’s will be wrapped with an HTML <strong> tag
- *   *  the same character must be used to open and close an emphasis span
- *   *  emphasis can be used in the middle of a word
- *   *  if an * or _ is surrounded by spaces,
- *      it’ll be treated as a literal asterisk or underscore
- *
- * @author Igor Gaponov <jiminy96@gmail.com>
- *
- */
-class Markdown_Filter_Emphasis extends Markdown_Filter
+class FilterEmphasisTest extends PHPUnit_Framework_TestCase
 {
-    public function transform($text)
+    public function testCommon()
     {
-        $text = preg_replace('/(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)\1/m', '<strong>\2</strong>', $text);
-        $text = preg_replace('/(\*|_)(?=\S)(.+?)(?<=\S)\1/m', '<em>\2</em>', $text);
-        return $text;
+        $f = new Markdown_Filter_Emphasis();
+        $this->assertEquals(
+'* no emphasis *
+
+<em>single asterisks</em>
+
+<em>single underscores</em>
+
+<strong>double asterisks</strong>
+
+<strong>double underscores</strong>
+
+<strong><em>triple asterisks</em></strong>
+
+<strong><em>triple underscores</em></strong>
+
+un<em>frigging</em>believable
+
+_ no emphasis _',
+        $f->transform(
+'* no emphasis *
+
+*single asterisks*
+
+_single underscores_
+
+**double asterisks**
+
+__double underscores__
+
+***triple asterisks***
+
+___triple underscores___
+
+un*frigging*believable
+
+_ no emphasis _'
+    ));
     }
 }
