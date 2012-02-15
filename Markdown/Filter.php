@@ -71,6 +71,13 @@ abstract class Markdown_Filter
 	);
 
     /**
+     * Width of a tab for code blocks
+     *
+     * @var int
+     */
+    protected static $_tabWidth = 4;
+
+    /**
      * Lookup Markdown_Filter_{$filtername} class and return its instance.
      *
      * @throws InvalidArgumentException
@@ -177,6 +184,18 @@ abstract class Markdown_Filter
         }
 
         return $text;
+    }
+
+    /**
+     * Remove one level of indentation
+     *
+     * @static
+     * @param string
+     * @return string
+     */
+    protected static function outdent($text)
+    {
+        return preg_replace('/^(\t| {1,' . self::$_tabWidth . '})/m', '', $text);
     }
 
     abstract public function transform($text);
