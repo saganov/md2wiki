@@ -57,7 +57,8 @@ abstract class Markdown_Filter
         'Linebreak',
         'ListBulleted',
         'ListNumbered',
-        'Paragraph'
+        'Paragraph',
+        'Unescape'
     );
 
     /**
