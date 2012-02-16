@@ -23,7 +23,7 @@
 
 require_once __DIR__ . '/../../Markdown/Filter/Emphasis.php';
 
-class FilterBlockquoteTest extends PHPUnit_Framework_TestCase
+class FilterEmphasisTest extends PHPUnit_Framework_TestCase
 {
     public function testCommon()
     {
@@ -63,6 +63,45 @@ All this can be done with * and _ characters, yes * and _
 Just surround word like this \\*word\\* or \\_word\\_ for <em>.
 Or \\*\\*word\\*\\* or \\_\\_word\\_\\_ for <strong>
 '
+    ));
+
+        $this->assertEquals(
+'* no emphasis *
+
+<em>single asterisks</em>
+
+<em>single underscores</em>
+
+<strong>double asterisks</strong>
+
+<strong>double underscores</strong>
+
+<strong><em>triple asterisks</em></strong>
+
+<strong><em>triple underscores</em></strong>
+
+un<em>frigging</em>believable
+
+_ no emphasis _',
+
+        $f->transform(
+'* no emphasis *
+
+*single asterisks*
+
+_single underscores_
+
+**double asterisks**
+
+__double underscores__
+
+***triple asterisks***
+
+___triple underscores___
+
+un*frigging*believable
+
+_ no emphasis _'
     ));
 
     }

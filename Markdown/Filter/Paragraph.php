@@ -23,10 +23,28 @@
 
 require_once __DIR__ . '/../Filter.php';
 
+/**
+ * Translates paragraphs to <p>
+ *
+ * Rules from markdown definition:
+ *
+ *   *  paragraph is simply one or more consecutive lines of text,
+ *      separated by one or more blank lines
+ *
+ * @author Igor Gaponov <jiminy96@gmail.com>
+ *
+ */
 class Markdown_Filter_Paragraph extends Markdown_Filter
 {
     public function transform($text)
     {
+        $text = trim($text, "\n");
+        $paragraphs = preg_split('/\n{2,}/', $text, -1, PREG_SPLIT_NO_EMPTY);
+        $htmlBlocks = array();
+        foreach($paragraphs as $paragraph) {
+            $htmlBlocks[] = sprintf("<p>%s</p>", ltrim($paragraph, " \t"));
+        }
+        $text = implode("\n\n", $htmlBlocks);
         return $text;
     }
 }

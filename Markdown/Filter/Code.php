@@ -23,10 +23,69 @@
 
 require_once __DIR__ . '/../Filter.php';
 
+/**
+ * Translates code blocks to <pre><code>
+ *
+ * Rules from markdown definition:
+ *
+ *   *  code block is indicated by indent at least 4 spaces or 1 tab
+ *   *  one level of indentation is removed from each line of the code block
+ *   *  code block continues until it reaches a line that is not indented
+ *   *  within a code block, ampersands (&) and angle brackets (< and >)
+ *      are automatically converted into HTML entities
+ *
+ * Translates code spans to <code>
+ *
+ * Rules from markdown definition:
+ *
+ *   * span of code is indicated by backtick quotes (`)
+ *   * to include one or more backticks the delimiters must
+ *     contain multiple backticks
+ *
+ * @author Igor Gaponov <jiminy96@gmail.com>
+ *
+ */
 class Markdown_Filter_Code extends Markdown_Filter
 {
     public function transform($text)
     {
+        $text = preg_replace_callback(
+            sprintf('/(?:\n\n|\A\n?)(?P<code>(?>( {%1$d}|\t).*\n+)+)((?=^ {0,%1$d}\S)|\Z)/m', self::$_tabWidth),
+            array($this, 'transformCodeBlock'), $text);
+        $text = preg_replace_callback('/(?<!\\\)(`+)(?!`)(?P<code>.+?)(?<!`)\1(?!`)/m',
+            array($this, 'transformCode'), $text);
         return $text;
+    }
+
+    /**
+     * Takes a signle markdown code block
+     * and returns its html equivalent.
+     *
+     * @param array
+     * @return string
+     */
+    protected function transformCodeBlock($values)
+    {
+        $code = self::outdent($values['code']);
+        $code = htmlspecialchars($code, ENT_NOQUOTES);
+        $code = ltrim($code, "\n");
+        $code = rtrim($code);
+
+        return sprintf("\n\n<pre><code>%s\n</code></pre>\n\n", $code);
+    }
+
+    /**
+     * Takes a signle markdown code span
+     * and returns its html equivalent.
+     *
+     * @param array
+     * @return string
+     */
+    protected function transformCode($values)
+    {
+        $code = trim($values['code'], " \t");
+        $code = htmlspecialchars($code, ENT_NOQUOTES);
+
+        return sprintf("<code>%s</code>", $code);
     }
 }

@@ -21,26 +21,20 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
+require_once __DIR__ . '/../../Markdown/Filter/Linebreak.php';
 
-/**
- * Translates horizontal rules to <hr>
- *
- * Rules from markdown definition:
- *
- *   *  horizontal rule produced by placing three or more
- *      hyphens, asterisks, or underscores on a line by themselves
- *   *  spaces can be used between the hyphens or asterisks
- *
- * @author Igor Gaponov <jiminy96@gmail.com>
- *
- */
-class Markdown_Filter_Hr extends Markdown_Filter
+class FilterLinebreakTest extends PHPUnit_Framework_TestCase
 {
-    public function transform($text)
+    public function testCommon()
     {
-        return preg_replace(
-            '/^ {0,3}([*-_])(?> {0,2}\1){2,} *$/m',
-            "\n<hr />\n", $text);
+        $f = new Markdown_Filter_Linebreak();
+        $this->assertEquals(
+'text<br />with
+
+linebreaks<br />.',
+        $f->transform(
+"text  \nwith\n
+linebreaks  \n."
+    ));
     }
 }

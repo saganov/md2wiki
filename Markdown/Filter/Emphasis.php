@@ -21,35 +21,39 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../Filter.php';
+
 /**
  * Implements <em> and <strong>
  *
- * Rules form markdown definition:
+ * Rules from markdown definition:
  *
- *   *  to produce <em> a string must be surrounded with * or _
- *   *  double * or _ used to produce <strong>
- *   *  if * and _ surrounded by spaces, it's treated as literals
- *   *  * and _ are backslash (/) escapeable
+ *   *  text wrapped with one * or _ will be wrapped with an HTML <em> tag
+ *   *  double *’s or _’s will be wrapped with an HTML <strong> tag
+ *   *  the same character must be used to open and close an emphasis span
+ *   *  emphasis can be used in the middle of a word
+ *   *  if an * or _ is surrounded by spaces,
+ *      it’ll be treated as a literal asterisk or underscore
+ *
+ * @author Max Tsepkov <max@garygolden.me>
+ * @author Igor Gaponov <jiminy96@gmail.com>
  *
  */
-
-require_once __DIR__ . '/../Filter.php';
-
 class Markdown_Filter_Emphasis extends Markdown_Filter
 {
     public function transform($text)
     {
         // strong
         $text = preg_replace(
-            '/((?<!\\\\)[*_]){2}(.*?)((?<!\\\\)[*_]){2}/s',
+            '/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/s',
             '<strong>$2</strong>',
         $text
         );
 
         // emphasis
         $text = preg_replace(
-            '/(?<!\\\\)[*_](?!\s)(.*?)(?<!\\\\)[*_]/s',
-            '<em>$1</em>',
+            '/(?<!\\\\)([*_])(?!\s)(.+?)(?<![\\\\\s])\1/s',
+            '<em>$2</em>',
             $text
         );
 

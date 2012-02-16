@@ -23,10 +23,21 @@
 
 require_once __DIR__ . '/../Filter.php';
 
+/**
+ * Translates linebreaks to <br />
+ *
+ * Rules from markdown definition:
+ *
+ *   *  linebreak is indicated by two or more spaces and (\n)
+ *      at the end of line
+ *
+ * @author Igor Gaponov <jiminy96@gmail.com>
+ *
+ */
 class Markdown_Filter_Linebreak extends Markdown_Filter
 {
     public function transform($text)
     {
-        return $text;
+        return preg_replace('/ {2,}\n/', '<br />', $text);
     }
 }
