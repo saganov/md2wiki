@@ -21,30 +21,27 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
+require_once __DIR__ . '/../../Markdown/Filter/Paragraph.php';
 
-/**
- * Translates paragraphs to <p>
- *
- * Rules from markdown definition:
- *
- *   *  paragraph is simply one or more consecutive lines of text,
- *      separated by one or more blank lines
- *
- * @author Igor Gaponov <jiminy96@gmail.com>
- *
- */
-class Markdown_Filter_Paragraph extends Markdown_Filter
+class FilterParagraphTest extends PHPUnit_Framework_TestCase
 {
-    public function transform($text)
+    public function testCommon()
     {
-        $text = trim($text, "\n");
-        $paragraphs = preg_split('/\n{2,}/', $text, -1, PREG_SPLIT_NO_EMPTY);
-        $htmlBlocks = array();
-        foreach($paragraphs as $paragraph) {
-            $htmlBlocks[] = sprintf("<p>%s</p>", ltrim($paragraph, " \t"));
-        }
-        $text = implode("\n\n", $htmlBlocks);
-        return $text;
+        $f = new Markdown_Filter_Paragraph();
+        $this->assertEquals(
+'<p>first paragraph</p>
+
+<p>second paragraph
+text
+end paragraph</p>',
+        $f->transform(
+'
+first paragraph
+
+second paragraph
+text
+end paragraph
+'
+    ));
     }
 }
