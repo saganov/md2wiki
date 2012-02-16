@@ -23,7 +23,7 @@
 
 require_once __DIR__ . '/../../Markdown/Filter/Unescape.php';
 
-class FilterBlockquoteTest extends PHPUnit_Framework_TestCase
+class FilterUnescapeTest extends PHPUnit_Framework_TestCase
 {
     public function testCommon()
     {
