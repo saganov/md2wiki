@@ -46,7 +46,9 @@ class FilterCodeTest extends PHPUnit_Framework_TestCase
 end code
 </code></pre>
 
-  not code',
+There is <code>a literal &lt;backtick&gt; (`) here.</code>
+
+  \`not code\`',
         $f->transform(
 ' This text is not code.
 
@@ -64,7 +66,9 @@ end code
 
     end code
 
-  not code'
+There is ``a literal <backtick> (`) here.``
+
+  \`not code\`'
     ));
     }
 }
