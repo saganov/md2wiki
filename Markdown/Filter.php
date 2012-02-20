@@ -46,6 +46,7 @@ abstract class Markdown_Filter
      * @var array
      */
     protected static $_defaultFilters = array(
+        'Newline',
         'Blockquote',
         'Code',
         'Emphasis',
