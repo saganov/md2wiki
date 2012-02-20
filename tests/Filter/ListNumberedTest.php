@@ -21,25 +21,53 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/List.php';
+require_once __DIR__ . '/../../Markdown/Filter/ListNumbered.php';
 
-/**
- * Translates bulleted list to <ul>
- *
- * Rules from markdown definition:
- *
- *   *  asterisks, pluses, and hyphens — interchangably — as list markers
- *
- * @author Igor Gaponov <jiminy96@gmail.com>
- *
- */
-class Markdown_Filter_ListBulleted extends Markdown_Filter_List
+class FilterListNumberedTest extends PHPUnit_Framework_TestCase
 {
-
-    public function transform($text)
+    public function testCommon()
     {
-        $this->_listType = 'ul';
-        $this->_markers = '(?:[*+-])';
-        return parent::transform($text);
+        $f = new Markdown_Filter_ListNumbered();
+        $this->assertEquals(
+'
+<ol>
+<li>Bird</li>
+<li>McHale</li>
+<li>Parish</li>
+
+<li>This is a list item with two paragraphs.
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet
+
+Suspendisse id sem consectetuer libero luctus adipiscing.</li>
+
+</ol>
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+
+<ol>
+<li> What a great season.</li>
+
+</ol>
+
+1986\. What a great season.
+',
+        $f->transform(
+'
+3. Bird
+1. McHale
+8. Parish
+
+1.  This is a list item with two paragraphs.
+Vestibulum enim wisi, viverra nec, fringilla in, laoreet
+
+  Suspendisse id sem consectetuer libero luctus adipiscing.
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+
+1986. What a great season.
+
+1986\. What a great season.
+'
+    ));
     }
 }

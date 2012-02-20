@@ -21,12 +21,26 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
+require_once __DIR__ . '/List.php';
 
-class Markdown_Filter_ListNumbered extends Markdown_Filter
+/**
+ * Translates numbered list to <ol>
+ *
+ * Rules from markdown definition:
+ *
+ *   *  ordered lists use numbers followed by periods
+ *   *  actual numbers in the list have no effect on the HTML output
+ *
+ * @author Igor Gaponov <jiminy96@gmail.com>
+ *
+ */
+class Markdown_Filter_ListNumbered extends Markdown_Filter_List
 {
+
     public function transform($text)
     {
-        return $text;
+        $this->_listType = 'ol';
+        $this->_markers = '(?:\d+\.)';
+        return parent::transform($text);
     }
 }
