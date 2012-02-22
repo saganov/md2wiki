@@ -39,7 +39,7 @@ class Markdown_Filter_HeaderAtx extends Markdown_Filter
 {
     public function transform($text)
     {
-        $text = preg_replace_callback('/^(?P<level>\#{1,6}) *(?P<text>.+?) *\#*\n+/m',
+        $text = preg_replace_callback('/^(?P<level>\#{1,6})[ \t]*(?P<text>.+?)[ \t]*\#*\n+/m',
             array($this, 'transformHeaderAtx'), $text);
         return $text;
     }
