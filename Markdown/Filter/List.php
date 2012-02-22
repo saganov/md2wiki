@@ -53,7 +53,7 @@ abstract class Markdown_Filter_List extends Markdown_Filter
 
     public function transform($text)
     {
-        $space = self::$_tabWidth - 1;
+        $space = $this->_tabWidth - 1;
         $text = preg_replace_callback(
             sprintf('/(?:(?<=\n)\n|\A\n?)(?P<list>([ ]{0,%1$d}(%2$s)[ \t]+(?!\ *\3\ ))(?:.+?)(\Z|\n{2,}(?=\S)(?![ \t]*%2$s[ \t]+)))/ms',
                 $space,

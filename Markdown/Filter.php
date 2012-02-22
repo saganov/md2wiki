@@ -77,7 +77,7 @@ abstract class Markdown_Filter
      *
      * @var int
      */
-    protected static $_tabWidth = 4;
+    protected $_tabWidth = 4;
 
     /**
      * Lookup Markdown_Filter_{$filtername} class and return its instance.
@@ -161,6 +161,15 @@ abstract class Markdown_Filter
      */
     public static function run($text, array $filters = null)
     {
+        // standardize line endings:
+        $text = preg_replace('/\r\n?/', "\n", $text);
+
+        // text ends with a couple of newlines:
+        $text .= "\n\n";
+
+        // strip lines consisting only of spaces and tabs.
+        $text = preg_replace('/^[ ]+$/m', '', $text);
+
         if ($filters === null) {
             $filters = self::getDefaultFilters();
             if (self::useFallbackFilter()) {
@@ -195,9 +204,9 @@ abstract class Markdown_Filter
      * @param string
      * @return string
      */
-    protected static function outdent($text)
+    protected function outdent($text)
     {
-        return preg_replace('/^(\t| {1,' . self::$_tabWidth . '})/m', '', $text);
+        return preg_replace('/^(\t| {1,' . $this->_tabWidth . '})/m', '', $text);
     }
 
     abstract public function transform($text);
