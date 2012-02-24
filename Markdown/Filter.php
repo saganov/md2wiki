@@ -77,7 +77,7 @@ abstract class Markdown_Filter
      *
      * @var int
      */
-    protected static $_tabWidth = 4;
+    protected $_tabWidth = 4;
 
     /**
      * Lookup Markdown_Filter_{$filtername} class and return its instance.
@@ -191,13 +191,12 @@ abstract class Markdown_Filter
     /**
      * Remove one level of indentation
      *
-     * @static
      * @param string
      * @return string
      */
-    protected static function outdent($text)
+    protected function outdent($text)
     {
-        return preg_replace('/^(\t| {1,' . self::$_tabWidth . '})/m', '', $text);
+        return preg_replace('/^(\t| {1,' . $this->_tabWidth . '})/m', '', $text);
     }
 
     abstract public function transform($text);

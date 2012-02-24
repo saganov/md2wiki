@@ -50,7 +50,7 @@ class Markdown_Filter_Code extends Markdown_Filter
     public function transform($text)
     {
         $text = preg_replace_callback(
-            sprintf('/(?:\n\n|\A\n?)(?P<code>(?>( {%1$d}|\t).*\n+)+)((?=^ {0,%1$d}\S)|\Z)/m', self::$_tabWidth),
+            sprintf('/(?:\n\n|\A\n?)(?P<code>(?>( {%1$d}|\t).*\n+)+)((?=^ {0,%1$d}\S)|\Z)/m', $this->_tabWidth),
             array($this, 'transformCodeBlock'), $text);
         $text = preg_replace_callback('/(?<!\\\)(`+)(?!`)(?P<code>.+?)(?<!`)\1(?!`)/m',
             array($this, 'transformCode'), $text);
@@ -66,7 +66,7 @@ class Markdown_Filter_Code extends Markdown_Filter
      */
     protected function transformCodeBlock($values)
     {
-        $code = self::outdent($values['code']);
+        $code = $this->outdent($values['code']);
         $code = htmlspecialchars($code, ENT_NOQUOTES);
         $code = ltrim($code, "\n");
         $code = rtrim($code);
