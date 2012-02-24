@@ -161,15 +161,6 @@ abstract class Markdown_Filter
      */
     public static function run($text, array $filters = null)
     {
-        // standardize line endings:
-        $text = preg_replace('/\r\n?/', "\n", $text);
-
-        // text ends with a couple of newlines:
-        $text .= "\n\n";
-
-        // strip lines consisting only of spaces and tabs.
-        $text = preg_replace('/^[ ]+$/m', '', $text);
-
         if ($filters === null) {
             $filters = self::getDefaultFilters();
             if (self::useFallbackFilter()) {
