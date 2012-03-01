@@ -21,12 +21,27 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../Filter.php';
+require_once __DIR__ . '/Link.php';
 
-class Markdown_Filter_Img extends Markdown_Filter
+/**
+ * Translates images to <img>
+ *
+ * Rules from markdown definition:
+ *
+ *   *  image syntax is resemble the syntax for links
+ *      but with an exclamation mark (!) before first bracket
+ *   *  brackets contain alt attribute
+ *   *  Markdown has no syntax for specifying the dimensions of an image
+ *
+ * @author Igor Gaponov <jiminy96@gmail.com>
+ *
+ */
+class Markdown_Filter_Img extends Markdown_Filter_Link
 {
     public function transform($text)
     {
-        return $text;
+        $this->_mark = '!';
+        $this->_format = '<img src="%s"%s alt="%s" />';
+        return parent::transform($text);
     }
 }

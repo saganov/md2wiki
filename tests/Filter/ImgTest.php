@@ -21,56 +21,52 @@
  * THE SOFTWARE.
  */
 
-require_once __DIR__ . '/../../Markdown/Filter/Paragraph.php';
+require_once __DIR__ . '/../../Markdown/Filter/Img.php';
 
-class FilterParagraphTest extends PHPUnit_Framework_TestCase
+class FilterImgTest extends PHPUnit_Framework_TestCase
 {
     public function testCommon()
     {
-        $f = new Markdown_Filter_Paragraph();
+        $f = new Markdown_Filter_Img();
         $this->assertEquals(
-'<p>first paragraph</p>
+'<img src="/path/to/img.jpg" alt="Alt text" />
 
-<p>second paragraph
-text
-end paragraph</p>
+<img src="/path/to/img.jpg" title="Optional title" alt="Alt text" />
 
-<p>paragraph</p>
+<img src="/path/to/img.jpg" alt="Alt text" />
 
-<div>text</div>
-
-<p>paragraph</p>
-
-<p>paragraph</p>
-
-<p>text</p>
-
-<p>paragraph</p>
-
-<p>paragraph</p>
-
-<h4>header</h4>
-
-<p>paragraph</p>',
+<img src="/path/to/img.jpg" title="Optional title" alt="Alt text" />',
         $f->transform(
-'
-first paragraph
+'![Alt text](/path/to/img.jpg)
 
-second paragraph
-text
-end paragraph
+![Alt text](/path/to/img.jpg "Optional title")
 
-paragraph
-<div>text</div>
-paragraph
+![Alt text](</path/to/img.jpg>)
 
-paragraph
-<p>text</p>
-paragraph
+![Alt text](</path/to/img.jpg> "Optional title")'
+    ),
+        'Links, inline style');
+    $this->assertEquals(
+'<img src="url/to/image" title="Optional title attribute" alt="Alt text" />
 
-paragraph
-<h4>header</h4>
-paragraph'
-    ));
+<img src="url/to/image" title="Optional title attribute" alt="Alt text" />
+
+![Alt text][id3]
+
+',
+        $f->transform(
+'![Alt text][id1]
+
+[id1]: url/to/image  "Optional title attribute"
+
+![Alt text][id2]
+
+[id2]: <url/to/image>  "Optional title attribute"
+
+![Alt text][id3]
+
+[id4]: url/to/image  "Optional title attribute"'
+    ),
+        'Links, reference style');
     }
 }

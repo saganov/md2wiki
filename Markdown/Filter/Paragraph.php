@@ -36,13 +36,25 @@ require_once __DIR__ . '/../Filter.php';
  */
 class Markdown_Filter_Paragraph extends Markdown_Filter
 {
+    protected $_blockTags = 'p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del|article|aside|header|hgroup|footer|nav|section|figure|figcaption';
+
     public function transform($text)
     {
         $text = trim($text, "\n");
-        $paragraphs = preg_split('/\n{2,}/', $text, -1, PREG_SPLIT_NO_EMPTY);
+        $paragraphs = preg_split(
+            sprintf(
+                '#\n{2,}|\n*(?=<(%s)>)|(?<=/%s>)\n*#',
+                $this->_blockTags,
+                str_replace('|', '>|/', $this->_blockTags)
+            ),
+            $text, -1, PREG_SPLIT_NO_EMPTY);
         $htmlBlocks = array();
         foreach($paragraphs as $paragraph) {
-            $htmlBlocks[] = sprintf("<p>%s</p>", ltrim($paragraph, " \t"));
+            if(preg_match(sprintf('/\n{2,}|<\/?(%1$s)>/', $this->_blockTags), $paragraph)) {
+                $htmlBlocks[] = $paragraph;
+            } else {
+                $htmlBlocks[] = sprintf("<p>%s</p>", ltrim($paragraph, " \t"));
+            }
         }
         $text = implode("\n\n", $htmlBlocks);
         return $text;
