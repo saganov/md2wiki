@@ -21,20 +21,20 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/Linebreak.php';
 
-class FilterLinebreakTest extends PHPUnit_Framework_TestCase
+class FilterLinebreakTest extends TestAbstract
 {
-    public function testCommon()
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_Linebreak();
-        $this->assertEquals(
-'text<br />with
-
-linebreaks<br />.',
-        $f->transform(
-"text  \nwith\n
-linebreaks  \n."
-    ));
+        $this->assertEquals($html, $f->transform($md));
     }
 }

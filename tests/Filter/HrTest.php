@@ -21,39 +21,20 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/Hr.php';
 
-class FilterHrTest extends PHPUnit_Framework_TestCase
+class FilterHrTest extends TestAbstract
 {
-    public function testCommon()
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_Hr();
-        $this->assertEquals(
-'* *
--
-
-<hr />
-
-
-<hr />
-
-
-<hr />
-
-
-<hr />
-
-
-<hr />
-',
-        $f->transform(
-'* *
--
-* * *
-***
-*****
-- - -
----------------------------------------'
-    ));
+        $this->assertEquals($html, $f->transform($md));
     }
 }

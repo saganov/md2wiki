@@ -21,88 +21,20 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/Emphasis.php';
 
-class FilterEmphasisTest extends PHPUnit_Framework_TestCase
+class FilterEmphasisTest extends TestAbstract
 {
-    public function testCommon()
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_Emphasis();
-        $this->assertEquals(
-'This is plain text.
-
-This is <em>empasis</em> word.
-Another <em>empasis</em> word.
-<em>Whole sentense is emphasis</em>
-<em>Even
-multiline works!</em>
-
-I can also do <strong>bolded</strong> words.
-<strong>Really</strong>, markdown is amazing!
-
-All this can be done with * and _ characters, yes * and _
-
-Just surround word like this \\*word\\* or \\_word\\_ for <em>.
-Or \\*\\*word\\*\\* or \\_\\_word\\_\\_ for <strong>
-',
-
-        $f->transform(
-'This is plain text.
-
-This is *empasis* word.
-Another _empasis_ word.
-_Whole sentense is emphasis_
-_Even
-multiline works!_
-
-I can also do **bolded** words.
-__Really__, markdown is amazing!
-
-All this can be done with * and _ characters, yes * and _
-
-Just surround word like this \\*word\\* or \\_word\\_ for <em>.
-Or \\*\\*word\\*\\* or \\_\\_word\\_\\_ for <strong>
-'
-    ));
-
-        $this->assertEquals(
-'* no emphasis *
-
-<em>single asterisks</em>
-
-<em>single underscores</em>
-
-<strong>double asterisks</strong>
-
-<strong>double underscores</strong>
-
-<strong><em>triple asterisks</em></strong>
-
-<strong><em>triple underscores</em></strong>
-
-un<em>frigging</em>believable
-
-_ no emphasis _',
-
-        $f->transform(
-'* no emphasis *
-
-*single asterisks*
-
-_single underscores_
-
-**double asterisks**
-
-__double underscores__
-
-***triple asterisks***
-
-___triple underscores___
-
-un*frigging*believable
-
-_ no emphasis _'
-    ));
-
+        $this->assertEquals($html, $f->transform($md));
     }
 }

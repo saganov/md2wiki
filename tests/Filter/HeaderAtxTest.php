@@ -21,33 +21,20 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/HeaderAtx.php';
 
-class FilterHeaderAtxTest extends PHPUnit_Framework_TestCase
+class FilterHeaderAtxTest extends TestAbstract
 {
-    public function testCommon()
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_HeaderAtx();
-        $this->assertEquals(
-'This text is not header.
-
-<h1>This is first-level header</h1>
-
-<h4>This is fourth-level header</h4>
-
-<h6>#This is sixth-level header</h6>
-
-not header',
-        $f->transform(
-'This text is not header.
-
-# This is first-level header
-
-####This is fourth-level header     #######
-
-#######This is sixth-level header #
-
-not header'
-    ));
+        $this->assertEquals($html, $f->transform($md));
     }
 }

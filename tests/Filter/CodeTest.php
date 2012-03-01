@@ -21,54 +21,20 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/Code.php';
 
-class FilterCodeTest extends PHPUnit_Framework_TestCase
+class FilterCodeTest extends TestAbstract
 {
-    public function testCommon()
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_Code();
-        $this->assertEquals(
-' This text is not code.
-
-<pre><code>start code
-
-    indent code //comment
-        indent more
-
-# foo bar
-* list
-
-&lt;div class="footer"&gt;
-    &amp;copy; 2012 Foo Corporation
-&lt;/div&gt;
-
-end code
-</code></pre>
-
-There is <code>a literal &lt;backtick&gt; (`) here.</code>
-
-  \`not code\`',
-        $f->transform(
-' This text is not code.
-
-    start code
-
-        indent code //comment
-            indent more
-
-    # foo bar
-    * list
-
-    <div class="footer">
-        &copy; 2012 Foo Corporation
-    </div>
-
-    end code
-
-There is ``a literal <backtick> (`) here.``
-
-  \`not code\`'
-    ));
+        $this->assertEquals($html, $f->transform($md));
     }
 }

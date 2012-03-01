@@ -21,56 +21,20 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/Paragraph.php';
 
-class FilterParagraphTest extends PHPUnit_Framework_TestCase
+class FilterParagraphTest extends TestAbstract
 {
-    public function testCommon()
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_Paragraph();
-        $this->assertEquals(
-'<p>first paragraph</p>
-
-<p>second paragraph
-text
-end paragraph</p>
-
-<p>paragraph</p>
-
-<div>text</div>
-
-<p>paragraph</p>
-
-<p>paragraph</p>
-
-<p>text</p>
-
-<p>paragraph</p>
-
-<p>paragraph</p>
-
-<h4>header</h4>
-
-<p>paragraph</p>',
-        $f->transform(
-'
-first paragraph
-
-second paragraph
-text
-end paragraph
-
-paragraph
-<div>text</div>
-paragraph
-
-paragraph
-<p>text</p>
-paragraph
-
-paragraph
-<h4>header</h4>
-paragraph'
-    ));
+        $this->assertEquals($html, $f->transform($md));
     }
 }

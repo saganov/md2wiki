@@ -21,52 +21,20 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/Img.php';
 
-class FilterImgTest extends PHPUnit_Framework_TestCase
+class FilterImgTest extends TestAbstract
 {
-    public function testCommon()
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_Img();
-        $this->assertEquals(
-'<img src="/path/to/img.jpg" alt="Alt text" />
-
-<img src="/path/to/img.jpg" title="Optional title" alt="Alt text" />
-
-<img src="/path/to/img.jpg" alt="Alt text" />
-
-<img src="/path/to/img.jpg" title="Optional title" alt="Alt text" />',
-        $f->transform(
-'![Alt text](/path/to/img.jpg)
-
-![Alt text](/path/to/img.jpg "Optional title")
-
-![Alt text](</path/to/img.jpg>)
-
-![Alt text](</path/to/img.jpg> "Optional title")'
-    ),
-        'Links, inline style');
-    $this->assertEquals(
-'<img src="url/to/image" title="Optional title attribute" alt="Alt text" />
-
-<img src="url/to/image" title="Optional title attribute" alt="Alt text" />
-
-![Alt text][id3]
-
-',
-        $f->transform(
-'![Alt text][id1]
-
-[id1]: url/to/image  "Optional title attribute"
-
-![Alt text][id2]
-
-[id2]: <url/to/image>  "Optional title attribute"
-
-![Alt text][id3]
-
-[id4]: url/to/image  "Optional title attribute"'
-    ),
-        'Links, reference style');
+        $this->assertEquals($html, $f->transform($md));
     }
 }

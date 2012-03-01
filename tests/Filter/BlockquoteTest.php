@@ -21,37 +21,20 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/Blockquote.php';
 
-class FilterBlockquoteTest extends PHPUnit_Framework_TestCase
+class FilterBlockquoteTest extends TestAbstract
 {
-    public function testCommon()
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($text, $md)
     {
         $f = new Markdown_Filter_Blockquote();
-        $this->assertEquals(
-'This text in not quoted.
-
-<blockquote>
-This is quoted text
-<blockquote>
-This is a nested quote
-</blockquote>
-</blockquote>
-
-<blockquote>
-another quote
-</blockquote>
-
-not qouted',
-        $f->transform(
-'This text in not quoted.
-
-> This is quoted text
-> > This is a nested quote
-
-> another quote
-
-not qouted'
-    ));
+        $this->assertEquals($md, $f->transform($text));
     }
 }

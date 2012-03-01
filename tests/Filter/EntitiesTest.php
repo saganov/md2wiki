@@ -21,10 +21,23 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/Entities.php';
 
-class FilterEntitiesTest extends PHPUnit_Framework_TestCase
+class FilterEntitiesTest extends TestAbstract
 {
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($md, $html)
+    {
+        $f = new Markdown_Filter_Entities();
+        $this->assertEquals($html, $f->transform($md));
+    }
+
     public function testSingles()
     {
         $f = new Markdown_Filter_Entities();
@@ -38,33 +51,5 @@ class FilterEntitiesTest extends PHPUnit_Framework_TestCase
     {
         $f = new Markdown_Filter_Entities();
         $this->assertEquals('foo\\`<bar>`', $f->transform('foo\\`<bar>`'));
-    }
-
-    public function testCommon()
-    {
-        $f = new Markdown_Filter_Entities();
-        $this->assertEquals(
-'Markdown states that symbols &amp; and &lt; must be escaped to ease writing.
-However if &amp; is part of html entity like &copy; it must not be escaped.
-Similary, if &lt; is part of html tag like <head> it must not be escaped as well.
-Inside code spans like this `&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;/html&gt;` &lt; is always escaped.
-Same rule apply to code blocks like this:
-
-    &lt;html&gt;
-        &lt;head&gt;&lt;title&gt;"Markdown"&lt;/title&gt;&lt;/title&gt;&lt;/head&gt;
-        &lt;a href="http://example.com?foo=bar&amp;bar=baz"&gt;Link&lt;/a&gt;
-	&lt;/html&gt;',
-        $f->transform(
-'Markdown states that symbols & and < must be escaped to ease writing.
-However if & is part of html entity like &copy; it must not be escaped.
-Similary, if < is part of html tag like <head> it must not be escaped as well.
-Inside code spans like this `<html><head></head></html>` < is always escaped.
-Same rule apply to code blocks like this:
-
-    <html>
-        <head><title>"Markdown"</title></title></head>
-        <a href="http://example.com?foo=bar&bar=baz">Link</a>
-	</html>' // intentionally place TAB here, code can be indented with TABs
-    ));
     }
 }

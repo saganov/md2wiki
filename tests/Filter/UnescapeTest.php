@@ -21,47 +21,20 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/Unescape.php';
 
-class FilterUnescapeTest extends PHPUnit_Framework_TestCase
+class FilterUnescapeTest extends TestAbstract
 {
-    public function testCommon()
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_Unescape();
-        $this->assertEquals(
-'Markdown provides backslash escapes for the following characters:
-
-\\   backslash
-`   backtick
-*   asterisk
-_   underscore
-{}  curly braces
-[]  square brackets
-()  parentheses
-#   hash mark
-+   plus sign
--   minus sign (hyphen)
-.   dot
-!   exclamation mark
-',
-
-        $f->transform(
-'Markdown provides backslash escapes for the following characters:
-
-\\\\   backslash
-\\`   backtick
-\\*   asterisk
-\\_   underscore
-\\{\\}  curly braces
-\\[\\]  square brackets
-\\(\\)  parentheses
-\\#   hash mark
-\\+   plus sign
-\\-   minus sign (hyphen)
-\\.   dot
-\\!   exclamation mark
-'
-    ));
-
+        $this->assertEquals($html, $f->transform($html));
     }
 }

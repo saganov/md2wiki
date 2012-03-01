@@ -21,30 +21,20 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/HeaderSetext.php';
 
-class FilterHeaderSetextTest extends PHPUnit_Framework_TestCase
+class FilterHeaderSetextTest extends TestAbstract
 {
-    public function testCommon()
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_HeaderSetext();
-        $this->assertEquals(
-'This text is not header.
-
-<h1>This is first-level header</h1>
-
-<h2>This is second-level header</h2>
-
-not header',
-        $f->transform(
-'This text is not header.
-
-This is first-level header
-========
-This is second-level header
----------------------------------
-
-not header'
-    ));
+        $this->assertEquals($html, $f->transform($md));
     }
 }

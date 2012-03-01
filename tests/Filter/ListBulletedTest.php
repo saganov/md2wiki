@@ -21,46 +21,20 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/ListBulleted.php';
 
-class FilterListBulletedTest extends PHPUnit_Framework_TestCase
+class FilterListBulletedTest extends TestAbstract
 {
-    public function testCommon()
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_ListBulleted();
-        $this->assertEquals(
-'
-<ul>
-<li>red fruit</li>
-<li>orange fruit</li>
-<li>blue</li>
-
-<li>This is a list item with four paragraphs.
-This is the second paragraph in the list item.
-
-This is the third paragraph in the list item.
-This is the fourth paragraph in the list item.</li>
-<li>This is another list item.</li>
-
-</ul>
-
-This paragraph is not in the list.
-',
-        $f->transform(
-"
-*  red fruit
-+  orange fruit
--  blue
-
-* This is a list item with four paragraphs.
-This is the second paragraph in the list item.
-
- This is the third paragraph in the list item.
-This is the fourth paragraph in the list item.
-+  This is another list item.
-
-This paragraph is not in the list.
-"
-    ));
+        $this->assertEquals($html, $f->transform($md));
     }
 }

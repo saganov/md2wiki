@@ -1,0 +1,16 @@
+This is plain text.
+
+This is <em>empasis</em> word.
+Another <em>empasis</em> word.
+<em>Whole sentense is emphasis</em>
+<em>Even
+multiline works!</em>
+
+I can also do <strong>bolded</strong> words.
+<strong>Really</strong>, markdown is amazing!
+
+All this can be done with * and _ characters, yes * and _
+
+Just surround word like this \*word\* or \_word\_ for <em>.
+Or \*\*word\*\* or \_\_word\_\_ for <strong>
+

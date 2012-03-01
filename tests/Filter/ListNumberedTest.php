@@ -21,53 +21,20 @@
  * THE SOFTWARE.
  */
 
+require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/ListNumbered.php';
 
-class FilterListNumberedTest extends PHPUnit_Framework_TestCase
+class FilterListNumberedTest extends TestAbstract
 {
-    public function testCommon()
+    /**
+     * @dataProvider filesystem
+     *
+     * @param string $md
+     * @param string $html
+     */
+    public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_ListNumbered();
-        $this->assertEquals(
-'
-<ol>
-<li>Bird</li>
-<li>McHale</li>
-<li>Parish</li>
-
-<li>This is a list item with two paragraphs.
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet
-
-Suspendisse id sem consectetuer libero luctus adipiscing.</li>
-
-</ol>
-
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-
-<ol>
-<li> What a great season.</li>
-
-</ol>
-
-1986\. What a great season.
-',
-        $f->transform(
-'
-3. Bird
-1. McHale
-8. Parish
-
-1.  This is a list item with two paragraphs.
-Vestibulum enim wisi, viverra nec, fringilla in, laoreet
-
-  Suspendisse id sem consectetuer libero luctus adipiscing.
-
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-
-1986. What a great season.
-
-1986\. What a great season.
-'
-    ));
+        $this->assertEquals($html, $f->transform($md));
     }
 }

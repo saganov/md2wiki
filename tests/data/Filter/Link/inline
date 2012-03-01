@@ -1,0 +1,7 @@
+This is <a href="http://example.com/" title="Title">an example</a> inline link.
+
+<a href="http://example.net/">This link</a> has no title attribute.
+
+See my <a href="/about/">About</a> page for details.
+
+<a href="/nested/">Nested [brackets]</a>
