@@ -33,7 +33,25 @@ class FilterParagraphTest extends PHPUnit_Framework_TestCase
 
 <p>second paragraph
 text
-end paragraph</p>',
+end paragraph</p>
+
+<p>paragraph</p>
+
+<div>text</div>
+
+<p>paragraph</p>
+
+<p>paragraph</p>
+
+<p>text</p>
+
+<p>paragraph</p>
+
+<p>paragraph</p>
+
+<h4>header</h4>
+
+<p>paragraph</p>',
         $f->transform(
 '
 first paragraph
@@ -41,7 +59,18 @@ first paragraph
 second paragraph
 text
 end paragraph
-'
+
+paragraph
+<div>text</div>
+paragraph
+
+paragraph
+<p>text</p>
+paragraph
+
+paragraph
+<h4>header</h4>
+paragraph'
     ));
     }
 }
