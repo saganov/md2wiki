@@ -72,9 +72,7 @@ class Markdown_Filter_Code extends Markdown_Filter
      */
     protected function transformCodeBlock($values)
     {
-        var_dump($values['code']);
         $code = self::outdent($values['code']);
-        var_dump($code);
         $code = htmlspecialchars($code, ENT_NOQUOTES);
         $code = ltrim($code, "\n");
         $code = rtrim($code);
