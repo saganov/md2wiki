@@ -72,22 +72,28 @@ class Markdown_Filter_Link extends Markdown_Filter
     public function transform($text)
     {
         $text = preg_replace_callback(
-            sprintf(
-                '/^[ ]{0,%d}\[(?P<id>.+)\]:[ \t]*\n?[ \t]*<?(?P<url>.+?)>?[ \t]*(?:\n?[ \t]*(?<=\s)[\'"(](?P<title>[^\n]*)[\'")][ \t]*)?(?:\n+|\Z)/m',
-                $this->_tabWidth - 1
-            ), array($this, 'extractLinkDefinitions'), $text);
+            '/^[ ]{0,3}\[(?P<id>.+)\]:[ \t]*\n?[ \t]*<?(?P<url>.+?)>?[ \t]*(?:\n?[ \t]*(?<=\s)[\'"(](?P<title>[^\n]*)[\'")][ \t]*)?(?:\n+|\Z)/m',
+            array($this, 'extractLinkDefinitions'),
+            $text
+        );
 
         $text = preg_replace_callback(
             sprintf(
                 '/%s\[(?P<text>(?>[^\[\]]+|\[(?>[^\[\]]+)*\])*)\][ ]?(?:\n[ ]*)?\[(?P<id>.*?)\]/xs',
                 $this->_mark
-            ), array($this, 'transformReference'), $text);
+            ),
+            array($this, 'transformReference'),
+            $text
+        );
 
         $text = preg_replace_callback(
             sprintf(
                 '/%s\[(?P<text>(?>[^\[\]]+|\[(?>[^\[\]]+)*\])*)\]\([ \t\n]*(?P<url><.+?>|.+?)[ \t\n]*(([\'"])(?P<title>.*?)\4[ \t\n]*)?\)/s',
                 $this->_mark
-            ), array($this, 'transformInline'), $text);
+            ),
+            array($this, 'transformInline'),
+            $text
+        );
 
         return $text;
     }
