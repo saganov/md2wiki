@@ -35,6 +35,6 @@ class FilterCodeTest extends TestAbstract
     public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_Code();
-        $this->assertEquals($html, $f->transform($md));
+        $this->assertEquals($html, $f->filter($md));
     }
 }

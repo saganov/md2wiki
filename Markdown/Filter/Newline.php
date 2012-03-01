@@ -33,7 +33,7 @@ require_once __DIR__ . '/../Filter.php';
  */
 class Markdown_Filter_Newline extends Markdown_Filter
 {
-    public function transform($text)
+    public function filter($text)
     {
         $text = str_replace("\r\n", "\n", $text);
         $text = str_replace("\r",   "\n", $text);

@@ -37,7 +37,7 @@ require_once __DIR__ . '/../Filter.php';
  */
 class Markdown_Filter_Hr extends Markdown_Filter
 {
-    public function transform($text)
+    public function filter($text)
     {
         return preg_replace(
             '/^ {0,3}([*-_])(?> {0,2}\1){2,} *$/m',

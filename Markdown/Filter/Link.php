@@ -69,7 +69,7 @@ class Markdown_Filter_Link extends Markdown_Filter
      */
     protected $_format = '<a href="%s"%s>%s</a>';
 
-    public function transform($text)
+    public function filter($text)
     {
         $text = preg_replace_callback(
             '/^[ ]{0,3}\[(?P<id>.+)\]:[ \t]*\n?[ \t]*<?(?P<url>.+?)>?[ \t]*(?:\n?[ \t]*(?<=\s)[\'"(](?P<title>[^\n]*)[\'")][ \t]*)?(?:\n+|\Z)/m',

@@ -38,7 +38,7 @@ class Markdown_Filter_Paragraph extends Markdown_Filter
 {
     protected $_blockTags = 'p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del|article|aside|header|hgroup|footer|nav|section|figure|figcaption';
 
-    public function transform($text)
+    public function filter($text)
     {
         $text = trim($text, "\n");
         $paragraphs = preg_split(

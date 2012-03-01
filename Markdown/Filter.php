@@ -175,7 +175,7 @@ abstract class Markdown_Filter
                 );
             }
 
-            $text = $filter->transform($text);
+            $text = $filter->filter($text);
         }
 
         return $text;
@@ -193,5 +193,5 @@ abstract class Markdown_Filter
         return preg_replace('/^(\t| {1,4})/m', '', $text);
     }
 
-    abstract public function transform($text);
+    abstract public function filter($text);
 }

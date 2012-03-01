@@ -48,7 +48,7 @@ class Markdown_Filter_Fallback extends Markdown_Filter
      * @return string
      * @throws RuntimeException
      */
-    public function transform($text)
+    public function filter($text)
     {
         $cmdline = 'perl ' . __DIR__ . '/Fallback/Markdown.pl';
         $child = proc_open(

@@ -35,6 +35,6 @@ class FilterUnescapeTest extends TestAbstract
     public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_Unescape();
-        $this->assertEquals($html, $f->transform($html));
+        $this->assertEquals($html, $f->filter($html));
     }
 }

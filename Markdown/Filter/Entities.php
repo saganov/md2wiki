@@ -39,7 +39,7 @@ require_once __DIR__ . '/../Filter.php';
  */
 class Markdown_Filter_Entities extends Markdown_Filter
 {
-    public function transform($text)
+    public function filter($text)
     {
         // always escape within code blocks and spans
         $text = preg_replace_callback(

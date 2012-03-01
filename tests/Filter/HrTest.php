@@ -35,6 +35,6 @@ class FilterHrTest extends TestAbstract
     public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_Hr();
-        $this->assertEquals($html, $f->transform($md));
+        $this->assertEquals($html, $f->filter($md));
     }
 }

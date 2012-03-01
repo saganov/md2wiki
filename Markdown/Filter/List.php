@@ -51,7 +51,7 @@ abstract class Markdown_Filter_List extends Markdown_Filter
      */
     protected $_markers;
 
-    public function transform($text)
+    public function filter($text)
     {
 
         $text = preg_replace_callback(

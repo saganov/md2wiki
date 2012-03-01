@@ -33,7 +33,7 @@ require_once __DIR__ . '/../Filter.php';
  */
 class Markdown_Filter_Unescape extends Markdown_Filter
 {
-    public function transform($text)
+    public function filter($text)
     {
         $text = preg_replace(
             '/\\\\([' . preg_quote(implode('', self::$_escapableChars), '/') . '])/',

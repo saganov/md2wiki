@@ -36,7 +36,7 @@ require_once __DIR__ . '/../Filter.php';
  */
 class Markdown_Filter_Linebreak extends Markdown_Filter
 {
-    public function transform($text)
+    public function filter($text)
     {
         return preg_replace('/ {2,}\n/', '<br />', $text);
     }

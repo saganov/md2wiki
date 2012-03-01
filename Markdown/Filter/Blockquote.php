@@ -39,7 +39,7 @@ require_once __DIR__ . '/../Filter.php';
  */
 class Markdown_Filter_Blockquote extends Markdown_Filter
 {
-    public function transform($text)
+    public function filter($text)
     {
         foreach($this->searchQuotes($text) as $quote)
         {

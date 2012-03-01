@@ -37,7 +37,7 @@ require_once __DIR__ . '/../Filter.php';
  */
 class Markdown_Filter_HeaderSetext extends Markdown_Filter
 {
-    public function transform($text)
+    public function filter($text)
     {
         $text = preg_replace_callback('/^(?P<text>.+) *\n(?P<level>=|-)+ *\n+/m',
             array($this, 'transformHeaderSetext'), $text);

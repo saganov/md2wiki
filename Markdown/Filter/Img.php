@@ -38,10 +38,10 @@ require_once __DIR__ . '/Link.php';
  */
 class Markdown_Filter_Img extends Markdown_Filter_Link
 {
-    public function transform($text)
+    public function filter($text)
     {
         $this->_mark = '!';
         $this->_format = '<img src="%s"%s alt="%s" />';
-        return parent::transform($text);
+        return parent::filter($text);
     }
 }

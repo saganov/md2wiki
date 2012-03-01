@@ -37,7 +37,7 @@ require_once __DIR__ . '/../Filter.php';
  */
 class Markdown_Filter_HeaderAtx extends Markdown_Filter
 {
-    public function transform($text)
+    public function filter($text)
     {
         $text = preg_replace_callback('/^(?P<level>\#{1,6})[ \t]*(?P<text>.+?)[ \t]*\#*\n+/m',
             array($this, 'transformHeaderAtx'), $text);
