@@ -36,11 +36,6 @@ require_once __DIR__ . '/List.php';
  */
 class Markdown_Filter_ListNumbered extends Markdown_Filter_List
 {
-
-    public function transform($text)
-    {
-        $this->_listType = 'ol';
-        $this->_markers = '(?:\d+\.)';
-        return parent::transform($text);
-    }
+    protected $_listType = 'ol';
+    protected $_markers = '(?:\d+\.)';
 }

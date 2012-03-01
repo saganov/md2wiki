@@ -35,11 +35,6 @@ require_once __DIR__ . '/List.php';
  */
 class Markdown_Filter_ListBulleted extends Markdown_Filter_List
 {
-
-    public function transform($text)
-    {
-        $this->_listType = 'ul';
-        $this->_markers = '(?:[*+-])';
-        return parent::transform($text);
-    }
+    protected $_listType = 'ul';
+    protected $_markers = '(?:[*+-])';
 }

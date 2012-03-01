@@ -53,10 +53,10 @@ abstract class Markdown_Filter_List extends Markdown_Filter
 
     public function transform($text)
     {
-        $space = $this->_tabWidth - 1;
+
         $text = preg_replace_callback(
-            sprintf('/(?:(?<=\n)\n|\A\n?)(?P<list>([ ]{0,%1$d}(%2$s)[ \t]+(?!\ *\3\ ))(?:.+?)(\Z|\n{2,}(?=\S)(?![ \t]*%2$s[ \t]+)))/ms',
-                $space,
+            sprintf(
+                '/(?:(?<=\n)\n|\A\n?)(?P<list>([ ]{0,3}(%1$s)[ \t]+(?!\ *\3\ ))(?:.+?)(\Z|\n{2,}(?=\S)(?![ \t]*%1$s[ \t]+)))/ms',
                 $this->_markers
             ),
             array($this, 'transformList'), $text);
@@ -110,7 +110,7 @@ abstract class Markdown_Filter_List extends Markdown_Filter
         $leadingSpace = $values['leading_space'];
         $markerSpace = $values['marker'];
         $item = $leadingSpace . str_repeat(' ', strlen($markerSpace)) . $item;
-        $item = $this->outdent($item);
+        $item = self::outdent($item);
 
         return sprintf("<li>%s</li>\n", $item);
     }

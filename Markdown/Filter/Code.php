@@ -43,17 +43,23 @@ require_once __DIR__ . '/../Filter.php';
  *     contain multiple backticks
  *
  * @author Igor Gaponov <jiminy96@gmail.com>
- *
  */
 class Markdown_Filter_Code extends Markdown_Filter
 {
     public function transform($text)
     {
         $text = preg_replace_callback(
-            sprintf('/(?:\n\n|\A\n?)(?P<code>(?>( {%1$d}|\t).*\n+)+)((?=^ {0,%1$d}\S)|\Z)/m', $this->_tabWidth),
-            array($this, 'transformCodeBlock'), $text);
-        $text = preg_replace_callback('/(?<!\\\)(`+)(?!`)(?P<code>.+?)(?<!`)\1(?!`)/m',
-            array($this, 'transformCode'), $text);
+            '/(?:\n\n|\A\n?)(?P<code>(?>( {4}|\t).*\n+)+)((?=^ {0,4}\S)|\Z)/m',
+            array($this, 'transformCodeBlock'),
+            $text
+        );
+
+        $text = preg_replace_callback(
+            '/(?<!\\\)(`+)(?!`)(?P<code>.+?)(?<!`)\1(?!`)/m',
+            array($this, 'transformCode'),
+            $text
+        );
+
         return $text;
     }
 
@@ -66,7 +72,9 @@ class Markdown_Filter_Code extends Markdown_Filter
      */
     protected function transformCodeBlock($values)
     {
-        $code = $this->outdent($values['code']);
+        var_dump($values['code']);
+        $code = self::outdent($values['code']);
+        var_dump($code);
         $code = htmlspecialchars($code, ENT_NOQUOTES);
         $code = ltrim($code, "\n");
         $code = rtrim($code);
