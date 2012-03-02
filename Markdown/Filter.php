@@ -55,6 +55,7 @@ abstract class Markdown_Filter
         'Hr',
         'Img',
         'Linebreak',
+        'Link',
         'ListBulleted',
         'ListNumbered',
         'Paragraph',
