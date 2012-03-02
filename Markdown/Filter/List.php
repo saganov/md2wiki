@@ -82,7 +82,7 @@ abstract class Markdown_Filter_List extends Markdown_Filter
      * @return string
      */
     protected function transformList($values) {
-        $list = $values['list'] . "\n";
+        $list = $values['list'];
         $list = $this->transformListItems($list);
 
         return sprintf("\n<%1\$s>\n%2\$s</%1\$s>\n\n", $this->_listType, $list);
@@ -97,7 +97,7 @@ abstract class Markdown_Filter_List extends Markdown_Filter
      */
     protected function transformListItems($text)
     {
-        $text = rtrim($text, "\n") . "\n";
+        $text = rtrim($text, "\n");
         $text = preg_replace_callback(
             sprintf(
                 '/(\n)?(?P<leading_space>^[ \t]*)(?P<marker>%1$s)[ \t]+(?P<item>(?s:.+?))(?=\n*(\Z|\2(%1$s)[ \t]+))/m',
