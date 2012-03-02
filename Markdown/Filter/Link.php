@@ -127,7 +127,7 @@ class Markdown_Filter_Link extends Markdown_Filter
     }
 
     /**
-     * Takes a signle markdown reference-style link
+     * Takes a single markdown reference-style link
      * and returns its html equivalent.
      *
      * @param array
@@ -155,7 +155,7 @@ class Markdown_Filter_Link extends Markdown_Filter
     }
 
     /**
-     * Takes a signle markdown inline-style link
+     * Takes a single markdown inline-style link
      * and returns its html equivalent.
      *
      * @param array

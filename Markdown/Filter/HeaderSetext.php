@@ -55,7 +55,7 @@ class Markdown_Filter_HeaderSetext extends Markdown_Filter
     }
 
     /**
-     * Takes a signle markdown header
+     * Takes a single markdown header
      * and returns its html equivalent.
      *
      * @param array

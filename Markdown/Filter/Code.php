@@ -91,7 +91,7 @@ class Markdown_Filter_Code extends Markdown_Filter
     }
 
     /**
-     * Takes a signle markdown code span
+     * Takes a single markdown code span
      * and returns its html equivalent.
      *
      * @param array

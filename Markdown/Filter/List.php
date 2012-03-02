@@ -75,7 +75,7 @@ abstract class Markdown_Filter_List extends Markdown_Filter
     }
 
     /**
-     * Takes a signle markdown list
+     * Takes a single markdown list
      * and returns its html equivalent.
      *
      * @param array
@@ -109,7 +109,7 @@ abstract class Markdown_Filter_List extends Markdown_Filter
     }
 
     /**
-     * Takes a signle markdown list item
+     * Takes a single markdown list item
      * and returns its html equivalent.
      *
      * @param array
