@@ -24,19 +24,22 @@
 require_once __DIR__ . '/../Filter.php';
 
 /**
- * Translates links to <a>
+ * Translates links.
  *
- * Rules from markdown definition:
+ * Definitions:
+ * <ul>
+ *   <li>link text is delimited by [square brackets]</li>
+ *   <li>inline-style URL is inside the parentheses with an optional title in quotes</li>
+ *   <li>reference-style links use a second set of square brackets with link label</li>
+ *   <li>link definitions can be placed anywhere in document</li>
+ *   <li>link definition names may consist of letters, numbers, spaces, and punctuation
+ *      — but they are not case sensitive</li>
+ * </ul>
  *
- *   *  link text is delimited by [square brackets]
- *   *  inline-style URL is inside the parentheses with an optional title in quotes
- *   *  reference-style links use a second set of square brackets with link label
- *   *  link definitions can be placed anywhere in document
- *   *  link definition names may consist of letters, numbers, spaces, and punctuation
- *      — but they are not case sensitive
- *
+ * @package Markdown
+ * @subpackage Filter
  * @author Igor Gaponov <jiminy96@gmail.com>
- *
+ * @version 1.0
  */
 class Markdown_Filter_Link extends Markdown_Filter
 {
@@ -69,6 +72,13 @@ class Markdown_Filter_Link extends Markdown_Filter
      */
     protected $_format = '<a href="%s"%s>%s</a>';
 
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
     public function filter($text)
     {
         $text = preg_replace_callback(

@@ -26,11 +26,10 @@
  *
  * Provides static methods to configure and use filtering system.
  *
- * @package markdown-oo-php
+ * @package Markdown
  * @subpackage Filter
- * @author Max Tsepkov <max@garygolden.me> http://garygolden.me
- * @version 0.9
- *
+ * @author Max Tsepkov <max@garygolden.me>
+ * @version 1.0
  */
 abstract class Markdown_Filter
 {

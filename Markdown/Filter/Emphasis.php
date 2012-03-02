@@ -24,23 +24,33 @@
 require_once __DIR__ . '/../Filter.php';
 
 /**
- * Implements <em> and <strong>
+ * Implements &lt;em&gt; and &lt;strong&gt;
  *
- * Rules from markdown definition:
+ * Definitions:
+ * <ul>
+ *   <li>text wrapped with one * or _ will be wrapped with an HTML &lt;em&gt; tag</li>
+ *   <li>double *’s or _’s will be wrapped with an HTML &lt;strong&gt; tag</li>
+ *   <li>the same character must be used to open and close an emphasis span</li>
+ *   <li>emphasis can be used in the middle of a word</li>
+ *   <li>if an * or _ is surrounded by spaces,
+ *      it’ll be treated as a literal asterisk or an underscore</li>
+ * </ul>
  *
- *   *  text wrapped with one * or _ will be wrapped with an HTML <em> tag
- *   *  double *’s or _’s will be wrapped with an HTML <strong> tag
- *   *  the same character must be used to open and close an emphasis span
- *   *  emphasis can be used in the middle of a word
- *   *  if an * or _ is surrounded by spaces,
- *      it’ll be treated as a literal asterisk or underscore
- *
+ * @package Markdown
+ * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
  * @author Igor Gaponov <jiminy96@gmail.com>
- *
+ * @version 1.0
  */
 class Markdown_Filter_Emphasis extends Markdown_Filter
 {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
     public function filter($text)
     {
         // strong

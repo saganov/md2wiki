@@ -26,14 +26,17 @@ require_once __DIR__ . '/../Filter.php';
 /**
  * Abstract class for all list's types
  *
- * Rules from markdown definition:
+ * Definitions:
+ * <ul>
+ *   <li>list items may consist of multiple paragraphs</li>
+ *   <li>each subsequent paragraph in a list item
+ *      must be indented by either 4 spaces or one tab</li>
+ * </ul>
  *
- *   *  list items may consist of multiple paragraphs
- *   *  each subsequent paragraph in a list item
- *      must be indented by either 4 spaces or one tab
- *
+ * @package Markdown
+ * @subpackage Filter
  * @author Igor Gaponov <jiminy96@gmail.com>
- *
+ * @version 1.0
  */
 abstract class Markdown_Filter_List extends Markdown_Filter
 {
@@ -51,6 +54,13 @@ abstract class Markdown_Filter_List extends Markdown_Filter
      */
     protected $_markers;
 
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
     public function filter($text)
     {
 

@@ -24,19 +24,29 @@
 require_once __DIR__ . '/../Filter.php';
 
 /**
- * Translates horizontal rules to <hr>
+ * Translates horizontal rules.
  *
- * Rules from markdown definition:
+ * Definitions:
+ * <ul>
+ *   <li>horizontal rule produced by placing three or more
+ *      hyphens, asterisks, or underscores on a line by themselves</li>
+ *   <li>spaces can be used between the hyphens or asterisks</li>
+ * </ul>
  *
- *   *  horizontal rule produced by placing three or more
- *      hyphens, asterisks, or underscores on a line by themselves
- *   *  spaces can be used between the hyphens or asterisks
- *
+ * @package Markdown
+ * @subpackage Filter
  * @author Igor Gaponov <jiminy96@gmail.com>
- *
+ * @version 1.0
  */
 class Markdown_Filter_Hr extends Markdown_Filter
 {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
     public function filter($text)
     {
         return preg_replace(

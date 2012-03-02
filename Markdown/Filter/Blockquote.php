@@ -24,25 +24,33 @@
 require_once __DIR__ . '/../Filter.php';
 
 /**
- * Translates email-style blockquotes to <blockquote>
+ * Translate email-style blockquotes.
  *
- * Rules from markdown definition:
+ * Definitions:
+ * <ul>
+ *   <li>blockquote is indicated by < at the start of line</li>
+ *   <li>blockquotes can be nested</li>
+ *   <li>lazy blockquotes are allowed</li>
+ *   <li>Blockquote ends with \n\n</li>
+ * </ul>
  *
- *   *  blockquote is indicated by < at the start of line
- *   *  blockquotes can be nested
- *   *  lazy blockquotes are allowed
- *
- * Blockquote ends with \n\n
- *
+ * @package Markdown
+ * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
- *
+ * @version 1.0
  */
 class Markdown_Filter_Blockquote extends Markdown_Filter
 {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
     public function filter($text)
     {
-        foreach($this->searchQuotes($text) as $quote)
-        {
+        foreach($this->searchQuotes($text) as $quote) {
             $text = str_replace($quote, $this->transformQuote($quote), $text);
         }
 
@@ -52,7 +60,8 @@ class Markdown_Filter_Blockquote extends Markdown_Filter
     /**
      * Search markdown for quotes and returns it untouched.
      *
-     * @param array $quotes
+     * @param string $text
+     * @return array $quotes
      */
     protected function searchQuotes($text)
     {
@@ -83,7 +92,7 @@ class Markdown_Filter_Blockquote extends Markdown_Filter
     }
 
     /**
-     * Recursive function takes a signle markdown quote
+     * Recursive function takes a single markdown quote
      * and returns its html equivalent.
      *
      * @param string

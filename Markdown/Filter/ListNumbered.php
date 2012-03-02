@@ -24,15 +24,18 @@
 require_once __DIR__ . '/List.php';
 
 /**
- * Translates numbered list to <ol>
+ * Translates numbered lists.
  *
- * Rules from markdown definition:
+ * Definitions:
+ * <ul>
+ *   <li>ordered lists use numbers followed by periods</li>
+ *   <li>actual numbers in the list have no effect on the HTML output</li>
+ * </ul>
  *
- *   *  ordered lists use numbers followed by periods
- *   *  actual numbers in the list have no effect on the HTML output
- *
+ * @package Markdown
+ * @subpackage Filter
  * @author Igor Gaponov <jiminy96@gmail.com>
- *
+ * @version 1.0
  */
 class Markdown_Filter_ListNumbered extends Markdown_Filter_List
 {

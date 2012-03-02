@@ -24,19 +24,29 @@
 require_once __DIR__ . '/../Filter.php';
 
 /**
- * Translates setext-style headers to <h#>
+ * Translates ==== style headers.
  *
- * Rules from markdown definition:
+ * Definitions:
+ * <ul>
+ *   <li>first-level headers are "underlined" using =</li>
+ *   <li>second-level headers are "underlined" using -</li>
+ *   <li>any number of underlining =’s or -’s will work.</li>
+ * </ul>
  *
- *   *  first-level headers are "underlined" using =
- *   *  second-level headers are "underlined" using -
- *   *  any number of underlining =’s or -’s will work.
- *
+ * @package Markdown
+ * @subpackage Filter
  * @author Igor Gaponov <jiminy96@gmail.com>
- *
+ * @version 1.0
  */
 class Markdown_Filter_HeaderSetext extends Markdown_Filter
 {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
     public function filter($text)
     {
         $text = preg_replace_callback('/^(?P<text>.+) *\n(?P<level>=|-)+ *\n+/m',

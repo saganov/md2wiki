@@ -24,15 +24,25 @@
 require_once __DIR__ . '/../Filter.php';
 
 /**
- * This class removes backslashes (\) before special symbols.
+ * Removes backslashes (\) before special symbols.
  *
- * This filter is run last, to let other filters be aware of backslashes.
+ * This filter should be run latest,
+ * to let other filters be aware of backslashes.
  *
+ * @package Markdown
+ * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
- *
+ * @version 1.0
  */
 class Markdown_Filter_Unescape extends Markdown_Filter
 {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
     public function filter($text)
     {
         $text = preg_replace(

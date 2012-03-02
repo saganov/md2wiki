@@ -26,10 +26,10 @@ require_once __DIR__ . '/Filter.php';
 /**
  * Represents a piece of text which can be both markdown and html.
  *
- * @package markdown-oo-php
+ * @package Markdown
  * @subpackage Text
- * @author Max Tsepkov <max@garygolden.me> http://garygolden.me
- * @version 0.9
+ * @author Max Tsepkov <max@garygolden.me>
+ * @version 1.0
  */
 class Markdown_Text
 {

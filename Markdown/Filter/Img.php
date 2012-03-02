@@ -24,20 +24,30 @@
 require_once __DIR__ . '/Link.php';
 
 /**
- * Translates images to <img>
+ * Translates images.
  *
- * Rules from markdown definition:
+ * Definitions:
+ * <ul>
+ *   <li>image syntax is resemble the syntax for links
+ *      but with an exclamation mark (!) before first bracket</li>
+ *   <li>brackets contain alt attribute</li>
+ *   <li>Markdown has no syntax for specifying the dimensions of an image</li>
+ * </ul>
  *
- *   *  image syntax is resemble the syntax for links
- *      but with an exclamation mark (!) before first bracket
- *   *  brackets contain alt attribute
- *   *  Markdown has no syntax for specifying the dimensions of an image
- *
+ * @package Markdown
+ * @subpackage Filter
  * @author Igor Gaponov <jiminy96@gmail.com>
- *
+ * @version 1.0
  */
 class Markdown_Filter_Img extends Markdown_Filter_Link
 {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
     public function filter($text)
     {
         $this->_mark = '!';

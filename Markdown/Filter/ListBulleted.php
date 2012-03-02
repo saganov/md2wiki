@@ -24,14 +24,17 @@
 require_once __DIR__ . '/List.php';
 
 /**
- * Translates bulleted list to <ul>
+ * Translates bulleted lists.
  *
- * Rules from markdown definition:
+ * Definitions:
+ * <ul>
+ *   <li>asterisks, pluses, and hyphens — interchangably — as list markers</li>
+ * </ul>
  *
- *   *  asterisks, pluses, and hyphens — interchangably — as list markers
- *
+ * @package Markdown
+ * @subpackage Filter
  * @author Igor Gaponov <jiminy96@gmail.com>
- *
+ * @version 1.0
  */
 class Markdown_Filter_ListBulleted extends Markdown_Filter_List
 {

@@ -24,21 +24,30 @@
 require_once __DIR__ . '/../Filter.php';
 
 /**
- * This class escapes symbols & and <
+ * Translates & and &lt; to &amp;amp; and &amp;lt;
  *
- * Rules from Markdown definition:
+ * Definitions:
+ * <ul>
+ *   <li>Transform & to &amp;amp; and < to &amp;lt;</li>
+ *   <li>do NOT transform if & is part of html entity, e.g. &amp;copy;</li>
+ *   <li>do NOT transform < if it's part of html tag</li>
+ *   <li>ALWAYS transfrom & and < within code spans and blocks</li>
+ * </ul>
  *
- *   - Transform & to &amp; and < to &lt;
- *   - do NOT transform if & is part of html entity, e.g. &copy;
- *   - do NOT transform < if it's part of html tag
- *   - ALWAYS transfrom & and < within code spans and blocks
- *
- *
+ * @package Markdown
+ * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
- *
+ * @version 1.0
  */
 class Markdown_Filter_Entities extends Markdown_Filter
 {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
     public function filter($text)
     {
         // always escape within code blocks and spans

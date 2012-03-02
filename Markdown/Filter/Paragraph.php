@@ -24,22 +24,31 @@
 require_once __DIR__ . '/../Filter.php';
 
 /**
- * Translates paragraphs to <p>
+ * Translates paragraphs.
  *
- * Rules from markdown definition:
+ * Definitions:
+ * <ul>
+ *   <li>paragraph is simply one or more consecutive lines of text,
+ *      separated by one or more blank lines</li>
+ *   <li>normal paragraphs should not be indented</li>
+ *   <li>block level inline html must be separated with blank lines
+ *      and start and end tags should not be indented</li>
+ * </ul>
  *
- *   *  paragraph is simply one or more consecutive lines of text,
- *      separated by one or more blank lines
- *   *  normal paragraphs should not be indented
- *   *  block level inline html must be separated with blank lines
- *      and start and end tags should not be indented
- *
+ * @package Markdown
+ * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
- * @author Igor Gaponov <jiminy96@gmail.com>
- *
+ * @version 1.0
  */
 class Markdown_Filter_Paragraph extends Markdown_Filter
 {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
     public function filter($text)
     {
         $result = '';

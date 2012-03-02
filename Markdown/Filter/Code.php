@@ -24,28 +24,39 @@
 require_once __DIR__ . '/../Filter.php';
 
 /**
- * Translates code blocks to <pre><code>
+ * Translate code blocks and spans.
  *
- * Rules from markdown definition:
+ * Definitions of code block:
+ * <ul>
+ *   <li>code block is indicated by indent at least 4 spaces or 1 tab</li>
+ *   <li>one level of indentation is removed from each line of the code block</li>
+ *   <li>code block continues until it reaches a line that is not indented</li>
+ *   <li>within a code block, ampersands (&) and angle brackets (< and >)
+ *      are automatically converted into HTML entities</li>
+ * </ul>
  *
- *   *  code block is indicated by indent at least 4 spaces or 1 tab
- *   *  one level of indentation is removed from each line of the code block
- *   *  code block continues until it reaches a line that is not indented
- *   *  within a code block, ampersands (&) and angle brackets (< and >)
- *      are automatically converted into HTML entities
+ * Definitions of code span:
+ * <ul>
+ *   <li>span of code is indicated by backtick quotes (`)</li>
+ *   <li>to include one or more backticks the delimiters must
+ *     contain multiple backticks</li>
+ * </ul>
  *
- * Translates code spans to <code>
- *
- * Rules from markdown definition:
- *
- *   * span of code is indicated by backtick quotes (`)
- *   * to include one or more backticks the delimiters must
- *     contain multiple backticks
- *
+ * @package Markdown
+ * @subpackage Filter
+ * @author Max Tsepkov <max@garygolden.me>
  * @author Igor Gaponov <jiminy96@gmail.com>
+ * @version 1.0
  */
 class Markdown_Filter_Code extends Markdown_Filter
 {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
     public function filter($text)
     {
         $text = preg_replace_callback(
@@ -64,8 +75,7 @@ class Markdown_Filter_Code extends Markdown_Filter
     }
 
     /**
-     * Takes a signle markdown code block
-     * and returns its html equivalent.
+     * Takes a single markdown code block and returns its html equivalent.
      *
      * @param array
      * @return string

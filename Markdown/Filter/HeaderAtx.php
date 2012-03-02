@@ -24,29 +24,42 @@
 require_once __DIR__ . '/../Filter.php';
 
 /**
- * Translates atx-style headers to <h#>
+ * Translates ### style headers.
  *
- * Rules from markdown definition:
+ * Definitions:
+ * <ul>
+ *   <li>use 1-6 hash characters at the start of the line</li>
+ *   <li>number of opening hashes determines the header level</li>
+ *   <li>closing hashes don’t need to match the number of hashes used to open</li>
+ * </ul>
  *
- *   *  use 1-6 hash characters at the start of the line
- *   *  number of opening hashes determines the header level
- *   *  closing hashes don’t even need to match the number of hashes used to open
- *
+ * @package Markdown
+ * @subpackage Filter
  * @author Igor Gaponov <jiminy96@gmail.com>
- *
+ * @version 1.0
  */
 class Markdown_Filter_HeaderAtx extends Markdown_Filter
 {
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Markdown_Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
     public function filter($text)
     {
-        $text = preg_replace_callback('/^(?P<level>\#{1,6})[ \t]*(?P<text>.+?)[ \t]*\#*\n+/m',
-            array($this, 'transformHeaderAtx'), $text);
+        $text = preg_replace_callback(
+            '/^(?P<level>\#{1,6})[ \t]*(?P<text>.+?)[ \t]*\#*\n+/m',
+            array($this, 'transformHeaderAtx'),
+            $text
+        );
+
         return $text;
     }
 
     /**
-     * Takes a signle markdown header
-     * and returns its html equivalent.
+     * Takes a single markdown header and returns its html equivalent.
      *
      * @param array
      * @return string

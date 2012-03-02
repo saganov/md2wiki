@@ -28,8 +28,10 @@ require_once __DIR__ . '/../Filter.php';
  *
  * This filter must be first in the chain, since others may rely on it.
  *
+ * @package Markdown
+ * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
- *
+ * @version 1.0
  */
 class Markdown_Filter_Newline extends Markdown_Filter
 {
