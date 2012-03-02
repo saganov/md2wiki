@@ -13,6 +13,9 @@ paragraph
 <p>text</p>
 paragraph
 
+Markdown states that block-level tags must be separated from surrounding content.
+And it should be, despite the fact that original perl script doesn't adhere to this.
+
 paragraph
 <h4>header</h4>
 paragraph

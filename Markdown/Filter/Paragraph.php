@@ -30,33 +30,43 @@ require_once __DIR__ . '/../Filter.php';
  *
  *   *  paragraph is simply one or more consecutive lines of text,
  *      separated by one or more blank lines
+ *   *  normal paragraphs should not be indented
+ *   *  block level inline html must be separated with blank lines
+ *      and start and end tags should not be indented
  *
+ * @author Max Tsepkov <max@garygolden.me>
  * @author Igor Gaponov <jiminy96@gmail.com>
  *
  */
 class Markdown_Filter_Paragraph extends Markdown_Filter
 {
-    protected $_blockTags = 'p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del|article|aside|header|hgroup|footer|nav|section|figure|figcaption';
-
     public function filter($text)
     {
-        $text = trim($text, "\n");
-        $paragraphs = preg_split(
-            sprintf(
-                '#\n{2,}|\n*(?=<(%s)>)|(?<=/%s>)\n*#',
-                $this->_blockTags,
-                str_replace('|', '>|/', $this->_blockTags)
-            ),
-            $text, -1, PREG_SPLIT_NO_EMPTY);
-        $htmlBlocks = array();
-        foreach($paragraphs as $paragraph) {
-            if(preg_match(sprintf('/\n{2,}|<\/?(%1$s)>/', $this->_blockTags), $paragraph)) {
-                $htmlBlocks[] = $paragraph;
-            } else {
-                $htmlBlocks[] = sprintf("<p>%s</p>", ltrim($paragraph, " \t"));
+        $result = '';
+
+        // split by empty lines to match paragraphs
+        foreach(preg_split('/\n\s*\n/', $text) as $paragraph) {
+            $paragraph = trim($paragraph, "\n");
+            $result .= $this->processParagraph($paragraph);
+            $result .= "\n\n";
+        }
+
+        return rtrim($result, "\n") . "\n";
+    }
+
+    protected function processParagraph($text)
+    {
+        if (strlen($text) > 0) {
+            // should not be indented
+            if (!preg_match('/^\s/', $text)) {
+                // should not be a block-level tag
+                $regex = sprintf('/^<(%s)/i', implode('|', self::$_blockTags));
+                if (!preg_match($regex, $text)) {
+                    return '<p>' . $text . '</p>';
+                }
             }
         }
-        $text = implode("\n\n", $htmlBlocks);
+
         return $text;
     }
 }

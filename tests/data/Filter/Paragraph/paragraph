@@ -4,20 +4,17 @@
 text
 end paragraph</p>
 
-<p>paragraph</p>
-
+<p>paragraph
 <div>text</div>
+paragraph</p>
 
-<p>paragraph</p>
-
-<p>paragraph</p>
-
+<p>paragraph
 <p>text</p>
+paragraph</p>
 
-<p>paragraph</p>
+<p>Markdown states that block-level tags must be separated from surrounding content.
+And it should be, despite the fact that original perl script doesn't adhere to this.</p>
 
-<p>paragraph</p>
-
+<p>paragraph
 <h4>header</h4>
-
-<p>paragraph</p>
+paragraph</p>

@@ -73,6 +73,18 @@ abstract class Markdown_Filter
 	);
 
     /**
+     * Block-level HTML tags.
+     *
+     * @var array
+     */
+    protected static $_blockTags = array(
+        'p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre',
+        'table', 'dl', 'ol', 'ul', 'script', 'noscript', 'form', 'fieldset',
+        'iframe', 'math', 'ins', 'del', 'article', 'aside', 'header', 'hgroup',
+        'footer', 'nav', 'section', 'figure', 'figcaption'
+    );
+
+    /**
      * Lookup Markdown_Filter_{$filtername} class and return its instance.
      *
      * @throws InvalidArgumentException
