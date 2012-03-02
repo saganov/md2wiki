@@ -118,9 +118,9 @@ class Markdown_Filter_Link extends Markdown_Filter
     protected function extractLinkDefinitions($values) {
         $id = strtolower($values['id']);
         $url = trim($values['url'], '<>');
-        $this->_urls[$id] = $url;
+        $this->_urls[$id] = $this->encodeAttribute($url);
         if(isset($values['title'])) {
-            $this->_titles[$id] = $values['title'];
+            $this->_titles[$id] = $this->encodeAttribute($values['title']);
         }
 
         return null;
@@ -164,12 +164,24 @@ class Markdown_Filter_Link extends Markdown_Filter
     protected function transformInline($values) {
         $text = $values['text'];
         $url = trim($values['url'], '<>');
+        $url = $this->encodeAttribute($url);
         if(isset($values['title'])) {
-            $title = " title=\"{$values['title']}\"";
+            $title = sprintf(' title="%s"',
+                $this->encodeAttribute($values['title']));
         } else {
             $title = null;
         }
 
         return sprintf($this->_format, $url, $title, $text);
+    }
+
+    /**
+     * Encode text for a double-quoted HTML attribute
+     *
+     * @param string
+     * @return string
+     */
+    protected function encodeAttribute($text) {
+        return str_replace('"', '&quot;', $text);
     }
 }
