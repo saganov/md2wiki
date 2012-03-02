@@ -54,16 +54,30 @@ class Markdown_Filter_Paragraph extends Markdown_Filter
         $result = '';
 
         // split by empty lines to match paragraphs
-        foreach(preg_split('/\n\s*\n/', $text) as $paragraph) {
-            $paragraph = trim($paragraph, "\n");
-            $result .= $this->processParagraph($paragraph);
+        foreach(preg_split('/\n\s*\n/', $text) as $snippet) {
+            $snippet = trim($snippet, "\n");
+            if (self::isParagraph($snippet)) {
+                $result .= '<p>' . $snippet . '</p>';
+            }
+            else {
+                $result .= $snippet;
+            }
             $result .= "\n\n";
         }
 
         return rtrim($result, "\n") . "\n";
     }
 
-    protected function processParagraph($text)
+    /**
+     * Return true if given text should be enclosed with &lt;p&gt;
+     * according to Markdown specification.
+     *
+     * False otherwise.
+     *
+     * @param string $text
+     * @return bool
+     */
+    protected static function isParagraph($text)
     {
         if (strlen($text) > 0) {
             // should not be indented
@@ -71,11 +85,11 @@ class Markdown_Filter_Paragraph extends Markdown_Filter
                 // should not be a block-level tag
                 $regex = sprintf('/^<(%s)/i', implode('|', self::$_blockTags));
                 if (!preg_match($regex, $text)) {
-                    return '<p>' . $text . '</p>';
+                    return true;
                 }
             }
         }
 
-        return $text;
+        return false;
     }
 }
