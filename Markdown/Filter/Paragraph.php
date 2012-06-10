@@ -69,8 +69,11 @@ class Markdown_Filter_Paragraph extends Markdown_Filter
     }
 
     /**
-     * Return true if given text should be enclosed with &lt;p&gt;
-     * according to Markdown specification.
+     * Return true if given text is:
+     * <ul>
+     *   <li>not intended</li>
+     *   <li>not started by a block-level tag</li>
+     * </ul>
      *
      * False otherwise.
      *
