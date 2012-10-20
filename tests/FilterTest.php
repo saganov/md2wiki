@@ -62,12 +62,6 @@ class FilterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Markdown_Filter::getDefaultFilters(), $filters);
     }
 
-    public function testUseFallbackFilterCanBeDisabled()
-    {
-        Markdown_Filter::useFallbackFilter(false);
-        $this->assertFalse(Markdown_Filter::useFallbackFilter());
-    }
-
     /**
      * @expectedException InvalidArgumentException
      */

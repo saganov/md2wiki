@@ -34,13 +34,6 @@
 abstract class Markdown_Filter
 {
     /**
-     * Flag indicates whether to append Markdown_Filter_Fallback to filter list.
-     *
-     * @var bool
-     */
-    protected static $_useFallbackFilter = false;
-
-    /**
      *
      * @var array
      */
@@ -139,24 +132,6 @@ abstract class Markdown_Filter
     }
 
     /**
-     * Enable/disable original markdown perl script usage.
-     * Returns current settings if called without parameter.
-     *
-     * @param bool $flag optional
-     * @return boolean
-     */
-    public static function useFallbackFilter($flag = null)
-    {
-        if ($flag === null) {
-            return self::$_useFallbackFilter;
-        }
-        else {
-            self::$_useFallbackFilter = (bool) $flag;
-            return self::$_useFallbackFilter;
-        }
-    }
-
-    /**
      * Pass given $text through $filters chain and return result.
      * Use default filters in no $filters given.
      *
@@ -168,9 +143,6 @@ abstract class Markdown_Filter
     {
         if ($filters === null) {
             $filters = self::getDefaultFilters();
-            if (self::useFallbackFilter()) {
-                $filters[] = self::factory('Fallback');
-            }
         }
 
         foreach ($filters as $filter) {

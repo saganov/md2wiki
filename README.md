@@ -64,27 +64,10 @@ You can write your own filters and use like this:
     Markdown_Filter::getDefaultFilters();
 
 
-Graceful fallback
-=============
-
-There is a special filter which is automatically executed after others.
-IIt's called Fallback. Its job is to launch original Markdown.pl script and process given text using it.
-This way the library will always stay usable during development process.
-
-You can easily disable this behavior:
-
-    Markdown_Filter::useFallbackFilter(false);
-
-    // or just use your own filters (Fallback filter will not be appended)
-    Markdown_Filter::setDefaultFilters($filters);
-
-
 Requirements
 ===========
 
   *  PHP  >= 5.3
-  *  Perl >= 5.6, if you gonna use Fallback filter.
-
 
 Contribution
 ==========
