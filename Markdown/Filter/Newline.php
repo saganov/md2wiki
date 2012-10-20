@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * Copyright (C) 2011, Maxim S. Tsepkov
  *
@@ -37,9 +37,6 @@ class Markdown_Filter_Newline extends Markdown_Filter
 {
     public function filter($text)
     {
-        $text = str_replace("\r\n", "\n", $text);
-        $text = str_replace("\r",   "\n", $text);
-
-        return $text;
+        return str_replace(array("\r\n", "\r"), "\n", $text);
     }
 }

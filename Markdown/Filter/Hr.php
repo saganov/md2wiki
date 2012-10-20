@@ -51,6 +51,8 @@ class Markdown_Filter_Hr extends Markdown_Filter
     {
         return preg_replace(
             '/^ {0,3}([*-_])(?> {0,2}\1){2,} *$/m',
-            "\n<hr />\n", $text);
+            "\n<hr />\n",
+            $text
+        );
     }
 }
