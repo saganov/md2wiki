@@ -21,10 +21,11 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
 
 require_once __DIR__ . '/../Markdown/Text.php';
 
-class FilterTest extends PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit_Framework_TestCase
 {
     protected static $_md   = array();
     protected static $_html = array();
@@ -49,7 +50,7 @@ class FilterTest extends PHPUnit_Framework_TestCase
      */
     public function testFactoryNonAlnum()
     {
-        Markdown_Filter::factory('/etc/passwd');
+        Filter::factory('/etc/passwd');
     }
 
     /**
@@ -57,17 +58,17 @@ class FilterTest extends PHPUnit_Framework_TestCase
      */
     public function testFactoryNonExistent()
     {
-        Markdown_Filter::factory('suchfilterdoesntexists');
+        Filter::factory('suchfilterdoesntexists');
     }
 
     public function testFactory()
     {
-        $this->assertInstanceOf('Markdown_Filter', Markdown_Filter::factory('Hr'));
+        $this->assertInstanceOf('\Markdown\Filter', Filter::factory('Hr'));
     }
 
     public function testGetDefaultFiltersNonEmpty()
     {
-        $this->assertNotEmpty(Markdown_Filter::getDefaultFilters());
+        $this->assertNotEmpty(Filter::getDefaultFilters());
     }
 
     /**
@@ -76,9 +77,9 @@ class FilterTest extends PHPUnit_Framework_TestCase
     public function testSetDefaultFilters()
     {
         $filters = array('Linebreak', 'Hr');
-        Markdown_Filter::setDefaultFilters($filters);
-        $this->assertEquals(Markdown_Filter::getDefaultFilters(), $filters);
-        Markdown_Filter::setDefaultFilters(Markdown_Filter::getFactoryDefaultFilters());
+        Filter::setDefaultFilters($filters);
+        $this->assertEquals(Filter::getDefaultFilters(), $filters);
+        Filter::setDefaultFilters(Filter::getFactoryDefaultFilters());
     }
 
     /**
@@ -86,14 +87,14 @@ class FilterTest extends PHPUnit_Framework_TestCase
      */
     public function testRunWithInvalidFiltersParameter()
     {
-        Markdown_Filter::run('', array('Filter', 1, false, true));
+        Filter::run('', array('Filter', 1, false, true));
     }
 
     public function testWithDataFiles()
     {
         foreach (self::$_md as $key => $md)
         {
-            $this->assertEquals(self::$_html[$key], Markdown_Filter::run($md)->getText());
+            $this->assertEquals(self::$_html[$key], Filter::run($md)->getText());
         }
     }
 }

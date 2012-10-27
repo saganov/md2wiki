@@ -21,6 +21,8 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
+
 require_once __DIR__ . '/../Filter.php';
 
 /**
@@ -38,7 +40,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-abstract class Markdown_Filter_List extends Markdown_Filter
+abstract class Filter_List extends Filter
 {
     /**
      * Type of list
@@ -57,11 +59,11 @@ abstract class Markdown_Filter_List extends Markdown_Filter
     /**
      * Pass given text through the filter and return result.
      *
-     * @see Markdown_Filter::filter()
+     * @see Filter::filter()
      * @param string $text
      * @return string $text
      */
-    public function filter(Markdown_Text $text)
+    public function filter(Text $text)
     {
         $text->setText(preg_replace_callback(
             sprintf(

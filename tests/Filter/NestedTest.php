@@ -21,6 +21,8 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
+
 require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Text.php';
 
@@ -34,7 +36,7 @@ class FilterNestedTest extends TestAbstract
      */
     public function testFilters($text, $md)
     {
-        $f = new Markdown_Text($text);
-        $this->assertEquals($md, Markdown_Filter::run($f));
+        $f = new Text($text);
+        $this->assertEquals($md, Filter::run($f));
     }
 }

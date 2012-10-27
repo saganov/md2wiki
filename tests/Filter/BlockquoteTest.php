@@ -21,6 +21,8 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
+
 require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/Blockquote.php';
 
@@ -34,7 +36,7 @@ class FilterBlockquoteTest extends TestAbstract
      */
     public function testFilter($text, $md)
     {
-        $f = new Markdown_Filter_Blockquote();
-        $this->assertEquals($md, $f->filter(new Markdown_Text($text)));
+        $f = new Filter_Blockquote();
+        $this->assertEquals($md, $f->filter(new Text($text)));
     }
 }

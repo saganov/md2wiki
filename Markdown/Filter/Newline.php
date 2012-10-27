@@ -21,6 +21,8 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
+
 require_once __DIR__ . '/../Filter.php';
 
 /**
@@ -33,9 +35,9 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Markdown_Filter_Newline extends Markdown_Filter
+class Filter_Newline extends Filter
 {
-    public function filter(Markdown_Text $text)
+    public function filter(Text $text)
     {
         $text->setText(str_replace(array("\r\n", "\r"), "\n", $text->getText()));
 

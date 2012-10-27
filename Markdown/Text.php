@@ -21,6 +21,8 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
+
 require_once __DIR__ . '/Filter.php';
 
 /**
@@ -31,7 +33,7 @@ require_once __DIR__ . '/Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Markdown_Text
+class Text
 {
     protected $_text = '';
 
@@ -61,7 +63,7 @@ class Markdown_Text
     /**
      *
      * @param string $text
-     * @return Markdown_Text
+     * @return Text
      */
     public function setText($text)
     {

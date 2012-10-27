@@ -21,6 +21,8 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
+
 require_once __DIR__ . '/../Filter.php';
 
 /**
@@ -40,16 +42,16 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Markdown_Filter_Paragraph extends Markdown_Filter
+class Filter_Paragraph extends Filter
 {
     /**
      * Pass given text through the filter and return result.
      *
-     * @see Markdown_Filter::filter()
+     * @see Filter::filter()
      * @param string $text
      * @return string $text
      */
-    public function filter(Markdown_Text $text)
+    public function filter(Text $text)
     {
         $result = '';
 

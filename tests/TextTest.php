@@ -21,9 +21,11 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
+
 require_once __DIR__ . '/../Markdown/Text.php';
 
-class TextTest extends PHPUnit_Framework_TestCase
+class TextTest extends \PHPUnit_Framework_TestCase
 {
     const SAMPLE_MARKDOWN = <<<MD
 This is a sample markdown
@@ -34,13 +36,13 @@ MD;
 
     public function testConstruct()
     {
-        $text = new Markdown_Text(self::SAMPLE_MARKDOWN);
+        $text = new Text(self::SAMPLE_MARKDOWN);
         $this->assertEquals(self::SAMPLE_MARKDOWN, $text->getText());
     }
 
     public function testSetGetMarkdown()
     {
-        $text = new Markdown_Text();
+        $text = new Text();
         $text->setText(self::SAMPLE_MARKDOWN);
         $this->assertEquals(self::SAMPLE_MARKDOWN, $text->getText());
     }

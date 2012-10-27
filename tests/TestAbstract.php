@@ -3,9 +3,11 @@
  * Common class for all tests.
  */
 
+namespace Markdown;
+
 require_once __DIR__ . '/../Markdown/Text.php';
 
-abstract class TestAbstract extends PHPUnit_Framework_TestCase
+abstract class TestAbstract extends \PHPUnit_Framework_TestCase
 {
     /**
      * Searches for files based on current class name.
@@ -16,7 +18,8 @@ abstract class TestAbstract extends PHPUnit_Framework_TestCase
     {
         $data = array();
 
-        $classname = get_class($this);
+        $classname = explode('\\', get_class($this));
+        $classname = array_pop($classname);
         if (substr($classname, -4) == 'Test') {
             preg_match_all('/[A-Z][a-z]+/', substr($classname, 0, -4), $dir);
             $dir = __DIR__ . '/data/' . implode('/', $dir[0]);

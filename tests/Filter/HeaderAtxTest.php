@@ -21,6 +21,8 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
+
 require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/HeaderAtx.php';
 
@@ -34,7 +36,7 @@ class FilterHeaderAtxTest extends TestAbstract
      */
     public function testFilter($md, $html)
     {
-        $f = new Markdown_Filter_HeaderAtx();
-        $this->assertEquals($html, $f->filter(new Markdown_Text($md)));
+        $f = new Filter_HeaderAtx();
+        $this->assertEquals($html, $f->filter(new Text($md)));
     }
 }

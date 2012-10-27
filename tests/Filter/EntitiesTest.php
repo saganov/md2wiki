@@ -21,6 +21,8 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
+
 require_once __DIR__ . '/../TestAbstract.php';
 require_once __DIR__ . '/../../Markdown/Filter/Entities.php';
 
@@ -34,22 +36,22 @@ class FilterEntitiesTest extends TestAbstract
      */
     public function testFilter($md, $html)
     {
-        $f = new Markdown_Filter_Entities();
-        $this->assertEquals($html, $f->filter(new Markdown_Text($md)));
+        $f = new Filter_Entities();
+        $this->assertEquals($html, $f->filter(new Text($md)));
     }
 
     public function testSingles()
     {
-        $f = new Markdown_Filter_Entities();
-        $this->assertEquals('&amp;', $f->filter(new Markdown_Text('&')));
-        $this->assertEquals('&amp;', $f->filter(new Markdown_Text('&amp;')));
-        $this->assertEquals('&lt;', $f->filter(new Markdown_Text('<')));
-        $this->assertEquals('<head>', $f->filter(new Markdown_Text('<head>')));
+        $f = new Filter_Entities();
+        $this->assertEquals('&amp;', $f->filter(new Text('&')));
+        $this->assertEquals('&amp;', $f->filter(new Text('&amp;')));
+        $this->assertEquals('&lt;', $f->filter(new Text('<')));
+        $this->assertEquals('<head>', $f->filter(new Text('<head>')));
     }
 
     public function testCodeSpan()
     {
-        $f = new Markdown_Filter_Entities();
-        $this->assertEquals('foo\\`<bar>`', $f->filter(new Markdown_Text('foo\\`<bar>`')));
+        $f = new Filter_Entities();
+        $this->assertEquals('foo\\`<bar>`', $f->filter(new Text('foo\\`<bar>`')));
     }
 }

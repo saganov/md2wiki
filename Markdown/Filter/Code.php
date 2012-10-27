@@ -21,6 +21,8 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
+
 require_once __DIR__ . '/../Filter.php';
 
 /**
@@ -48,16 +50,16 @@ require_once __DIR__ . '/../Filter.php';
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class Markdown_Filter_Code extends Markdown_Filter
+class Filter_Code extends Filter
 {
     /**
      * Pass given text through the filter and return result.
      *
-     * @see Markdown_Filter::filter()
+     * @see Filter::filter()
      * @param string $text
      * @return string $text
      */
-    public function filter(Markdown_Text $text)
+    public function filter(Text $text)
     {
         $text->setText(preg_replace_callback(
             '/(?:\n\n|\A\n?)(?P<code>(?>( {4}|\t).*\n+)+)((?=^ {0,4}\S)|\Z)/m',

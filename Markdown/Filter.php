@@ -21,6 +21,8 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
+
 /**
  * Superclass of all filters.
  *
@@ -31,7 +33,7 @@
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-abstract class Markdown_Filter
+abstract class Filter
 {
     protected static $_defaultFilters = null;
 
@@ -76,17 +78,17 @@ abstract class Markdown_Filter
     );
 
     /**
-     * Lookup Markdown_Filter_{$filtername} class and return its instance.
+     * Lookup Filter_{$filtername} class and return its instance.
      *
      * @throws InvalidArgumentException
      * @param string $filtername
-     * @return Markdown_Filter
+     * @return Filter
      */
     public static function factory($filtername)
     {
         if (is_string($filtername) && ctype_alnum($filtername)) {
             $file  = __DIR__ . '/Filter/' . $filtername . '.php';
-            $class = 'Markdown_Filter_'   . $filtername;
+            $class = __NAMESPACE__ . '\\Filter_'   . $filtername;
 
             if (is_readable($file)) {
                 require_once $file;
@@ -95,17 +97,17 @@ abstract class Markdown_Filter
                     return new $class;
                 }
                 else {
-                    throw new InvalidArgumentException(
+                    throw new \InvalidArgumentException(
                         'Could not find class ' . $class
                     );
                 }
             }
             else {
-                throw new InvalidArgumentException($file . ' is not readable');
+                throw new \InvalidArgumentException($file . ' is not readable');
             }
         }
         else {
-            throw new InvalidArgumentException(sprintf(
+            throw new \InvalidArgumentException(sprintf(
                 '$filtername must be an alphanumeric string, <%s> given.',
                 gettype($filtername)
             ));
@@ -131,7 +133,7 @@ abstract class Markdown_Filter
 
     /**
      * @param array $filters
-     * @return Markdown_Filter
+     * @return Filter
      */
     public static function setDefaultFilters(array $filters)
     {
@@ -148,8 +150,8 @@ abstract class Markdown_Filter
      */
     public static function run($text, array $filters = null)
     {
-        if(!$text instanceof Markdown_Text) {
-            $text = new Markdown_Text($text);
+        if(!$text instanceof Text) {
+            $text = new Text($text);
         }
 
         if ($filters === null) {
@@ -157,7 +159,7 @@ abstract class Markdown_Filter
         }
 
         foreach ($filters as $filter) {
-            if ($filter instanceof Markdown_Filter) {
+            if ($filter instanceof Filter) {
                 // do nothing
             }
             elseif (is_string($filter)) {
@@ -166,7 +168,7 @@ abstract class Markdown_Filter
             else {
                 throw new InvalidArgumentException(
                     '$filters must be an array which elements ' .
-                    'is either a string or Markdown_Filter'
+                    'is either a string or Filter'
                 );
             }
 
@@ -190,8 +192,8 @@ abstract class Markdown_Filter
         return preg_replace('/^(\t| {1,4})/m', '', $text);
     }
 
-    abstract public function filter(Markdown_Text $text);
+    abstract public function filter(Text $text);
 
-    public function preFilter(Markdown_Text $text) {}
-    public function postFilter(Markdown_Text $text) {}
+    public function preFilter(Text $text) {}
+    public function postFilter(Text $text) {}
 }

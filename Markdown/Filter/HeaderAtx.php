@@ -21,6 +21,8 @@
  * THE SOFTWARE.
  */
 
+namespace Markdown;
+
 require_once __DIR__ . '/../Filter.php';
 
 /**
@@ -38,16 +40,16 @@ require_once __DIR__ . '/../Filter.php';
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class Markdown_Filter_HeaderAtx extends Markdown_Filter
+class Filter_HeaderAtx extends Filter
 {
     /**
      * Pass given text through the filter and return result.
      *
-     * @see Markdown_Filter::filter()
+     * @see Filter::filter()
      * @param string $text
      * @return string $text
      */
-    public function filter(Markdown_Text $text)
+    public function filter(Text $text)
     {
         $text->setText(preg_replace_callback(
             '/^(?P<level>\#{1,6})[ \t]*(?P<text>.+?)[ \t]*\#*\n+/m',
