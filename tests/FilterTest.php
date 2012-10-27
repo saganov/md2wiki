@@ -26,6 +26,24 @@ require_once __DIR__ . '/../Markdown/Text.php';
 
 class FilterTest extends PHPUnit_Framework_TestCase
 {
+    protected static $_md   = array();
+    protected static $_html = array();
+
+    public static function setUpBeforeClass()
+    {
+        $mds = glob(__DIR__ . '/data/*.md');
+        foreach($mds as $filename) {
+            $key = basename($filename, '.md');
+            self::$_md[$key] = file_get_contents($filename);
+        }
+
+        $htmls = glob(__DIR__ . '/data/*.html');
+        foreach($htmls as $filename) {
+            $key = basename($filename, '.html');
+            self::$_html[$key] = file_get_contents($filename);
+        }
+    }
+
     /**
      * @expectedException InvalidArgumentException
      */
@@ -60,6 +78,7 @@ class FilterTest extends PHPUnit_Framework_TestCase
         $filters = array('Linebreak', 'Hr');
         Markdown_Filter::setDefaultFilters($filters);
         $this->assertEquals(Markdown_Filter::getDefaultFilters(), $filters);
+        Markdown_Filter::setDefaultFilters(Markdown_Filter::getFactoryDefaultFilters());
     }
 
     /**
@@ -68,5 +87,13 @@ class FilterTest extends PHPUnit_Framework_TestCase
     public function testRunWithInvalidFiltersParameter()
     {
         Markdown_Filter::run('', array('Filter', 1, false, true));
+    }
+
+    public function testWithDataFiles()
+    {
+        foreach (self::$_md as $key => $md)
+        {
+            $this->assertEquals(self::$_html[$key], Markdown_Filter::run($md));
+        }
     }
 }

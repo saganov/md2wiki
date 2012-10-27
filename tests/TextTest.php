@@ -25,34 +25,23 @@ require_once __DIR__ . '/../Markdown/Text.php';
 
 class TextTest extends PHPUnit_Framework_TestCase
 {
-    protected static $_md   = array();
-    protected static $_html = array();
+    const SAMPLE_MARKDOWN = <<<MD
+This is a sample markdown
+=========================
 
-    public static function setUpBeforeClass()
-    {
-        $mds = glob(__DIR__ . '/data/*.md');
-        foreach($mds as $filename) {
-            $key = basename($filename, '.md');
-            self::$_md[$key] = file_get_contents($filename);
-        }
-
-        $htmls = glob(__DIR__ . '/data/*.html');
-        foreach($htmls as $filename) {
-            $key = basename($filename, '.html');
-            self::$_html[$key] = file_get_contents($filename);
-        }
-    }
+With a single paragraph.
+MD;
 
     public function testConstruct()
     {
-        $text = new Markdown_Text(self::$_md['syntax']);
-        $this->assertEquals(self::$_md['syntax'], $text->getMarkdown());
+        $text = new Markdown_Text(self::SAMPLE_MARKDOWN);
+        $this->assertEquals(self::SAMPLE_MARKDOWN, $text->getMarkdown());
     }
 
     public function testSetGetMarkdown()
     {
         $text = new Markdown_Text();
-        $text->setMarkdown(self::$_md['basics']);
-        $this->assertEquals(self::$_md['basics'], $text->getMarkdown());
+        $text->setMarkdown(self::SAMPLE_MARKDOWN);
+        $this->assertEquals(self::SAMPLE_MARKDOWN, $text->getMarkdown());
     }
 }
