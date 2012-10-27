@@ -33,11 +33,9 @@
  */
 abstract class Markdown_Filter
 {
-    /**
-     *
-     * @var array
-     */
-    protected static $_defaultFilters = array(
+    protected static $_defaultFilters = null;
+
+    protected static $_factoryDefaultFilters = array(
         'Newline',
         'Blockquote',
         'Code',
@@ -114,11 +112,20 @@ abstract class Markdown_Filter
         }
     }
 
+    public static function getFactoryDefaultFilters()
+    {
+        return self::$_factoryDefaultFilters;
+    }
+
     /**
      * @return array
      */
     public static function getDefaultFilters()
     {
+        if (!self::$_defaultFilters) {
+            self::$_defaultFilters = self::getFactoryDefaultFilters();
+        }
+
         return self::$_defaultFilters;
     }
 
