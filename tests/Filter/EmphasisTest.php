@@ -35,6 +35,6 @@ class FilterEmphasisTest extends TestAbstract
     public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_Emphasis();
-        $this->assertEquals($html, $f->filter($md));
+        $this->assertEquals($html, $f->filter(new Markdown_Text($md)));
     }
 }

@@ -48,10 +48,12 @@ class Markdown_Filter_Img extends Markdown_Filter_Link
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
         $this->_mark = '!';
         $this->_format = '<img src="%s"%s alt="%s" />';
-        return parent::filter($text);
+        $text->setText(parent::filter($text));
+
+        return $text->getText();
     }
 }

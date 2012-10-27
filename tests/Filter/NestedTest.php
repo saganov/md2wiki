@@ -35,6 +35,6 @@ class FilterNestedTest extends TestAbstract
     public function testFilters($text, $md)
     {
         $f = new Markdown_Text($text);
-        $this->assertEquals($md, $f->getHtml());
+        $this->assertEquals($md, Markdown_Filter::run($f));
     }
 }

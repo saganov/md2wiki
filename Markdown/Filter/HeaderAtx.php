@@ -47,15 +47,15 @@ class Markdown_Filter_HeaderAtx extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
-        $text = preg_replace_callback(
+        $text->setText(preg_replace_callback(
             '/^(?P<level>\#{1,6})[ \t]*(?P<text>.+?)[ \t]*\#*\n+/m',
             array($this, 'transformHeaderAtx'),
             $text
-        );
+        ));
 
-        return $text;
+        return $text->getText();
     }
 
     /**

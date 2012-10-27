@@ -35,21 +35,21 @@ class FilterEntitiesTest extends TestAbstract
     public function testFilter($md, $html)
     {
         $f = new Markdown_Filter_Entities();
-        $this->assertEquals($html, $f->filter($md));
+        $this->assertEquals($html, $f->filter(new Markdown_Text($md)));
     }
 
     public function testSingles()
     {
         $f = new Markdown_Filter_Entities();
-        $this->assertEquals('&amp;', $f->filter('&'));
-        $this->assertEquals('&amp;', $f->filter('&amp;'));
-        $this->assertEquals('&lt;', $f->filter('<'));
-        $this->assertEquals('<head>', $f->filter('<head>'));
+        $this->assertEquals('&amp;', $f->filter(new Markdown_Text('&')));
+        $this->assertEquals('&amp;', $f->filter(new Markdown_Text('&amp;')));
+        $this->assertEquals('&lt;', $f->filter(new Markdown_Text('<')));
+        $this->assertEquals('<head>', $f->filter(new Markdown_Text('<head>')));
     }
 
     public function testCodeSpan()
     {
         $f = new Markdown_Filter_Entities();
-        $this->assertEquals('foo\\`<bar>`', $f->filter('foo\\`<bar>`'));
+        $this->assertEquals('foo\\`<bar>`', $f->filter(new Markdown_Text('foo\\`<bar>`')));
     }
 }

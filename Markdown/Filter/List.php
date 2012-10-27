@@ -61,17 +61,16 @@ abstract class Markdown_Filter_List extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
-
-        $text = preg_replace_callback(
+        $text->setText(preg_replace_callback(
             sprintf(
                 '/(?:(?<=\n)\n|\A\n?)(?P<list>([ ]{0,3}(%1$s)[ \t]+(?!\ *\3\ ))(?:.+?)(\Z|\n{2,}(?=\S)(?![ \t]*%1$s[ \t]+)))/ms',
                 $this->_markers
             ),
-            array($this, 'transformList'), $text);
+            array($this, 'transformList'), $text->getText()));
 
-        return $text;
+        return $text->getText();
     }
 
     /**

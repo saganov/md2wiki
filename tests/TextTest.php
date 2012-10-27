@@ -35,13 +35,13 @@ MD;
     public function testConstruct()
     {
         $text = new Markdown_Text(self::SAMPLE_MARKDOWN);
-        $this->assertEquals(self::SAMPLE_MARKDOWN, $text->getMarkdown());
+        $this->assertEquals(self::SAMPLE_MARKDOWN, $text->getText());
     }
 
     public function testSetGetMarkdown()
     {
         $text = new Markdown_Text();
-        $text->setMarkdown(self::SAMPLE_MARKDOWN);
-        $this->assertEquals(self::SAMPLE_MARKDOWN, $text->getMarkdown());
+        $text->setText(self::SAMPLE_MARKDOWN);
+        $this->assertEquals(self::SAMPLE_MARKDOWN, $text->getText());
     }
 }

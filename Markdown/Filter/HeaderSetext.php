@@ -47,14 +47,15 @@ class Markdown_Filter_HeaderSetext extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
-        $text = preg_replace_callback(
+        $text->setText(preg_replace_callback(
             '/^(?P<text>.+) *\n(?P<level>=|-)+ *\n+/m',
             array($this, 'transformHeaderSetext'),
-            $text
-        );
-        return $text;
+            $text->getText()
+        ));
+
+        return $text->getText();
     }
 
     /**

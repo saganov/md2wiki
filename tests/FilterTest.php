@@ -93,7 +93,7 @@ class FilterTest extends PHPUnit_Framework_TestCase
     {
         foreach (self::$_md as $key => $md)
         {
-            $this->assertEquals(self::$_html[$key], Markdown_Filter::run($md));
+            $this->assertEquals(self::$_html[$key], Markdown_Filter::run($md)->getText());
         }
     }
 }

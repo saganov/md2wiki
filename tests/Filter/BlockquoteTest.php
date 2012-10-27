@@ -35,6 +35,6 @@ class FilterBlockquoteTest extends TestAbstract
     public function testFilter($text, $md)
     {
         $f = new Markdown_Filter_Blockquote();
-        $this->assertEquals($md, $f->filter($text));
+        $this->assertEquals($md, $f->filter(new Markdown_Text($text)));
     }
 }

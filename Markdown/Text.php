@@ -24,7 +24,7 @@
 require_once __DIR__ . '/Filter.php';
 
 /**
- * Represents a piece of text which can be both markdown and html.
+ * Represents a piece of text.
  *
  * @package Markdown
  * @subpackage Text
@@ -33,68 +33,39 @@ require_once __DIR__ . '/Filter.php';
  */
 class Markdown_Text
 {
-    /**
-     *
-     * @var string
-     */
-    protected $_markdown;
+    protected $_text = '';
 
     /**
      *
-     * @var string
+     * @param string $text
      */
-    protected $_html;
-
-    /**
-     *
-     * @param string $markdown
-     */
-    public function __construct($markdown = '')
+    public function __construct($text = '')
     {
-        $this->setMarkdown($markdown);
+        $this->setText($text);
     }
 
     public function __toString()
     {
-        return $this->getHtml();
+        return $this->_text;
     }
 
     /**
      *
      * @return string
      */
-    public function getHtml()
+    public function getText()
     {
-        if ($this->_html === null) {
-            $this->_html = Markdown_Filter::run($this->getMarkdown());
-        }
-
-        return $this->_html;
+        return $this->_text;
     }
 
     /**
      *
-     * @return string
-     */
-    public function getMarkdown()
-    {
-        return $this->_markdown;
-    }
-
-    /**
-     *
-     * @param string $markdown
+     * @param string $text
      * @return Markdown_Text
      */
-    public function setMarkdown($markdown)
+    public function setText($text)
     {
-        $markdown = (string) $markdown;
-
-        // do not flush html cache if nothing is changed
-        if ($markdown !== $this->_markdown) {
-            $this->_markdown = $markdown;
-            $this->_html     = null;
-        }
+        $this->_text = (string) $text;
 
         return $this;
     }

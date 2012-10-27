@@ -51,22 +51,22 @@ class Markdown_Filter_Emphasis extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
         // strong
-        $text = preg_replace(
+        $text->setText(preg_replace(
             '/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/s',
             '<strong>$2</strong>',
         $text
-        );
+        ));
 
         // emphasis
-        $text = preg_replace(
+        $text->setText(preg_replace(
             '/(?<!\\\\)([*_])(?!\s)(.+?)(?<![\\\\\s])\1/s',
             '<em>$2</em>',
             $text
-        );
+        ));
 
-        return $text;
+        return $text->getText();
     }
 }

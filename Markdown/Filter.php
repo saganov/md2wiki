@@ -148,6 +148,10 @@ abstract class Markdown_Filter
      */
     public static function run($text, array $filters = null)
     {
+        if(!$text instanceof Markdown_Text) {
+            $text = new Markdown_Text($text);
+        }
+
         if ($filters === null) {
             $filters = self::getDefaultFilters();
         }
@@ -166,7 +170,9 @@ abstract class Markdown_Filter
                 );
             }
 
-            $text = $filter->filter($text);
+            $filter->preFilter($text);
+            $filter->filter($text);
+            $filter->postFilter($text);
         }
 
         return $text;
@@ -184,5 +190,8 @@ abstract class Markdown_Filter
         return preg_replace('/^(\t| {1,4})/m', '', $text);
     }
 
-    abstract public function filter($text);
+    abstract public function filter(Markdown_Text $text);
+
+    public function preFilter(Markdown_Text $text) {}
+    public function postFilter(Markdown_Text $text) {}
 }

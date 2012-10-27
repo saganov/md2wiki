@@ -47,12 +47,14 @@ class Markdown_Filter_Hr extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
-        return preg_replace(
+        $text->setText(preg_replace(
             '/^ {0,3}([*-_])(?> {0,2}\1){2,} *$/m',
             "\n<hr />\n",
-            $text
-        );
+            $text->getText()
+        ));
+
+        return $text->getText();
     }
 }

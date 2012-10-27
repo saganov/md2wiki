@@ -57,21 +57,21 @@ class Markdown_Filter_Code extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
-        $text = preg_replace_callback(
+        $text->setText(preg_replace_callback(
             '/(?:\n\n|\A\n?)(?P<code>(?>( {4}|\t).*\n+)+)((?=^ {0,4}\S)|\Z)/m',
             array($this, 'transformCodeBlock'),
             $text
-        );
+        ));
 
-        $text = preg_replace_callback(
+        $text->setText(preg_replace_callback(
             '/(?<!\\\)(`+)(?!`)(?P<code>.+?)(?<!`)\1(?!`)/m',
             array($this, 'transformCode'),
             $text
-        );
+        ));
 
-        return $text;
+        return $text->getText();
     }
 
     /**

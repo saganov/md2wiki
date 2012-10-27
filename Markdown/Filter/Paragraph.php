@@ -49,12 +49,12 @@ class Markdown_Filter_Paragraph extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
         $result = '';
 
         // split by empty lines to match paragraphs
-        foreach(preg_split('/\n\s*\n/', $text) as $snippet) {
+        foreach(preg_split('/\n\s*\n/', $text->getText()) as $snippet) {
             $snippet = trim($snippet, "\n");
             if (self::isParagraph($snippet)) {
                 $result .= '<p>' . $snippet . '</p>';
@@ -65,7 +65,9 @@ class Markdown_Filter_Paragraph extends Markdown_Filter
             $result .= "\n\n";
         }
 
-        return rtrim($result, "\n") . "\n";
+        $text->setText(rtrim($result, "\n") . "\n");
+
+        return $text->getText();
     }
 
     /**

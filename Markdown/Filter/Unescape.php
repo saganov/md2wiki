@@ -43,14 +43,14 @@ class Markdown_Filter_Unescape extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
-        $text = preg_replace(
+        $text->setText(preg_replace(
             '/\\\\([' . preg_quote(implode('', self::$_escapableChars), '/') . '])/',
             '$1',
-            $text
-        );
+            $text->getText()
+        ));
 
-        return $text;
+        return $text->getText();
     }
 }

@@ -48,10 +48,10 @@ class Markdown_Filter_Entities extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
         // always escape within code blocks and spans
-        $text = preg_replace_callback(
+        $text->setText(preg_replace_callback(
             array('/^( {4,}|\t+).*?$/mu',
                   '/(?<!\\\\)`.*?(?<!\\\\)`/u'
             ),
@@ -59,14 +59,14 @@ class Markdown_Filter_Entities extends Markdown_Filter
                 return htmlspecialchars($match[0], ENT_NOQUOTES);
             },
             $text
-        );
+        ));
 
         // escape & outside of html entity
-        $text = preg_replace('/&(?![A-z]+;)/u', '&amp;', $text);
+        $text->setText(preg_replace('/&(?![A-z]+;)/u', '&amp;', $text));
 
         // escape < outside of html tag
-        $text = preg_replace('/<(?![A-z\\/])/u', '&lt;', $text);
+        $text->setText(preg_replace('/<(?![A-z\\/])/u', '&lt;', $text));
 
-        return $text;
+        return $text->getText();
     }
 }

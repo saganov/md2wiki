@@ -35,8 +35,10 @@ require_once __DIR__ . '/../Filter.php';
  */
 class Markdown_Filter_Newline extends Markdown_Filter
 {
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
-        return str_replace(array("\r\n", "\r"), "\n", $text);
+        $text->setText(str_replace(array("\r\n", "\r"), "\n", $text->getText()));
+
+        return $text->getText();
     }
 }

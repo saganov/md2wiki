@@ -21,28 +21,13 @@ Quick start
 =========
 
 Library has two entities: _Text_ and _Filter_
-_Text_ represents a piece of text which can be both markdown and html.
+_Text_ represents a piece of text.
 _Filter_ is responsible for actual transformation.
+_Text_ is passed through filters resulting into html output.
 
-In most cases, _Text_ is enough for simple usage.
+    require_once 'Markdown/Filter.php';
 
-    require_once 'Markdown/Text.php';
-
-    // create an instance
-    $text = new Markdown_Text();
-
-    // set plaintext
-    $text->setMarkdown($markdown);
-
-    // or just
-    $text = new Markdown_Text($markdown);
-
-    // now you can output html
-    echo $text->getHtml();
-
-    // or just
-    echo $text;
-
+    echo Markdown_Filter::run($markdown);
 
 Advanced usage
 ==============

@@ -46,8 +46,10 @@ class Markdown_Filter_Linebreak extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
-        return preg_replace('/ {2,}\n/', '<br />', $text);
+        $text->setText(preg_replace('/ {2,}\n/', '<br />', $text->getText()));
+
+        return $text->getText();
     }
 }

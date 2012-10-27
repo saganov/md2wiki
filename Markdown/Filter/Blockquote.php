@@ -48,13 +48,13 @@ class Markdown_Filter_Blockquote extends Markdown_Filter
      * @param string $text
      * @return string $text
      */
-    public function filter($text)
+    public function filter(Markdown_Text $text)
     {
-        foreach($this->searchQuotes($text) as $quote) {
-            $text = str_replace($quote, $this->transformQuote($quote), $text);
+        foreach($this->searchQuotes($text->getText()) as $quote) {
+            $text->setText(str_replace($quote, $this->transformQuote($quote), $text));
         }
 
-        return $text;
+        return $text->getText();
     }
 
     /**

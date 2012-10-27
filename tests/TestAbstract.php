@@ -3,6 +3,8 @@
  * Common class for all tests.
  */
 
+require_once __DIR__ . '/../Markdown/Text.php';
+
 abstract class TestAbstract extends PHPUnit_Framework_TestCase
 {
     /**
