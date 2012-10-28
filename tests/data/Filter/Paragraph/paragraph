@@ -18,3 +18,13 @@ And it should be, despite the fact that original perl script doesn't adhere to t
 <p>paragraph
 <h4>header</h4>
 paragraph</p>
+
+<p>This is a regular paragraph.</p>
+
+<table>
+    <tr>
+        <td>Foo</td>
+    </tr>
+</table>
+
+<p>This is another regular paragraph.</p>
