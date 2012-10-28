@@ -37,6 +37,7 @@ require_once __DIR__ . '/Filter.php';
 class Text
 {
     const NOMARKDOWN = 1;
+    const CODEBLOCK  = 2;
 
     public $lines = array();
     public $lineflags = array();
