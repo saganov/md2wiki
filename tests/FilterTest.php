@@ -94,7 +94,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         foreach (self::$_md as $key => $md)
         {
-            $this->assertEquals(self::$_html[$key], Filter::run($md)->getText());
+            $this->assertEquals(self::$_html[$key], (string) Filter::run($md));
         }
     }
 }
