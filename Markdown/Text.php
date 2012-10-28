@@ -35,7 +35,10 @@ require_once __DIR__ . '/Filter.php';
  */
 class Text
 {
+    const CODEBLOCK = 2;
+
     public $lines = array();
+    public $lineflags = array();
 
     /**
      *
@@ -86,6 +89,7 @@ class Text
         else {
             $this->lines = self::explode($text);
         }
+        $this->lineflags = array_fill(0, count($this->lines), 0);
 
         return $this;
     }
