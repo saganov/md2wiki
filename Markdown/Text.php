@@ -89,7 +89,6 @@ class Text
         else {
             $this->lines = self::explode($text);
         }
-        $this->lineflags = array_fill(0, count($this->lines), 0);
 
         return $this;
     }

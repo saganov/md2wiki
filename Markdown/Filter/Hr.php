@@ -55,7 +55,7 @@ class Filter_Hr extends Filter
     public function filter(Text $text)
     {
         foreach($text->lines as $no => &$line) {
-            if ($text->lineflags[$no] & Text::CODEBLOCK) continue;
+            if (@$text->lineflags[$no] & Text::CODEBLOCK) continue;
 
             $line = preg_replace(
                 '/^([*-_])(?> {0,2}\1){2,} *$/',
