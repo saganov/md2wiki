@@ -52,11 +52,11 @@ class Filter_Blockquote extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($this->searchQuotes($text->getText()) as $quote) {
-            $text->setText(str_replace($quote, $this->transformQuote($quote), $text));
+        foreach($this->searchQuotes((string) $text) as $quote) {
+            $text->setText(str_replace($quote, $this->transformQuote($quote), (string) $text));
         }
 
-        return $text->getText();
+        return (string) $text;
     }
 
     /**

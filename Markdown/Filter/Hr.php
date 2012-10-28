@@ -54,9 +54,9 @@ class Filter_Hr extends Filter
         $text->setText(preg_replace(
             '/^ {0,3}([*-_])(?> {0,2}\1){2,} *$/m',
             "\n<hr />\n",
-            $text->getText()
+            $text
         ));
 
-        return $text->getText();
+        return (string) $text;
     }
 }

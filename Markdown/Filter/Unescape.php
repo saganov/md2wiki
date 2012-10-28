@@ -50,9 +50,9 @@ class Filter_Unescape extends Filter
         $text->setText(preg_replace(
             '/\\\\([' . preg_quote(implode('', self::$_escapableChars), '/') . '])/',
             '$1',
-            $text->getText()
+            $text
         ));
 
-        return $text->getText();
+        return (string) $text;
     }
 }

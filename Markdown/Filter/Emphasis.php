@@ -59,7 +59,7 @@ class Filter_Emphasis extends Filter
         $text->setText(preg_replace(
             '/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/s',
             '<strong>$2</strong>',
-        $text
+            $text
         ));
 
         // emphasis
@@ -69,6 +69,6 @@ class Filter_Emphasis extends Filter
             $text
         ));
 
-        return $text->getText();
+        return (string) $text;
     }
 }

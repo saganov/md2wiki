@@ -69,6 +69,6 @@ class Filter_Entities extends Filter
         // escape < outside of html tag
         $text->setText(preg_replace('/<(?![A-z\\/])/u', '&lt;', $text));
 
-        return $text->getText();
+        return (string) $text;
     }
 }

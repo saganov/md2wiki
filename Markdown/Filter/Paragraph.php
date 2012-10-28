@@ -56,7 +56,7 @@ class Filter_Paragraph extends Filter
         $result = '';
 
         // split by empty lines to match paragraphs
-        foreach(preg_split('/\n\s*\n/', $text->getText()) as $snippet) {
+        foreach(preg_split('/\n\s*\n/', (string) $text) as $snippet) {
             $snippet = trim($snippet, "\n");
             if (self::isParagraph($snippet)) {
                 $result .= '<p>' . $snippet . '</p>';
@@ -69,7 +69,7 @@ class Filter_Paragraph extends Filter
 
         $text->setText(rtrim($result, "\n") . "\n");
 
-        return $text->getText();
+        return (string) $text;
     }
 
     /**

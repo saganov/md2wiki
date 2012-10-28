@@ -70,9 +70,9 @@ abstract class Filter_List extends Filter
                 '/(?:(?<=\n)\n|\A\n?)(?P<list>([ ]{0,3}(%1$s)[ \t]+(?!\ *\3\ ))(?:.+?)(\Z|\n{2,}(?=\S)(?![ \t]*%1$s[ \t]+)))/ms',
                 $this->_markers
             ),
-            array($this, 'transformList'), $text->getText()));
+            array($this, 'transformList'), $text));
 
-        return $text->getText();
+        return (string) $text;
     }
 
     /**
