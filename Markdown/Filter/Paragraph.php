@@ -45,6 +45,37 @@ require_once __DIR__ . '/../Filter.php';
 class Filter_Paragraph extends Filter
 {
     /**
+     * Flag block-level HTML with NOMARKDOWN.
+     *
+     * @see \Markdown\Filter::preFilter()
+     */
+    public function preFilter(Text $text)
+    {
+        $ex = sprintf('/^<(%s)/i', implode('|', self::$_blockTags));
+
+        $inHtml = false;
+        foreach($text->lines as $no => &$line) {
+            $prevline = @$text->lines[$no - 1];
+            $nextline = @$text->lines[$no + 1];
+
+            if (!$inHtml) {
+                if (self::isBlank($prevline)) {
+                    if (preg_match($ex, $line, $matches)) {
+                        $inHtml = $matches[1];
+                    }
+                }
+            }
+
+            if ($inHtml) {
+                @$text->lineflags[$no] |= Text::NOMARKDOWN;
+                if (self::isBlank($nextline)) {
+                    $inHtml = false;
+                }
+            }
+        }
+    }
+
+    /**
      * Pass given text through the filter and return result.
      *
      * @see Filter::filter()
@@ -53,50 +84,19 @@ class Filter_Paragraph extends Filter
      */
     public function filter(Text $text)
     {
-        $result = '';
+        foreach($text->lines as $no => &$line) {
+            if (@$text->lineflags[$no] & Text::NOMARKDOWN) continue;
+            if (self::isBlank($line)) continue;
 
-        // split by empty lines to match paragraphs
-        foreach(preg_split('/\n\s*\n/', (string) $text) as $snippet) {
-            $snippet = trim($snippet, "\n");
-            if (self::isParagraph($snippet)) {
-                $result .= '<p>' . $snippet . '</p>';
+            $prevline = @$text->lines[$no - 1];
+            $nextline = @$text->lines[$no + 1];
+
+            if (self::isBlank($prevline)) {
+                $line = '<p>' . $line;
             }
-            else {
-                $result .= $snippet;
-            }
-            $result .= "\n\n";
-        }
-
-        $text->setText(rtrim($result, "\n") . "\n");
-
-        return $text;
-    }
-
-    /**
-     * Return true if given text is:
-     * <ul>
-     *   <li>not intended</li>
-     *   <li>not started by a block-level tag</li>
-     * </ul>
-     *
-     * False otherwise.
-     *
-     * @param string $text
-     * @return bool
-     */
-    protected static function isParagraph($text)
-    {
-        if (strlen($text) > 0) {
-            // should not be indented
-            if (!preg_match('/^\s/', $text)) {
-                // should not be a block-level tag
-                $regex = sprintf('/^<(%s)/i', implode('|', self::$_blockTags));
-                if (!preg_match($regex, $text)) {
-                    return true;
-                }
+            if (self::isBlank($nextline)) {
+                $line .= '</p>';
             }
         }
-
-        return false;
     }
 }
