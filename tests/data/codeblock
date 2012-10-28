@@ -8,6 +8,8 @@ Nothing else is converted.
     =====================================
     
     Except & and < and > nothing is converted.
+    & is converted even if part of an entity &amp;
+    < is converted even if part of a tag <head>
     This _word_ should not be emphasised.
 
 This paragraph lays unders the codeblock.
