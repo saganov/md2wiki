@@ -31,10 +31,10 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         $data = array();
 
-        foreach(glob(__DIR__ . '/data/*.md') as $markdown) {
-            $basename = basename($markdown);
-            $html     = dirname($markdown) . '/' . substr($basename, 0, -3) . '.html';
-            if (is_readable($html)) {
+        foreach(glob(__DIR__ . '/data/*.html') as $html) {
+            $basename = basename($html);
+            $markdown = dirname($html) . '/' . substr($basename, 0, -5);
+            if (is_readable($markdown)) {
                 $data[] = array(
                         file_get_contents($markdown),
                         file_get_contents($html)
