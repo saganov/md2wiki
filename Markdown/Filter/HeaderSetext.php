@@ -53,7 +53,7 @@ class Filter_HeaderSetext extends Filter
     {
         foreach($text->lines as $no => &$line) {
             if ($no == 0) continue; // processing 1st line makes no sense
-            if (@$text->lineflags[$no] & Text::CODEBLOCK) continue;
+            if (@$text->lineflags[$no] & Text::NOMARKDOWN) continue;
 
             $prevline =& $text->lines[$no - 1];
             if (preg_match('/^=+$/', $line)) {

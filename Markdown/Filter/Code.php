@@ -63,7 +63,7 @@ class Filter_Code extends Filter
         $lineNo = 0;
         foreach($text->lines as $line) {
             if (substr($line, 0, 4) === '    ' || @$line[0] == "\t") {
-                @$text->lineflags[$lineNo] |= Text::CODEBLOCK;
+                @$text->lineflags[$lineNo] |= Text::NOMARKDOWN;
             }
             $lineNo++;
         }
