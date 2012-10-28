@@ -1,3 +1,8 @@
+Notice
+======
+
+The library is under active development. API may change without notice.
+
 What is Markdown?
 =================
 
