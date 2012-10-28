@@ -37,11 +37,14 @@ require_once __DIR__ . '/../Filter.php';
  *
  * @package Markdown
  * @subpackage Filter
+ * @author Max Tsepkov <max@garygolden.me>
  * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
 class Filter_Hr extends Filter
 {
+    protected static $chars = array('*', '-', '_');
+
     /**
      * Pass given text through the filter and return result.
      *
@@ -51,11 +54,15 @@ class Filter_Hr extends Filter
      */
     public function filter(Text $text)
     {
-        $text->setText(preg_replace(
-            '/^ {0,3}([*-_])(?> {0,2}\1){2,} *$/m',
-            "\n<hr />\n",
-            $text
-        ));
+        foreach($text->lines as $no => &$line) {
+            if ($text->lineflags[$no] & Text::CODEBLOCK) continue;
+
+            $line = preg_replace(
+                '/^([*-_])(?> {0,2}\1){2,} *$/',
+                '<hr />',
+                $line
+            );
+        }
 
         return $text;
     }
