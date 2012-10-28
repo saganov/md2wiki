@@ -36,7 +36,7 @@ require_once __DIR__ . '/../Filter.php';
  *
  * @package Markdown
  * @subpackage Filter
- * @author Igor Gaponov <jiminy96@gmail.com>
+ * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
 class Filter_Linebreak extends Filter
@@ -50,8 +50,14 @@ class Filter_Linebreak extends Filter
      */
     public function filter(Text $text)
     {
-        $text->setText(preg_replace('/ {2,}\n/', '<br />', $text->getText()));
+        $result = $text->getText();
+        foreach($result as &$line) {
+            if (substr($line, -2) === '  ') {
+                $line = substr($line, 0, -2) . '<br />';
+            }
+        }
+        $text->setText($result);
 
-        return $text->getText();
+        return (string) $text;
     }
 }
