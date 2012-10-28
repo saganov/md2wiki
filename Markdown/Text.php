@@ -67,6 +67,30 @@ class Text
         return $str;
     }
 
+    public function insert($lines, $index)
+    {
+        if (!is_array($lines)) {
+            $lines = array($lines);
+        }
+
+        $slice = array_splice($this->lines, $index);
+        $this->lines = array_merge($this->lines, $lines, $slice);
+
+        $newflags = array();
+        $linescount = count($lines);
+        foreach ($this->lineflags as $key => $val) {
+            if ($key < $index) {
+                $newflags[$key] = $val;
+            }
+            else {
+                $newflags[$key + $linescount] = $val;
+            }
+        }
+        $this->lineflags = $newflags;
+
+        return $this;
+    }
+
     /**
      *
      * @return string
