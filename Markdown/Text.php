@@ -28,6 +28,7 @@ require_once __DIR__ . '/Filter.php';
 /**
  * Represents a piece of text.
  *
+ * @todo Make object traverable instead of public $lines
  * @package Markdown
  * @subpackage Text
  * @author Max Tsepkov <max@garygolden.me>
