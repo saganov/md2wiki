@@ -54,10 +54,10 @@ class Filter_HeaderSetext extends Filter
         $text->setText(preg_replace_callback(
             '/^(?P<text>.+) *\n(?P<level>=|-)+ *\n+/m',
             array($this, 'transformHeaderSetext'),
-            $text->getText()
+            (string) $text
         ));
 
-        return $text->getText();
+        return (string) $text;
     }
 
     /**
