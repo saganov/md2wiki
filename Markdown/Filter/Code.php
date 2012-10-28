@@ -60,12 +60,10 @@ class Filter_Code extends Filter
      */
     public function preFilter(Text $text)
     {
-        $lineNo = 0;
-        foreach($text->lines as $line) {
+        foreach($text->lines as $no => $line) {
             if (substr($line, 0, 4) === '    ' || @$line[0] == "\t") {
-                @$text->lineflags[$lineNo] |= Text::NOMARKDOWN;
+                @$text->lineflags[$no] |= Text::NOMARKDOWN;
             }
-            $lineNo++;
         }
     }
 
