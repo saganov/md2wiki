@@ -27,22 +27,22 @@ require_once __DIR__ . '/../Markdown/Text.php';
 
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
-    protected static $_md   = array();
-    protected static $_html = array();
-
-    public static function setUpBeforeClass()
+    public function filesystem()
     {
-        $mds = glob(__DIR__ . '/data/*.md');
-        foreach($mds as $filename) {
-            $key = basename($filename, '.md');
-            self::$_md[$key] = file_get_contents($filename);
+        $data = array();
+
+        foreach(glob(__DIR__ . '/data/*.md') as $markdown) {
+            $basename = basename($markdown);
+            $html     = dirname($markdown) . '/' . substr($basename, 0, -3) . '.html';
+            if (is_readable($html)) {
+                $data[] = array(
+                        file_get_contents($markdown),
+                        file_get_contents($html)
+                );
+            }
         }
 
-        $htmls = glob(__DIR__ . '/data/*.html');
-        foreach($htmls as $filename) {
-            $key = basename($filename, '.html');
-            self::$_html[$key] = file_get_contents($filename);
-        }
+        return $data;
     }
 
     /**
@@ -90,11 +90,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         Filter::run('', array('Filter', 1, false, true));
     }
 
-    public function testWithDataFiles()
+    /**
+     * @dataProvider filesystem
+     */
+    public function testWithDataFiles($md, $html)
     {
-        foreach (self::$_md as $key => $md)
-        {
-            $this->assertEquals(self::$_html[$key], (string) Filter::run($md));
-        }
+        $this->assertEquals($html, (string) Filter::run($md));
     }
 }
