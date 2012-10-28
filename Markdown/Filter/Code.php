@@ -53,6 +53,23 @@ require_once __DIR__ . '/../Filter.php';
 class Filter_Code extends Filter
 {
     /**
+     * Flags lines containing codeblocks.
+     * Other filters must avoid parsing markdown on that lines.
+     *
+     * @see \Markdown\Filter::preFilter()
+     */
+    public function preFilter(Text $text)
+    {
+        $lineNo = 0;
+        foreach($text->lines as $line) {
+            if (substr($line, 0, 4) === '    ' || @$line[0] == "\t") {
+                $text->lineflags[$lineNo] |= Text::CODEBLOCK;
+            }
+            $lineNo++;
+        }
+    }
+
+    /**
      * Pass given text through the filter and return result.
      *
      * @see Filter::filter()
