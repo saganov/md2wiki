@@ -37,7 +37,7 @@ require_once __DIR__ . '/../Filter.php';
  *
  * @package Markdown
  * @subpackage Filter
- * @author Igor Gaponov <jiminy96@gmail.com>
+ * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
 class Filter_HeaderAtx extends Filter
@@ -51,24 +51,14 @@ class Filter_HeaderAtx extends Filter
      */
     public function filter(Text $text)
     {
-        $text->setText(preg_replace_callback(
-            '/^(?P<level>\#{1,6})[ \t]*(?P<text>.+?)[ \t]*\#*\n+/m',
-            array($this, 'transformHeaderAtx'),
-            $text
-        ));
+        foreach($text->lines as $no => &$line) {
+            if (@$text->lineflags[$no] & Text::NOMARKDOWN) continue;
 
-        return $text;
-    }
-
-    /**
-     * Takes a single markdown header and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformHeaderAtx($values)
-    {
-        $level = min(strlen($values['level']), 6);
-        return sprintf("<h%1\$d>%2\$s</h%1\$d>\n\n", $level, $values['text']);
+            if (@$line[0] == '#') {
+                $line = rtrim($line, '#');
+                $level = substr_count($line, '#', 0, min(6, strlen($line)));
+                $line = "<h$level>" . trim(substr($line, $level)) . "</h$level>";
+            }
+        }
     }
 }
