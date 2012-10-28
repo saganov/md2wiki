@@ -84,6 +84,8 @@ class Filter_Paragraph extends Filter
      */
     public function filter(Text $text)
     {
+        $inParagraph = false;
+
         foreach($text->lines as $no => &$line) {
             if (@$text->lineflags[$no] & Text::NOMARKDOWN) continue;
             if (self::isBlank($line)) continue;
@@ -91,11 +93,13 @@ class Filter_Paragraph extends Filter
             $prevline = @$text->lines[$no - 1];
             $nextline = @$text->lines[$no + 1];
 
-            if (self::isBlank($prevline)) {
+            if (!$inParagraph && self::isBlank($prevline)) {
                 $line = '<p>' . $line;
+                $inParagraph = true;
             }
-            if (self::isBlank($nextline)) {
+            if ($inParagraph && self::isBlank($nextline)) {
                 $line .= '</p>';
+                $inParagraph = false;
             }
         }
     }
