@@ -56,7 +56,7 @@ class Filter_Blockquote extends Filter
             $text->setText(str_replace($quote, $this->transformQuote($quote), (string) $text));
         }
 
-        return (string) $text;
+        return $text;
     }
 
     /**

@@ -34,9 +34,9 @@ class FilterBlockquoteTest extends TestAbstract
      * @param string $md
      * @param string $html
      */
-    public function testFilter($text, $md)
+    public function testFilter($md, $html)
     {
         $f = new Filter_Blockquote();
-        $this->assertEquals($md, $f->filter(new Text($text)));
+        $this->assertEquals($html, (string) $f->filter(new Text($md)));
     }
 }

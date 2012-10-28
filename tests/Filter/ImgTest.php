@@ -37,6 +37,6 @@ class FilterImgTest extends TestAbstract
     public function testFilter($md, $html)
     {
         $f = new Filter_Img();
-        $this->assertEquals($html, $f->filter(new Text($md)));
+        $this->assertEquals($html, (string) $f->filter(new Text($md)));
     }
 }

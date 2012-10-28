@@ -73,7 +73,7 @@ class Filter_Code extends Filter
             $text
         ));
 
-        return (string) $text;
+        return $text;
     }
 
     /**

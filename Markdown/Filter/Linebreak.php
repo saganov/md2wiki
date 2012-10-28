@@ -58,6 +58,6 @@ class Filter_Linebreak extends Filter
         }
         $text->setText($result);
 
-        return (string) $text;
+        return $text;
     }
 }

@@ -111,7 +111,7 @@ class Filter_Link extends Filter
 
         $text->setText($result);
 
-        return (string) $text;
+        return $text;
     }
 
     /**

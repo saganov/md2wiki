@@ -69,7 +69,7 @@ class Filter_Paragraph extends Filter
 
         $text->setText(rtrim($result, "\n") . "\n");
 
-        return (string) $text;
+        return $text;
     }
 
     /**

@@ -69,6 +69,6 @@ class Filter_Emphasis extends Filter
             $text
         ));
 
-        return (string) $text;
+        return $text;
     }
 }

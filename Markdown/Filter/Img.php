@@ -56,6 +56,6 @@ class Filter_Img extends Filter_Link
         $this->_format = '<img src="%s"%s alt="%s" />';
         $text->setText(parent::filter($text));
 
-        return (string) $text;
+        return $text;
     }
 }

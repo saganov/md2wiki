@@ -57,6 +57,6 @@ class Filter_Hr extends Filter
             $text
         ));
 
-        return (string) $text;
+        return $text;
     }
 }

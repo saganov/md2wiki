@@ -53,6 +53,6 @@ class Filter_Unescape extends Filter
             $text
         ));
 
-        return (string) $text;
+        return $text;
     }
 }

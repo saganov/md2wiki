@@ -57,7 +57,7 @@ class Filter_HeaderSetext extends Filter
             (string) $text
         ));
 
-        return (string) $text;
+        return $text;
     }
 
     /**

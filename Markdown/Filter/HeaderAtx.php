@@ -57,7 +57,7 @@ class Filter_HeaderAtx extends Filter
             $text
         ));
 
-        return (string) $text;
+        return $text;
     }
 
     /**

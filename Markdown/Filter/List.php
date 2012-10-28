@@ -72,7 +72,7 @@ abstract class Filter_List extends Filter
             ),
             array($this, 'transformList'), $text));
 
-        return (string) $text;
+        return $text;
     }
 
     /**
