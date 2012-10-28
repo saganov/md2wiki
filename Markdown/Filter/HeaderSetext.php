@@ -37,7 +37,7 @@ require_once __DIR__ . '/../Filter.php';
  *
  * @package Markdown
  * @subpackage Filter
- * @author Igor Gaponov <jiminy96@gmail.com>
+ * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
 class Filter_HeaderSetext extends Filter
@@ -51,25 +51,21 @@ class Filter_HeaderSetext extends Filter
      */
     public function filter(Text $text)
     {
-        $text->setText(preg_replace_callback(
-            '/^(?P<text>.+) *\n(?P<level>=|-)+ *\n+/m',
-            array($this, 'transformHeaderSetext'),
-            (string) $text
-        ));
+        foreach($text->lines as $no => &$line) {
+            if ($no == 0) continue; // processing 1st line makes no sense
+            if (substr($line, 0, 4) === '    ' || @$line[0] == "\t") continue; // codeblock
+
+            $prevline =& $text->lines[$no - 1];
+            if (preg_match('/^=+$/', $line)) {
+                $prevline = '<h1>' . $prevline . '</h1>';
+                $line = '';
+            }
+            else if (preg_match('/^-+$/', $line)) {
+                $prevline = '<h2>' . $prevline . '</h2>';
+                $line = '';
+            }
+        }
 
         return $text;
-    }
-
-    /**
-     * Takes a single markdown header
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformHeaderSetext($values)
-    {
-        $level = $values['level'] == '=' ? 1 : 2;
-        return sprintf("<h%1\$d>%2\$s</h%1\$d>\n\n", $level, $values['text']);
     }
 }
