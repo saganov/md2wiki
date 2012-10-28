@@ -41,7 +41,6 @@ require_once __DIR__ . '/../Filter.php';
  * @package Markdown
  * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
- * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
 class Filter_Emphasis extends Filter
@@ -55,20 +54,24 @@ class Filter_Emphasis extends Filter
      */
     public function filter(Text $text)
     {
-        // strong
-        $text->setText(preg_replace(
-            '/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/s',
-            '<strong>$2</strong>',
-            $text
-        ));
+        // FIXME multiline emphasis doesn't work this way
 
-        // emphasis
-        $text->setText(preg_replace(
-            '/(?<!\\\\)([*_])(?!\s)(.+?)(?<![\\\\\s])\1/s',
-            '<em>$2</em>',
-            $text
-        ));
+        foreach ($text->lines as $no => &$line) {
+            if (@$text->lineflags[$no] & Text::NOMARKDOWN) continue;
 
-        return $text;
+            // strong
+            $line = preg_replace(
+                '/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/s',
+                '<strong>$2</strong>',
+                $line
+            );
+
+            // emphasis
+            $line = preg_replace(
+                '/(?<!\\\\)([*_])(?!\s)(.+?)(?<![\\\\\s])\1/s',
+                '<em>$2</em>',
+                $line
+            );
+        }
     }
 }
