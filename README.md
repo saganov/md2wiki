@@ -53,6 +53,13 @@ You can write your own filters and use like this:
     // you can get current filters set
     Markdown_Filter::getDefaultFilters();
 
+FAQ
+===
+
+#### Can your library process very large documents?
+
+Yes. There is known problem with other markdown implementations when PCRE engine fails with very large files.
+My library parses input line by line, so as long as you keep lines less than ~1M you'll be okay.
 
 Requirements
 ===========
