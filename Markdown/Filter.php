@@ -191,6 +191,11 @@ abstract class Filter
         return preg_replace('/^(\t| {1,4})/m', '', $text);
     }
 
+    protected static function isBlank($line)
+    {
+        return (empty($line) || preg_match('/^\s*/', $line));
+    }
+
     abstract public function filter(Text $text);
 
     public function preFilter(Text $text) {}
