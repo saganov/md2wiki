@@ -38,7 +38,6 @@ abstract class Filter
     protected static $_defaultFilters = null;
 
     protected static $_factoryDefaultFilters = array(
-        'Newline',
         'Blockquote',
         'Code',
         'Emphasis',

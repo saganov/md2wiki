@@ -35,7 +35,12 @@ require_once __DIR__ . '/Filter.php';
  */
 class Text
 {
-    protected $_text = '';
+    /**
+     * Text is stored as array line by line.
+     *
+     * @var array
+     */
+    protected $_text = array();
 
     /**
      *
@@ -48,7 +53,20 @@ class Text
 
     public function __toString()
     {
-        return $this->_text;
+        return implode("\n", $this->_text);
+    }
+
+    /**
+     * Breaks $str by newlines, multiplatform.
+     *
+     * @param string $str
+     * @return array
+     */
+    public static function explode($str)
+    {
+        $str = explode("\n", $str);
+        $str = array_map(function($str) { return trim($str, "\r"); }, $str);
+        return $str;
     }
 
     /**
@@ -62,12 +80,17 @@ class Text
 
     /**
      *
-     * @param string $text
+     * @param array|string $text
      * @return Text
      */
     public function setText($text)
     {
-        $this->_text = (string) $text;
+        if (is_array($text)) {
+            $this->_text = $text;
+        }
+        else {
+            $this->_text = self::explode($text);
+        }
 
         return $this;
     }
