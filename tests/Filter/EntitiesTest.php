@@ -37,7 +37,7 @@ class FilterEntitiesTest extends TestAbstract
     public function testFilter($md, $html)
     {
         $f = new Filter_Entities();
-        $this->assertEquals($html, (string) $f->filter(new Text($md)));
+        $this->assertEquals($html, (string) Filter::run($md, array($f)));
     }
 
     public function testSingles()
