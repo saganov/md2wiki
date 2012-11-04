@@ -38,6 +38,8 @@ abstract class Filter
     protected static $_defaultFilters = null;
 
     protected static $_factoryDefaultFilters = array(
+        'ListBulleted',
+        'ListNumbered',
         'Blockquote',
         'Code',
         'Emphasis',
@@ -48,8 +50,6 @@ abstract class Filter
         'Img',
         'Linebreak',
         'Link',
-        'ListBulleted',
-        'ListNumbered',
         'Paragraph',
         'Unescape'
     );
@@ -165,7 +165,7 @@ abstract class Filter
                 $filter = self::factory($filter);
             }
             else {
-                throw new InvalidArgumentException(
+                throw new \InvalidArgumentException(
                     '$filters must be an array which elements ' .
                     'is either a string or Filter'
                 );
