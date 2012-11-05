@@ -193,7 +193,7 @@ abstract class Filter
 
     protected static function isBlank($line)
     {
-        return (empty($line) || preg_match('/^\s*$/', $line));
+        return (empty($line) || preg_match('/^\s*$/uS', $line));
     }
 
     abstract public function filter(Text $text);
