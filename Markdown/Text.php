@@ -38,6 +38,7 @@ class Text
 {
     const NOMARKDOWN = 1;
     const CODEBLOCK  = 2;
+    const LISTS      = 4;
 
     public $lines = array();
     public $lineflags = array();

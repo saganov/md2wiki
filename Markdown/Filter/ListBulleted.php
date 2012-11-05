@@ -35,11 +35,20 @@ require_once __DIR__ . '/List.php';
  *
  * @package Markdown
  * @subpackage Filter
- * @author Igor Gaponov <jiminy96@gmail.com>
+ * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
 class Filter_ListBulleted extends Filter_List
 {
-    protected $_listType = 'ul';
-    protected $_markers = '(?:[*+-])';
+    const TAG = 'ul';
+
+    protected function matchMarker($line)
+    {
+        if (preg_match('/^ {0,3}[*+-]\s+/uS', $line, $matches)) {
+            return $matches[0];
+        }
+        else {
+            return false;
+        }
+    }
 }

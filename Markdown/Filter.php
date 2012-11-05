@@ -196,6 +196,11 @@ abstract class Filter
         return (empty($line) || preg_match('/^\s*$/uS', $line));
     }
 
+    protected static function isIndented($line)
+    {
+        return ($line[0] == "\t" || substr($line, 0, 4) == '    ');
+    }
+
     abstract public function filter(Text $text);
 
     public function preFilter(Text $text) {}

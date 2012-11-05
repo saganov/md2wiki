@@ -104,7 +104,7 @@ class Filter_Code extends Filter
         $code = ltrim($code, "\n");
         $code = rtrim($code);
 
-        return sprintf("\n\n<pre><code>%s\n</code></pre>\n\n", $code);
+        return sprintf("\n\n<pre><code>%s</code></pre>\n\n", $code);
     }
 
     /**

@@ -36,11 +36,20 @@ require_once __DIR__ . '/List.php';
  *
  * @package Markdown
  * @subpackage Filter
- * @author Igor Gaponov <jiminy96@gmail.com>
+ * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
 class Filter_ListNumbered extends Filter_List
 {
-    protected $_listType = 'ol';
-    protected $_markers = '(?:\d+\.)';
+    const TAG = 'ol';
+
+    protected function matchMarker($line)
+    {
+        if (preg_match('/^ {0,3}\d+\.\s+/uS', $line, $matches)) {
+            return $matches[0];
+        }
+        else {
+            return false;
+        }
+    }
 }

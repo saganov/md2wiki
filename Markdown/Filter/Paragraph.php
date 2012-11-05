@@ -87,7 +87,7 @@ class Filter_Paragraph extends Filter
         $inParagraph = false;
 
         foreach($text->lines as $no => &$line) {
-            if (@$text->lineflags[$no] & Text::NOMARKDOWN) continue;
+            if (@$text->lineflags[$no] & Text::NOMARKDOWN + Text::LISTS) continue;
             if (self::isBlank($line)) continue;
 
             $prevline = @$text->lines[$no - 1];

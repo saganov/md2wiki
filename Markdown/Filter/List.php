@@ -23,6 +23,8 @@
 
 namespace Markdown;
 
+use Markdown\ListStack;
+
 require_once __DIR__ . '/../Filter.php';
 
 /**
@@ -37,25 +39,11 @@ require_once __DIR__ . '/../Filter.php';
  *
  * @package Markdown
  * @subpackage Filter
- * @author Igor Gaponov <jiminy96@gmail.com>
+ * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
 abstract class Filter_List extends Filter
 {
-    /**
-     * Type of list
-     *
-     * @var string
-     */
-    protected $_listType;
-
-    /**
-     * Markers for regular expression
-     *
-     * @var string
-     */
-    protected $_markers;
-
     /**
      * Pass given text through the filter and return result.
      *
@@ -65,65 +53,89 @@ abstract class Filter_List extends Filter
      */
     public function filter(Text $text)
     {
-        $text->setText(preg_replace_callback(
-            sprintf(
-                '/(?:(?<=\n)\n|\A\n?)(?P<list>([ ]{0,3}(%1$s)[ \t]+(?!\ *\3\ ))(?:.+?)(\Z|\n{2,}(?=\S)(?![ \t]*%1$s[ \t]+)))/ms',
-                $this->_markers
-            ),
-            array($this, 'transformList'), $text));
+        require_once __DIR__ . '/List/Stack.php';
+        $stack = new ListStack();
+
+        foreach ($text->lines as $no => $line)
+        {
+            $prevLine = isset($text->lines[$no - 1]) ? $text->lines[$no - 1] : null;
+            $nextLine = isset($text->lines[$no + 1]) ? $text->lines[$no + 1] : null;
+
+            // match list marker, add a new list item
+            if (($marker = $this->matchMarker($line)) !== false)
+            {
+                if (!$stack->isEmpty() && $prevLine !== null && self::isBlank($prevLine)) {
+                    $stack->paragraphize();
+                }
+
+                $stack->addItem(array($no => substr($line, strlen($marker))));
+
+                continue;
+            }
+
+            // we are inside a list
+            if (!$stack->isEmpty())
+            {
+                // a blank line
+                if (self::isBlank($line)) {
+                    // two blank lines in a row
+                    if ($prevLine !== null && self::isBlank($prevLine)) {
+                        // end of list
+                        $stack->apply($text, static::TAG);
+                    }
+                }
+                // not blank line
+                else {
+
+                    if (self::isIndented($line)) {
+                        // blockquote
+                        if (substr(ltrim($line), 0, 1) == '>') {
+                            $line = substr(ltrim($line), 1);
+                            if (substr(ltrim($prevLine), 0, 1) != '>') {
+                                $line = '<blockquote>' . $line;
+                            }
+                            if (substr(ltrim($nextLine), 0, 1) != '>') {
+                                $line .= '</blockquote>';
+                            }
+                        }
+                        // codeblock
+                        else if (substr($line, 0, 2) == "\t\t" || substr($line, 0, 8) == '        ') {
+                            $line = ltrim(htmlspecialchars($line, ENT_NOQUOTES));
+                            if (!(substr($prevLine, 0, 2) == "\t\t" || substr($prevLine, 0, 8) == '        ')) {
+                                $line = '<pre><code>' . $line;
+                            }
+                            if (!(substr($nextLine, 0, 2) == "\t\t" || substr($nextLine, 0, 8) == '        ')) {
+                                $line .= '</code></pre>';
+                            }
+                        }
+                        else if (self::isBlank($prevLine)) {
+                            // new paragraph inside a list item
+                            $line = '</p><p>' . ltrim($line);
+                        }
+                    }
+                    else if (self::isBlank($prevLine)) {
+                        // end of list
+                        $stack->apply($text, static::TAG);
+                        continue;
+                    }
+                    // unbroken text inside a list item
+                    else {
+                        // add text to current list item
+                        $line = ltrim($line);
+                    }
+
+                    $stack->appendLine(array($no => $line));
+                }
+            }
+        }
+
+        // if there is still stack, flush it
+        if (!$stack->isEmpty()) {
+            $stack->apply($text, static::TAG);
+        }
 
         return $text;
     }
 
-    /**
-     * Takes a single markdown list
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformList($values) {
-        $list = $values['list'];
-        $list = $this->transformListItems($list);
-
-        return sprintf("\n<%1\$s>\n%2\$s</%1\$s>\n\n", $this->_listType, $list);
-    }
-
-    /**
-     * Process the contents of a single ordered or unordered list,
-     * splitting it into individual list items.
-     *
-     * @param string
-     * @return string
-     */
-    protected function transformListItems($text)
-    {
-        $text = rtrim($text, "\n");
-        $text = preg_replace_callback(
-            sprintf(
-                '/(\n)?(?P<leading_space>^[ \t]*)(?P<marker>%1$s)[ \t]+(?P<item>(?s:.+?))(?=\n*(\Z|\2(%1$s)[ \t]+))/m',
-                $this->_markers
-            ),
-            array($this, 'transformListItem'), $text);
-
-        return $text;
-    }
-
-    /**
-     * Takes a single markdown list item
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformListItem($values) {
-        $item = $values['item'];
-        $leadingSpace = $values['leading_space'];
-        $markerSpace = $values['marker'];
-        $item = $leadingSpace . str_repeat(' ', strlen($markerSpace)) . $item;
-        $item = self::outdent($item);
-
-        return sprintf("<li>%s</li>\n", $item);
-    }
-
+    abstract protected function matchMarker($line);
 }
