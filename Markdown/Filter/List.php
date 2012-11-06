@@ -37,6 +37,7 @@ require_once __DIR__ . '/../Filter.php';
  *      must be indented by either 4 spaces or one tab</li>
  * </ul>
  *
+ * @todo Readahead list lines and pass through blockquote and code filters.
  * @package Markdown
  * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
