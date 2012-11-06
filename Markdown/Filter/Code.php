@@ -47,7 +47,6 @@ require_once __DIR__ . '/../Filter.php';
  * @package Markdown
  * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
- * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
 class Filter_Code extends Filter
@@ -61,7 +60,7 @@ class Filter_Code extends Filter
     public function preFilter(Text $text)
     {
         foreach($text->lines as $no => $line) {
-            if (substr($line, 0, 4) === '    ' || @$line[0] == "\t") {
+            if (self::isIndented($line)) {
                 @$text->lineflags[$no] |= Text::NOMARKDOWN | Text::CODEBLOCK;
             }
         }
@@ -76,49 +75,37 @@ class Filter_Code extends Filter
      */
     public function filter(Text $text)
     {
-        $text->setText(preg_replace_callback(
-            '/(?:\n\n|\A\n?)(?P<code>(?>( {4}|\t).*\n+)+)((?=^ {0,4}\S)|\Z)/m',
-            array($this, 'transformCodeBlock'),
-            $text
-        ));
+        $insideCodeBlock = false;
 
-        $text->setText(preg_replace_callback(
-            '/(?<!\\\)(`+)(?!`)(?P<code>.+?)(?<!`)\1(?!`)/m',
-            array($this, 'transformCode'),
-            $text
-        ));
+        foreach ($text->lines as $no => &$line)
+        {
+            $nextLine = isset($text->lines[$no + 1]) ? $text->lines[$no + 1] : null;
+
+            if (self::isIndented($line)) {
+                $line = self::outdent($line);
+                $line = htmlspecialchars($line, ENT_NOQUOTES);
+                if (!$insideCodeBlock) {
+                    $line = '<pre><code>' . $line;
+                    $insideCodeBlock = true;
+                }
+                if (!$nextLine || !self::isIndented($nextLine)) {
+                    $line .= '</code></pre>';
+                    $insideCodeBlock = false;
+                }
+            }
+            else {
+                $line = preg_replace_callback(
+                    '/(?<!\\\)(`+)(?!`)(?P<code>.+?)(?<!`)\1(?!`)/u',
+                    function($values) {
+                        $line = trim($values['code']);
+                        $line = htmlspecialchars($line, ENT_NOQUOTES);
+                        return '<code>' . $line . '</code>';
+                    },
+                    $line
+                );
+            }
+        }
 
         return $text;
-    }
-
-    /**
-     * Takes a single markdown code block and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformCodeBlock($values)
-    {
-        $code = self::outdent($values['code']);
-        $code = htmlspecialchars($code, ENT_NOQUOTES);
-        $code = ltrim($code, "\n");
-        $code = rtrim($code);
-
-        return sprintf("\n\n<pre><code>%s</code></pre>\n\n", $code);
-    }
-
-    /**
-     * Takes a single markdown code span
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformCode($values)
-    {
-        $code = trim($values['code'], " \t");
-        $code = htmlspecialchars($code, ENT_NOQUOTES);
-
-        return sprintf("<code>%s</code>", $code);
     }
 }
