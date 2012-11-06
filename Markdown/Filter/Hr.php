@@ -38,7 +38,6 @@ require_once __DIR__ . '/../Filter.php';
  * @package Markdown
  * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
- * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
 class Filter_Hr extends Filter
@@ -58,7 +57,7 @@ class Filter_Hr extends Filter
             if (@$text->lineflags[$no] & Text::NOMARKDOWN) continue;
 
             $line = preg_replace(
-                '/^([*-_])(?> {0,2}\1){2,} *$/',
+                '/^(?:[*-_]\s*){2,}$/uS',
                 '<hr />',
                 $line
             );

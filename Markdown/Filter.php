@@ -38,6 +38,7 @@ abstract class Filter
     protected static $_defaultFilters = null;
 
     protected static $_factoryDefaultFilters = array(
+        'Hr',
         'ListBulleted',
         'ListNumbered',
         'Blockquote',
@@ -46,7 +47,6 @@ abstract class Filter
         'Entities',
         'HeaderAtx',
         'HeaderSetext',
-        'Hr',
         'Img',
         'Linebreak',
         'Link',
