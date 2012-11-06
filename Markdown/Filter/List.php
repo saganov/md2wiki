@@ -87,7 +87,6 @@ abstract class Filter_List extends Filter
                 }
                 // not blank line
                 else {
-
                     if (self::isIndented($line)) {
                         // blockquote
                         if (substr(ltrim($line), 0, 1) == '>') {
@@ -112,6 +111,9 @@ abstract class Filter_List extends Filter
                         else if (self::isBlank($prevLine)) {
                             // new paragraph inside a list item
                             $line = '</p><p>' . ltrim($line);
+                        }
+                        else {
+                            $line = ltrim($line);
                         }
                     }
                     else if (self::isBlank($prevLine)) {
