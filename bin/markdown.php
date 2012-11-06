@@ -20,4 +20,3 @@ else {
 }
 
 echo Filter::run($md);
-echo PHP_EOL;
