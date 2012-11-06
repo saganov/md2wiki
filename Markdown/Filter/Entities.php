@@ -69,10 +69,10 @@ class Filter_Entities extends Filter
             );
 
             // escape & outside of html entity
-            $line = preg_replace('/&(?![A-z]+;)/u', '&amp;', $line);
+            $line = preg_replace('/&(?![A-z]+;)/uS', '&amp;', $line);
 
             // escape < outside of html tag
-            $line = preg_replace('/<(?![A-z\\/])/u', '&lt;', $line);
+            $line = preg_replace('/<(?![A-z\\/])/uS', '&lt;', $line);
         }
     }
 }
