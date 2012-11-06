@@ -198,7 +198,18 @@ abstract class Filter
 
     protected static function isIndented($line)
     {
-        return ($line[0] == "\t" || substr($line, 0, 4) == '    ');
+        if (!is_string($line)) {
+            return false;
+        }
+        if (isset($line[0]) && $line[0] == "\t") {
+            return true;
+        }
+        if (substr($line, 0, 4) == '    ') {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     abstract public function filter(Text $text);
