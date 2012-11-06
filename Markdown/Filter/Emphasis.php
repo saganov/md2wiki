@@ -54,8 +54,6 @@ class Filter_Emphasis extends Filter
      */
     public function filter(Text $text)
     {
-        // FIXME multiline emphasis doesn't work this way
-
         foreach ($text->lines as $no => &$line) {
             if (@$text->lineflags[$no] & Text::NOMARKDOWN) continue;
 
