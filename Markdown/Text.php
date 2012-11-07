@@ -28,95 +28,100 @@ require_once __DIR__ . '/Filter.php';
 /**
  * Represents a piece of text.
  *
- * @todo Make object traverable instead of public $lines
  * @package Markdown
  * @subpackage Text
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Text
+class Text extends \ArrayObject
 {
-    const NOMARKDOWN = 1;
-    const CODEBLOCK  = 2;
-    const LISTS      = 4;
+    const NONE        = 0;
+    const NOMARKDOWN  = 1;
+    const CODEBLOCK   = 2;
+    const LISTS       = 4;
 
-    public $lines = array();
-    public $lineflags = array();
+    /**
+     * Flag indicating that object has been passed through filters.
+     *
+     * @var bool
+     */
+    protected $_isFiltered = false;
+
+    /**
+     * Array of custom filters.
+     * Default filters is used if not set.
+     *
+     * @var array
+     */
+    protected $_filters = null;
+
+    /**
+     * Array of flags for each line of text.
+     * Number of lines as keys, flags as values.
+     * If a line has no entry in this array, then no flags was set.
+     *
+     * @var array
+     */
+    protected $_lineflags = array();
 
     /**
      *
-     * @param string $text
+     * @param array|string $markdown
      */
-    public function __construct($text = '')
+    public function __construct($markdown)
     {
-        $this->setText($text);
+        if (!is_array($markdown)) {
+            $markdown = explode("\n", (string) $markdown);
+            $markdown = array_map(function($markdown) { return trim($markdown, "\r"); }, $markdown);
+        }
+
+        parent::__construct($markdown);
     }
 
     public function __toString()
     {
-        return implode("\n", $this->lines);
+        return $this->getHtml();
+    }
+
+    public function getHtml()
+    {
+        if (!$this->_isFiltered) {
+            Filter::run($this, $this->_filters);
+            $this->_isFiltered = true;
+        }
+
+        return implode("\n", (array) $this);
+    }
+
+    public function getFilters()
+    {
+        return $this->_filters;
+    }
+
+    public function setFilters(array $filters)
+    {
+        $this->_filters = $filters;
+
+        return $this;
     }
 
     /**
-     * Breaks $str by newlines, multiplatform.
+     * Get or set flags for line number $no.
      *
-     * @param string $str
-     * @return array
+     * @param int $no
+     * @param int $flags
      */
-    public static function explode($str)
+    public function lineflags($no, $flags = null)
     {
-        $str = explode("\n", $str);
-        $str = array_map(function($str) { return trim($str, "\r"); }, $str);
-        return $str;
-    }
-
-    public function insert($lines, $index)
-    {
-        if (!is_array($lines)) {
-            $lines = array($lines);
-        }
-
-        $slice = array_splice($this->lines, $index);
-        $this->lines = array_merge($this->lines, $lines, $slice);
-
-        $newflags = array();
-        $linescount = count($lines);
-        foreach ($this->lineflags as $key => $val) {
-            if ($key < $index) {
-                $newflags[$key] = $val;
+        if ($flags !== null) {
+            if (is_integer($flags)) {
+                $this->_lineflags[$no] = $flags;
             }
             else {
-                $newflags[$key + $linescount] = $val;
+                throw new \InvalidArgumentException('Flags must be an integer value.');
             }
         }
-        $this->lineflags = $newflags;
 
-        return $this;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getText()
-    {
-        return $this->lines;
-    }
-
-    /**
-     *
-     * @param array|string $text
-     * @return Text
-     */
-    public function setText($text)
-    {
-        if (is_array($text)) {
-            $this->lines = $text;
-        }
-        else {
-            $this->lines = self::explode($text);
-        }
-
-        return $this;
+        return isset($this->_lineflags[$no]) ? $this->_lineflags[$no] : self::NONE;
     }
 }
