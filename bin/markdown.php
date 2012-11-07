@@ -2,9 +2,8 @@
 <?php
 
 require_once __DIR__ . '/../Markdown/Text.php';
-require_once __DIR__ . '/../Markdown/Filter.php';
 
-use \Markdown\Filter;
+use Markdown\Text;
 
 if (@$_SERVER['argv'][1]) {
     if (is_readable($_SERVER['argv'][1]) && is_file($_SERVER['argv'][1])) {
@@ -19,4 +18,4 @@ else {
     $md = stream_get_contents(STDIN);
 }
 
-echo Filter::run($md);
+echo new Text($md);

@@ -37,8 +37,5 @@ MD;
     public function testConstruct()
     {
         $text = new Text(self::SAMPLE_MARKDOWN);
-        $text->setFilters(array('Paragraph'));
-
-        echo $text;
     }
 }
