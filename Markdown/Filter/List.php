@@ -57,10 +57,10 @@ abstract class Filter_List extends Filter
         require_once __DIR__ . '/List/Stack.php';
         $stack = new ListStack();
 
-        foreach ($text->lines as $no => $line)
+        foreach ($text as $no => $line)
         {
-            $prevLine = isset($text->lines[$no - 1]) ? $text->lines[$no - 1] : null;
-            $nextLine = isset($text->lines[$no + 1]) ? $text->lines[$no + 1] : null;
+            $prevLine = isset($text[$no - 1]) ? $text[$no - 1] : null;
+            $nextLine = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
             // match list marker, add a new list item
             if (($marker = $this->matchMarker($line)) !== false)

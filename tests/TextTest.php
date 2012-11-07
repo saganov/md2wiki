@@ -37,13 +37,8 @@ MD;
     public function testConstruct()
     {
         $text = new Text(self::SAMPLE_MARKDOWN);
-        $this->assertEquals(self::SAMPLE_MARKDOWN, $text->getText());
-    }
+        $text->setFilters(array('Paragraph'));
 
-    public function testSetGetMarkdown()
-    {
-        $text = new Text();
-        $text->setText(self::SAMPLE_MARKDOWN);
-        $this->assertEquals(self::SAMPLE_MARKDOWN, $text->getText());
+        echo $text;
     }
 }

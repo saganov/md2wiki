@@ -52,8 +52,8 @@ class Filter_Blockquote extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($this->searchQuotes((string) $text) as $quote) {
-            $text->setText(str_replace($quote, $this->transformQuote($quote), (string) $text));
+        foreach($this->searchQuotes(implode("\n", (array) $text)) as $quote) {
+            $text->exchangeArray(explode("\n", str_replace($quote, $this->transformQuote($quote), implode("\n", (array) $text))));
         }
 
         return $text;

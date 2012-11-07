@@ -52,22 +52,7 @@ class Filter_Entities extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($text->lines as $no => &$line) {
-            // always escape within a codeblock
-            if ($text->lineflags & Text::CODEBLOCK) {
-                $line = htmlspecialchars($line, ENT_NOQUOTES, null, true);
-                continue;
-            }
-
-            // always escape within a code span
-            $line = preg_replace_callback(
-                array('/(?<!\\\\)`.*?(?<!\\\\)`/u'),
-                function ($match) {
-                    return htmlspecialchars($match[0], ENT_NOQUOTES);
-                },
-                $line
-            );
-
+        foreach($text as $no => &$line) {
             // escape & outside of html entity
             $line = preg_replace('/&(?![A-z]+;)/uS', '&amp;', $line);
 

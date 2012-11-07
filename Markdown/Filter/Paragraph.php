@@ -51,12 +51,12 @@ class Filter_Paragraph extends Filter
      */
     public function preFilter(Text $text)
     {
-        $ex = sprintf('/^<(%s)/i', implode('|', self::$_blockTags));
+        $ex = sprintf('/^<(%s)/iuS', implode('|', self::$_blockTags));
 
         $inHtml = false;
-        foreach($text->lines as $no => &$line) {
-            $prevline = @$text->lines[$no - 1];
-            $nextline = @$text->lines[$no + 1];
+        foreach($text as $no => &$line) {
+            $prevline = @$text[$no - 1];
+            $nextline = @$text[$no + 1];
 
             if (!$inHtml) {
                 if (self::isBlank($prevline)) {
@@ -67,7 +67,7 @@ class Filter_Paragraph extends Filter
             }
 
             if ($inHtml) {
-                @$text->lineflags[$no] |= Text::NOMARKDOWN;
+                $text->lineflags($no, Text::NOMARKDOWN);
                 if (self::isBlank($nextline)) {
                     $inHtml = false;
                 }
@@ -86,12 +86,12 @@ class Filter_Paragraph extends Filter
     {
         $inParagraph = false;
 
-        foreach($text->lines as $no => &$line) {
-            if (@$text->lineflags[$no] & Text::NOMARKDOWN + Text::LISTS) continue;
+        foreach($text as $no => &$line) {
+            if ($text->lineflags($no) & Text::NOMARKDOWN + Text::LISTS) continue;
             if (self::isBlank($line)) continue;
 
-            $prevline = @$text->lines[$no - 1];
-            $nextline = @$text->lines[$no + 1];
+            $prevline = @$text[$no - 1];
+            $nextline = @$text[$no + 1];
 
             if (!$inParagraph && self::isBlank($prevline)) {
                 $line = '<p>' . $line;

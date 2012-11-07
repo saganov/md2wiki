@@ -42,8 +42,6 @@ require_once __DIR__ . '/../Filter.php';
  */
 class Filter_Hr extends Filter
 {
-    protected static $chars = array('*', '-', '_');
-
     /**
      * Pass given text through the filter and return result.
      *
@@ -53,8 +51,8 @@ class Filter_Hr extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($text->lines as $no => &$line) {
-            if (@$text->lineflags[$no] & Text::NOMARKDOWN) continue;
+        foreach($text as $no => &$line) {
+            if ($text->lineflags($no) & Text::NOMARKDOWN) continue;
 
             $line = preg_replace(
                 '/^(?:[*-_]\s*){2,}$/uS',

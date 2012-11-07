@@ -50,7 +50,7 @@ class Filter_Linebreak extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($text->lines as &$line) {
+        foreach($text as &$line) {
             if (substr($line, -2) === '  ') {
                 $line = substr($line, 0, -2) . '<br />';
             }

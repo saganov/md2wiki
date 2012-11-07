@@ -59,9 +59,9 @@ class Filter_Code extends Filter
      */
     public function preFilter(Text $text)
     {
-        foreach($text->lines as $no => $line) {
+        foreach($text as $no => $line) {
             if (self::isIndented($line)) {
-                @$text->lineflags[$no] |= Text::NOMARKDOWN | Text::CODEBLOCK;
+                $text->lineflags($no, Text::NOMARKDOWN | Text::CODEBLOCK);
             }
         }
     }
@@ -77,9 +77,9 @@ class Filter_Code extends Filter
     {
         $insideCodeBlock = false;
 
-        foreach ($text->lines as $no => &$line)
+        foreach ($text as $no => &$line)
         {
-            $nextLine = isset($text->lines[$no + 1]) ? $text->lines[$no + 1] : null;
+            $nextLine = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
             if (self::isIndented($line)) {
                 $line = self::outdent($line);

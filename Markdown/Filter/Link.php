@@ -83,7 +83,7 @@ class Filter_Link extends Filter
      */
     public function filter(Text $text)
     {
-        $result = (string) $text;
+        $result = implode("\n", (array) $text);
 
         $result = preg_replace_callback(
             '/^[ ]{0,3}\[(?P<id>.+)\]:[ \t]*\n?[ \t]*<?(?P<url>.+?)>?[ \t]*(?:\n?[ \t]*(?<=\s)[\'"(](?P<title>[^\n]*)[\'")][ \t]*)?(?:\n+|\Z)/m',
@@ -109,7 +109,7 @@ class Filter_Link extends Filter
             $result
         );
 
-        $text->setText($result);
+        $text->exchangeArray(explode("\n", $result));
 
         return $text;
     }
