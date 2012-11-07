@@ -95,6 +95,6 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithDataFiles($md, $html)
     {
-        $this->assertEquals($html, (string) Filter::run($md));
+        $this->assertEquals($html, (string) new Text($md));
     }
 }
