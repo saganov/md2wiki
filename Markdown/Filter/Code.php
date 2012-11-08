@@ -44,6 +44,7 @@ require_once __DIR__ . '/../Filter.php';
  *     contain multiple backticks</li>
  * </ul>
  *
+ * @todo Require codeblock to be surrounded by blank lines.
  * @package Markdown
  * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>

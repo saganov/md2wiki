@@ -40,40 +40,11 @@ require_once __DIR__ . '/../Filter.php';
  *
  * @package Markdown
  * @subpackage Filter
- * @author Igor Gaponov <jiminy96@gmail.com>
+ * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
 class Filter_Link extends Filter
 {
-    /**
-     * Array with link definitions
-     *
-     * @var array
-     */
-    protected $_urls = array();
-
-    /**
-     * Array with titles of link definitions
-     *
-     * @var array
-     */
-    protected $_titles = array();
-
-    /**
-     * Mark, that placed before brackets of link text,
-     * null by default
-     *
-     * @var null
-     */
-    protected $_mark = null;
-
-    /**
-     * Format of the returned html code
-     *
-     * @var string
-     */
-    protected $_format = '<a href="%s"%s>%s</a>';
-
     /**
      * Pass given text through the filter and return result.
      *
@@ -83,111 +54,61 @@ class Filter_Link extends Filter
      */
     public function filter(Text $text)
     {
-        $result = implode("\n", (array) $text);
+        $links = array();
+        foreach($text as $no => &$line) {
+            if (preg_match('/^ {0,3}\[([\w ]+)\]:\s+<?(.+?)>?(\s+[\'"(].*?[\'")])?\s*$/uS', $line, $match)) {
+                $link =& $links[ strtolower($match[1]) ];
+                $link['href']  = $match[2];
+                $link['title'] = null;
+                if (isset($match[3])) {
+                    $link['title'] = trim($match[3], ' \'"()');
+                }
+                else if (isset($text[$no + 1])) {
+                    if (preg_match('/^ {0,3}[\'"(].*?[\'")]\s*$/uS', $text[$no + 1], $match)) {
+                        $link['title'] = trim($match[0], ' \'"()');
+                        $text[$no + 1] = '';
+                    }
+                }
+                // erase line
+                $line = '';
+            }
+        }
+        unset($link, $match, $no, $line);
 
-        $result = preg_replace_callback(
-            '/^[ ]{0,3}\[(?P<id>.+)\]:[ \t]*\n?[ \t]*<?(?P<url>.+?)>?[ \t]*(?:\n?[ \t]*(?<=\s)[\'"(](?P<title>[^\n]*)[\'")][ \t]*)?(?:\n+|\Z)/m',
-            array($this, 'extractLinkDefinitions'),
-            $result
-        );
+        foreach($text as $no => &$line) {
+            $line = preg_replace_callback(
+                '/\[(.*?)\]\((.*?)(\s+"[\w ]+")?\)/uS',
+                function($match) {
+                    if (!isset($match[3])) $match[3] = null;
+                    return $this->buildHtml($match[1], $match[2], $match[3]);
+                },
+                $line
+            );
 
-        $result = preg_replace_callback(
-            sprintf(
-                '/%s\[(?P<text>(?>[^\[\]]+|\[(?>[^\[\]]+)*\])*)\][ ]?(?:\n[ ]*)?\[(?P<id>.*?)\]/xs',
-                $this->_mark
-            ),
-            array($this, 'transformReference'),
-            $result
-        );
-
-        $result = preg_replace_callback(
-            sprintf(
-                '/%s\[(?P<text>(?>[^\[\]]+|\[(?>[^\[\]]+)*\])*)\]\([ \t\n]*(?P<url><.+?>|.+?)[ \t\n]*(([\'"])(?P<title>.*?)\4[ \t\n]*)?\)/s',
-                $this->_mark
-            ),
-            array($this, 'transformInline'),
-            $result
-        );
-
-        $text->exchangeArray(explode("\n", $result));
+            if (preg_match_all('/\[(.+?)\] ?\[([\w ]*)\]/uS', $line, $matches, PREG_SET_ORDER)) {
+                foreach($matches as &$match) {
+                    $ref = !empty($match[2]) ? $match[2] : $match[1];
+                    $ref = strtolower(trim($ref));
+                    if (isset($links[$ref])) {
+                        $link =& $links[$ref];
+                        $html = $this->buildHtml($match[1], $link['href'], $link['title']);
+                        $line = str_replace($match[0], $html, $line);
+                    }
+                }
+            }
+        }
 
         return $text;
     }
 
-    /**
-     * Extract all link definitions from text
-     * and place them in {@link $_urls}
-     *
-     * @param array
-     * @return null
-     */
-    protected function extractLinkDefinitions($values) {
-        $id = strtolower($values['id']);
-        $url = trim($values['url'], '<>');
-        $this->_urls[$id] = $this->encodeAttribute($url);
-        if(isset($values['title'])) {
-            $this->_titles[$id] = $this->encodeAttribute($values['title']);
+    protected function buildHtml($content, $href, $title = null)
+    {
+        $link = '<a href="' . trim($href) . '"';
+        if (!empty($title)) {
+            $link .= ' title="' . trim($title, ' "') . '"';
         }
+        $link .= '>' . trim($content) . '</a>';
 
-        return null;
-    }
-
-    /**
-     * Takes a single markdown reference-style link
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformReference($values) {
-        $text = $values['text'];
-        $id = $values['id'];
-        if(empty($id)) {
-            $id = $text;
-        }
-        $id = preg_replace('/[ ]?\n/', ' ', strtolower($id));
-        if(isset($this->_urls[$id])) {
-            $url = $this->_urls[$id];
-            if(isset( $this->_titles[$id])) {
-                $title = " title=\"{$this->_titles[$id]}\"";
-            } else {
-                $title = null;
-            }
-        } else {
-            return $values[0];
-        }
-
-        return sprintf($this->_format, $url, $title, $text);
-    }
-
-    /**
-     * Takes a single markdown inline-style link
-     * and returns its html equivalent.
-     *
-     * @param array
-     * @return string
-     */
-    protected function transformInline($values) {
-        $text = $values['text'];
-        $url = trim($values['url'], '<>');
-        $url = $this->encodeAttribute($url);
-        if(isset($values['title'])) {
-            $title = sprintf(' title="%s"',
-                $this->encodeAttribute($values['title']));
-        } else {
-            $title = null;
-        }
-
-        return sprintf($this->_format, $url, $title, $text);
-    }
-
-    /**
-     * Encode text for a double-quoted HTML attribute
-     *
-     * @param string
-     * @return string
-     */
-    protected function encodeAttribute($text) {
-        return str_replace('"', '&quot;', $text);
+        return $link;
     }
 }

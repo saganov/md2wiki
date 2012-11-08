@@ -17,7 +17,7 @@ This is [an example] [id] reference-style link.
 
 [Example2][Next Line]
 [next line]: http://example.com/longish/path/to/resource/here
-    "Optional Title Here"
+   "Optional Title Here"
 
 [Google][]
 
