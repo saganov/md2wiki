@@ -68,11 +68,14 @@ class Text extends \ArrayObject
      *
      * @param array|string $markdown
      */
-    public function __construct($markdown)
+    public function __construct($markdown, array $filters = null)
     {
         if (!is_array($markdown)) {
             $markdown = explode("\n", (string) $markdown);
             $markdown = array_map(function($markdown) { return trim($markdown, "\r"); }, $markdown);
+        }
+        if ($filters !== null) {
+            $this->setFilters($filters);
         }
 
         parent::__construct($markdown);
