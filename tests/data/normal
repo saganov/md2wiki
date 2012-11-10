@@ -1,7 +1,10 @@
 This text in not quoted.
 
-> This is quoted text
-> > This is a nested quote
+> This is the first level of quoting.
+>
+> > This is nested blockquote.
+>
+> Back to the first level.
 
 > another quote
 

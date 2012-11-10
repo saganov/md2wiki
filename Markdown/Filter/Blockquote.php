@@ -52,62 +52,34 @@ class Filter_Blockquote extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($this->searchQuotes(implode("\n", (array) $text)) as $quote) {
-            $text->exchangeArray(explode("\n", str_replace($quote, $this->transformQuote($quote), implode("\n", (array) $text))));
+        $quote = null;
+
+        foreach($text as $no => &$line) {
+            $prevLine = isset($text[$no - 1]) ? $text[$no - 1] : null;
+            $nextLine = isset($text[$no + 1]) ? $text[$no + 1] : null;
+
+            if (!$quote) {
+                if (isset($line[0]) && $line[0] == '>') {
+                    $quote = new Text(array($no => preg_replace('/^> ?/uS', '', $line)));
+                }
+            }
+
+            if($quote) {
+                $quote[$no] = preg_replace('/^> ?/uS', '', $line);
+
+                if (self::isBlank($nextLine)) {
+                    $quote = $this->filter($quote);
+                    $quote[ key($quote) ] = '<blockquote>' . current($quote);
+                    end($quote);
+                    $quote[ key($quote) ] .= '</blockquote>';
+                    foreach ($quote as $key => $val) {
+                        $text[$key] = $val;
+                    }
+                    $quote = null;
+                }
+            }
         }
 
         return $text;
-    }
-
-    /**
-     * Search markdown for quotes and returns it untouched.
-     *
-     * @param string $text
-     * @return array $quotes
-     */
-    protected function searchQuotes($text)
-    {
-        $quotes = array();
-
-        $inQuote = false;
-        $len = strlen($text);
-        for ($pos = 0; $pos < $len; $pos++) {
-            if (!$inQuote) {
-                if ($text[$pos] == '>' && ($pos == 0 || $text[$pos-1] == "\n")) {
-                    $inQuote  = true;
-                    $quotes[] = '';
-                    $quote    =& $quotes[count($quotes) - 1];
-                }
-            }
-
-            if ($inQuote) {
-                if ($text[$pos] == "\n" && $text[$pos-1] == "\n") {
-                    $inQuote = false;
-                }
-                else {
-                    $quote .= $text[$pos];
-                }
-            }
-        }
-
-        return $quotes;
-    }
-
-    /**
-     * Recursive function takes a single markdown quote
-     * and returns its html equivalent.
-     *
-     * @param string
-     * @return string
-     */
-    protected function transformQuote($text)
-    {
-        $text = preg_replace('/^\s*>\s*/m', '', $text);
-
-        foreach ($this->searchQuotes($text) as $quote) {
-            $text = str_replace($quote, $this->transformQuote($quote), $text);
-        }
-
-        return "<blockquote>\n" . $text . "</blockquote>\n";
     }
 }
