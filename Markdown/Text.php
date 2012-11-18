@@ -70,15 +70,20 @@ class Text extends \ArrayObject
      */
     public function __construct($markdown, array $filters = null)
     {
-        if (!is_array($markdown)) {
+        if (is_string($markdown) || method_exists($markdown, '__toString')) {
             $markdown = explode("\n", (string) $markdown);
             $markdown = array_map(function($markdown) { return trim($markdown, "\r"); }, $markdown);
         }
+        if (is_array($markdown)) {
+            parent::__construct($markdown);
+        }
+        else {
+            throw new \InvalidArgumentException('Text constructor expects array, string or stringable object.');
+        }
+
         if ($filters !== null) {
             $this->setFilters($filters);
         }
-
-        parent::__construct($markdown);
     }
 
     public function __toString()
