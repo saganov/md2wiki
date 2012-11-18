@@ -55,8 +55,8 @@ class Filter_Paragraph extends Filter
 
         $inHtml = false;
         foreach($text as $no => &$line) {
-            $prevline = @$text[$no - 1];
-            $nextline = @$text[$no + 1];
+            $prevline = (!empty($text[$no - 1]) ? @$text[$no - 1] : false);
+            $nextline = (!empty($text[$no + 1]) ? @$text[$no + 1] : false);
 
             if (!$inHtml) {
                 if (self::isBlank($prevline)) {

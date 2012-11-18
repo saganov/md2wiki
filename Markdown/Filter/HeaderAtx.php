@@ -53,6 +53,7 @@ class Filter_HeaderAtx extends Filter
     {
         foreach($text as $no => &$line) {
             if ($text->lineflags($no) & Text::NOMARKDOWN) continue;
+            if (empty($line[0])) continue;
 
             if (@$line[0] == '#') {
                 $line = rtrim($line, '#');
