@@ -35,25 +35,6 @@ namespace Markdown;
  */
 abstract class Filter
 {
-    protected static $_defaultFilters = null;
-
-    protected static $_factoryDefaultFilters = array(
-        'Hr',
-        'ListBulleted',
-        'ListNumbered',
-        'Blockquote',
-        'Code',
-        'Emphasis',
-        'Entities',
-        'HeaderAtx',
-        'HeaderSetext',
-        'Img',
-        'Linebreak',
-        'Link',
-        'Paragraph',
-        'Unescape'
-    );
-
     /**
      * List of characters which copies as is after \ char.
      *
@@ -76,108 +57,9 @@ abstract class Filter
         'footer', 'nav', 'section', 'figure', 'figcaption'
     );
 
-    /**
-     * Lookup Filter_{$filtername} class and return its instance.
-     *
-     * @throws InvalidArgumentException
-     * @param string $filtername
-     * @return Filter
-     */
-    public static function factory($filtername)
-    {
-        if (is_string($filtername) && ctype_alnum($filtername)) {
-            $file  = __DIR__ . '/Filter/' . $filtername . '.php';
-            $class = __NAMESPACE__ . '\\Filter_'   . $filtername;
-
-            if (is_readable($file)) {
-                require_once $file;
-
-                if (class_exists($class)) {
-                    return new $class;
-                }
-                else {
-                    throw new \InvalidArgumentException(
-                        'Could not find class ' . $class
-                    );
-                }
-            }
-            else {
-                throw new \InvalidArgumentException($file . ' is not readable');
-            }
-        }
-        else {
-            throw new \InvalidArgumentException(sprintf(
-                '$filtername must be an alphanumeric string, <%s> given.',
-                gettype($filtername)
-            ));
-        }
-    }
-
-    public static function getFactoryDefaultFilters()
-    {
-        return self::$_factoryDefaultFilters;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getDefaultFilters()
-    {
-        if (!self::$_defaultFilters) {
-            self::$_defaultFilters = self::getFactoryDefaultFilters();
-        }
-
-        return self::$_defaultFilters;
-    }
-
-    /**
-     * @param array $filters
-     * @return Filter
-     */
-    public static function setDefaultFilters(array $filters)
-    {
-        self::$_defaultFilters = $filters;
-    }
-
-    /**
-     * Pass given $text through $filters chain and return result.
-     * Use default filters in no $filters given.
-     *
-     * @param string $text
-     * @param array $filters optional
-     * @return string
-     */
-    public static function run($text, array $filters = null)
-    {
-        if(!$text instanceof Text) {
-            $text = new Text($text);
-        }
-
-        if ($filters === null) {
-            $filters = self::getDefaultFilters();
-        }
-
-        foreach ($filters as $filter) {
-            if ($filter instanceof Filter) {
-                // do nothing
-            }
-            elseif (is_string($filter)) {
-                $filter = self::factory($filter);
-            }
-            else {
-                throw new \InvalidArgumentException(
-                    '$filters must be an array which elements ' .
-                    'is either a string or Filter'
-                );
-            }
-
-            $filter->preFilter($text);
-            $filter->filter($text);
-            $filter->postFilter($text);
-        }
-
-        return $text;
-    }
+    abstract public function filter(Text $text);
+    public function preFilter(Text $text) {}
+    public function postFilter(Text $text) {}
 
     /**
      * Remove one level of indentation
@@ -212,8 +94,4 @@ abstract class Filter
         }
     }
 
-    abstract public function filter(Text $text);
-
-    public function preFilter(Text $text) {}
-    public function postFilter(Text $text) {}
 }

@@ -37,5 +37,68 @@ MD;
     public function testConstruct()
     {
         $text = new Text(self::SAMPLE_MARKDOWN);
+
+        $this->assertEquals(
+            $text->getFilters(),
+            $text->setFilters(Text::getDefaultFilters()),
+            'Default filters are returned when custom filters are not set.'
+        );
     }
+
+    public function testSetFilter()
+    {
+        $text = new Text(self::SAMPLE_MARKDOWN);
+
+#        $text->setFilters('not array');
+    }
+
+    public function testGetHtml()
+    {
+        $text = new Text(self::SAMPLE_MARKDOWN);
+
+#        var_dump($text->getHtml());
+    }
+
+    public function filesystem()
+    {
+        $data = array();
+
+        foreach(glob(__DIR__ . '/data/*.html') as $html) {
+            $basename = basename($html);
+            $markdown = dirname($html) . '/' . substr($basename, 0, -5);
+            if (is_readable($markdown)) {
+                $data[] = array(
+                        file_get_contents($markdown),
+                        file_get_contents($html)
+                );
+            }
+        }
+
+        return $data;
+    }
+
+    public function testGetDefaultFiltersNonEmpty()
+    {
+        $this->assertNotEmpty(Text::getDefaultFilters());
+    }
+
+    /**
+     * @depends testGetDefaultFiltersNonEmpty
+     */
+    public function testSetDefaultFilters()
+    {
+        $filters = array('Linebreak', 'Hr');
+        Text::setDefaultFilters($filters);
+        $this->assertEquals(Text::getDefaultFilters(), $filters);
+        Text::setDefaultFilters(Text::getFactoryDefaultFilters());
+    }
+
+    /**
+     * @dataProvider filesystem
+     */
+    public function testWithDataFiles($md, $html)
+    {
+        $this->assertEquals($html, (string) new Text($md));
+    }
+
 }

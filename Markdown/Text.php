@@ -47,13 +47,32 @@ class Text extends \ArrayObject
      */
     protected $_isFiltered = false;
 
+    protected static $_defaultFilters = null;
+
+    protected static $_factoryDefaultFilters = array(
+        'Hr',
+        'ListBulleted',
+        'ListNumbered',
+        'Blockquote',
+        'Code',
+        'Emphasis',
+        'Entities',
+        'HeaderAtx',
+        'HeaderSetext',
+        'Img',
+        'Linebreak',
+        'Link',
+        'Paragraph',
+        'Unescape'
+    );
+
     /**
      * Array of custom filters.
      * Default filters is used if not set.
      *
      * @var array
      */
-    protected $_filters = null;
+    protected $_filters = array();
 
     /**
      * Array of flags for each line of text.
@@ -84,6 +103,9 @@ class Text extends \ArrayObject
         if ($filters !== null) {
             $this->setFilters($filters);
         }
+        else {
+            $this->setFilters(self::getDefaultFilters());
+        }
     }
 
     public function __toString()
@@ -94,7 +116,18 @@ class Text extends \ArrayObject
     public function getHtml()
     {
         if (!$this->_isFiltered) {
-            Filter::run($this, $this->_filters);
+            foreach ($this->_filters as $filter) {
+                $filter->preFilter($this);
+            }
+
+            foreach ($this->_filters as $filter) {
+                $filter->filter($this);
+            }
+
+            foreach ($this->_filters as $filter) {
+                $filter->postFilter($this);
+            }
+
             $this->_isFiltered = true;
         }
 
@@ -106,11 +139,44 @@ class Text extends \ArrayObject
         return $this->_filters;
     }
 
+    /**
+     * Define filters for this Text instance.
+     *
+     * Each filter may be defined either as a string or as a Filter instance.
+     * If filter is a string, corresponding class will be attempted to autoload.
+     *
+     * Returns filters array with all members instantiated.
+     *
+     * @param array $filters
+     * @throws \InvalidArgumentException
+     * @return array
+     */
     public function setFilters(array $filters)
     {
-        $this->_filters = $filters;
+        $this->_filters = array();
 
-        return $this;
+        foreach ($filters as $key => $filter) {
+            if (is_string($filter) && ctype_alnum($filter)) {
+                $classname = __NAMESPACE__ . '\\Filter_'   . $filter;
+                $classfile = __DIR__ . '/Filter/' . $filter . '.php';
+                if (!class_exists($classname) && is_readable($classfile)) {
+                    require_once $classfile;
+                }
+
+                $filter = new $classname;
+            }
+
+            if (!$filter instanceof Filter) {
+                throw new \InvalidArgumentException(
+                    '$filters must be an array which elements ' .
+                    'are either an alphanumeric string or a Filter instance'
+                );
+            }
+
+            $this->_filters[$key] = $filter;
+        }
+
+        return $this->_filters;
     }
 
     /**
@@ -131,5 +197,31 @@ class Text extends \ArrayObject
         }
 
         return isset($this->_lineflags[$no]) ? $this->_lineflags[$no] : self::NONE;
+    }
+
+    public static function getFactoryDefaultFilters()
+    {
+        return self::$_factoryDefaultFilters;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getDefaultFilters()
+    {
+        if (!self::$_defaultFilters) {
+            self::$_defaultFilters = self::getFactoryDefaultFilters();
+        }
+
+        return self::$_defaultFilters;
+    }
+
+    /**
+     * @param array $filters
+     * @return Filter
+     */
+    public static function setDefaultFilters(array $filters)
+    {
+        self::$_defaultFilters = $filters;
     }
 }
