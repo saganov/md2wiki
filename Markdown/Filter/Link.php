@@ -55,7 +55,7 @@ class Filter_Link extends Filter
     public function filter(Text $text)
     {
         $links = array();
-        foreach($text as $no => &$line) {
+        foreach($text as $no => $line) {
             if (preg_match('/^ {0,3}\[([\w ]+)\]:\s+<?(.+?)>?(\s+[\'"(].*?[\'")])?\s*$/uS', $line, $match)) {
                 $link =& $links[ strtolower($match[1]) ];
                 $link['href']  = $match[2];
@@ -70,13 +70,13 @@ class Filter_Link extends Filter
                     }
                 }
                 // erase line
-                $line = '';
+                $text[$no] = '';
             }
         }
         unset($link, $match, $no, $line);
 
-        foreach($text as $no => &$line) {
-            $line = preg_replace_callback(
+        foreach($text as $no => $line) {
+            $text[$no] = preg_replace_callback(
                 '/\[(.*?)\]\((.*?)(\s+"[\w ]+")?\)/uS',
                 function($match) {
                     if (!isset($match[3])) $match[3] = null;
@@ -92,7 +92,7 @@ class Filter_Link extends Filter
                     if (isset($links[$ref])) {
                         $link =& $links[$ref];
                         $html = $this->buildHtml($match[1], $link['href'], $link['title']);
-                        $line = str_replace($match[0], $html, $line);
+                        $text[$no] = str_replace($match[0], $html, $line);
                     }
                 }
             }

@@ -54,18 +54,18 @@ class Filter_Emphasis extends Filter
      */
     public function filter(Text $text)
     {
-        foreach ($text as $no => &$line) {
-            if ($text->lineflags($no) & Text::NOMARKDOWN) continue;
+        foreach ($text as $no => $line) {
+            if ($line->flags() & Line::NOMARKDOWN) continue;
 
             // strong
-            $line = preg_replace(
+            $text[$no] = preg_replace(
                 '/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/u',
                 '<strong>$2</strong>',
                 $line
             );
 
             // emphasis
-            $line = preg_replace(
+            $text[$no] = preg_replace(
                 '/(?<!\\\\)([*_])(?!\s)(.+?)(?<![\\\\\s])\1/u',
                 '<em>$2</em>',
                 $line

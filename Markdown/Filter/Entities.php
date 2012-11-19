@@ -52,12 +52,12 @@ class Filter_Entities extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($text as $no => &$line) {
+        foreach($text as $no => $line) {
             // escape & outside of html entity
-            $line = preg_replace('/&(?![A-z]+;)/uS', '&amp;', $line);
+            $text[$no] = preg_replace('/&(?![A-z]+;)/uS', '&amp;', $line);
 
             // escape < outside of html tag
-            $line = preg_replace('/<(?![A-z\\/])/uS', '&lt;', $line);
+            $text[$no] = preg_replace('/<(?![A-z\\/])/uS', '&lt;', $line);
         }
     }
 }

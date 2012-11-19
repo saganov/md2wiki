@@ -50,9 +50,9 @@ class Filter_Linebreak extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($text as &$line) {
+        foreach($text as $no => $line) {
             if (substr($line, -2) === '  ') {
-                $line = substr($line, 0, -2) . '<br />';
+                $text[$no] = substr($line, 0, -2) . '<br />';
             }
         }
 

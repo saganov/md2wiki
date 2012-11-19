@@ -35,11 +35,6 @@ require_once __DIR__ . '/Line.php';
  */
 class Text extends \ArrayObject
 {
-    const NONE        = 0;
-    const NOMARKDOWN  = 1;
-    const CODEBLOCK   = 2;
-    const LISTS       = 4;
-
     /**
      * Flag indicating that object has been passed through filters.
      *
@@ -73,15 +68,6 @@ class Text extends \ArrayObject
      * @var array
      */
     protected $_filters = array();
-
-    /**
-     * Array of flags for each line of text.
-     * Number of lines as keys, flags as values.
-     * If a line has no entry in this array, then no flags was set.
-     *
-     * @var array
-     */
-    protected $_lineflags = array();
 
     /**
      *
@@ -139,6 +125,15 @@ class Text extends \ArrayObject
         return $this->_filters;
     }
 
+    public function offsetSet($offset, $value)
+    {
+        if (!$value instanceof Line) {
+            $value = new Line($value);
+        }
+
+        parent::offsetSet($offset, $value);
+    }
+
     /**
      * Define filters for this Text instance.
      *
@@ -177,26 +172,6 @@ class Text extends \ArrayObject
         }
 
         return $this->_filters;
-    }
-
-    /**
-     * Get or set flags for line number $no.
-     *
-     * @param int $no
-     * @param int $flags
-     */
-    public function lineflags($no, $flags = null)
-    {
-        if ($flags !== null) {
-            if (is_integer($flags)) {
-                $this->_lineflags[$no] = $flags;
-            }
-            else {
-                throw new \InvalidArgumentException('Flags must be an integer value.');
-            }
-        }
-
-        return isset($this->_lineflags[$no]) ? $this->_lineflags[$no] : self::NONE;
     }
 
     public static function getFactoryDefaultFilters()

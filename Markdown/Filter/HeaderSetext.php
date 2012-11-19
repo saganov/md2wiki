@@ -51,18 +51,17 @@ class Filter_HeaderSetext extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($text as $no => &$line) {
+        foreach($text as $no => $line) {
             if ($no == 0) continue; // processing 1st line makes no sense
-            if ($text->lineflags($no) & Text::NOMARKDOWN) continue;
+            if ($line->flags() & Line::NOMARKDOWN) continue;
 
-            $prevline =& $text[$no - 1];
             if (preg_match('/^=+$/uS', $line)) {
-                $prevline = '<h1>' . $prevline . '</h1>';
-                $line = '';
+                $text[$no - 1] = '<h1>' . $text[$no - 1] . '</h1>';
+                $text[$no] = '';
             }
             else if (preg_match('/^-+$/uS', $line)) {
-                $prevline = '<h2>' . $prevline . '</h2>';
-                $line = '';
+                $text[$no - 1] = '<h2>' . $text[$no - 1] . '</h2>';
+                $text[$no] = '';
             }
         }
 

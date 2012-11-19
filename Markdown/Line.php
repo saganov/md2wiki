@@ -33,6 +33,13 @@ namespace Markdown;
  */
 class Line extends \ArrayObject
 {
+    const NONE        = 0;
+    const NOMARKDOWN  = 1;
+    const CODEBLOCK   = 2;
+    const LISTS       = 4;
+
+    protected $_flags = self::NONE;
+
     public function __construct($line)
     {
         if (is_string($line) || method_exists($line, '__toString')) {
@@ -50,5 +57,24 @@ class Line extends \ArrayObject
     public function __toString()
     {
         return implode('', (array) $this);
+    }
+
+    /**
+     * Get or set flags.
+     *
+     * @param int $flags
+     */
+    public function flags($flags = null)
+    {
+        if ($flags !== null) {
+            if (is_integer($flags)) {
+                $this->_flags = $flags;
+            }
+            else {
+                throw new \InvalidArgumentException('Flags must be an integer value.');
+            }
+        }
+
+        return $this->_flags;
     }
 }

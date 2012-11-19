@@ -47,8 +47,8 @@ class Filter_Unescape extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($text as $no => &$line) {
-            $line = preg_replace(
+        foreach($text as $no => $line) {
+            $text[$no] = preg_replace(
                 '/\\\\([' . preg_quote(implode('', self::$_escapableChars), '/') . '])/uS',
                 '$1',
                 $line

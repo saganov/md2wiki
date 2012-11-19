@@ -90,9 +90,9 @@ abstract class Filter_List extends Filter
                     if (self::isIndented($line)) {
                         // blockquote
                         if (substr(ltrim($line), 0, 1) == '>') {
-                            $line = substr(ltrim($line), 1);
+                            $text[$no] = substr(ltrim($line), 1);
                             if (substr(ltrim($prevLine), 0, 1) != '>') {
-                                $line = '<blockquote>' . $line;
+                                $text[$no] = '<blockquote>' . $line;
                             }
                             if (substr(ltrim($nextLine), 0, 1) != '>') {
                                 $line .= '</blockquote>';
@@ -100,9 +100,9 @@ abstract class Filter_List extends Filter
                         }
                         // codeblock
                         else if (substr($line, 0, 2) == "\t\t" || substr($line, 0, 8) == '        ') {
-                            $line = ltrim(htmlspecialchars($line, ENT_NOQUOTES));
+                            $text[$no] = ltrim(htmlspecialchars($line, ENT_NOQUOTES));
                             if (!(substr($prevLine, 0, 2) == "\t\t" || substr($prevLine, 0, 8) == '        ')) {
-                                $line = '<pre><code>' . $line;
+                                $text[$no] = '<pre><code>' . $line;
                             }
                             if (!(substr($nextLine, 0, 2) == "\t\t" || substr($nextLine, 0, 8) == '        ')) {
                                 $line .= '</code></pre>';
@@ -110,10 +110,10 @@ abstract class Filter_List extends Filter
                         }
                         else if (self::isBlank($prevLine)) {
                             // new paragraph inside a list item
-                            $line = '</p><p>' . ltrim($line);
+                            $text[$no] = '</p><p>' . ltrim($line);
                         }
                         else {
-                            $line = ltrim($line);
+                            $text[$no] = ltrim($line);
                         }
                     }
                     else if (self::isBlank($prevLine)) {
@@ -124,7 +124,7 @@ abstract class Filter_List extends Filter
                     // unbroken text inside a list item
                     else {
                         // add text to current list item
-                        $line = ltrim($line);
+                        $text[$no] = ltrim($line);
                     }
 
                     $stack->appendLine(array($no => $line));

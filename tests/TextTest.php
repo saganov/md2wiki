@@ -40,7 +40,7 @@ MD;
 
         $this->assertEquals(
             $text->getFilters(),
-            $text->setFilters(Text::getDefaultFilters()),
+            $text->setFilters($text::getDefaultFilters()),
             'Default filters are returned when custom filters are not set.'
         );
     }

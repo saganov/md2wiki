@@ -51,10 +51,10 @@ class Filter_Hr extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($text as $no => &$line) {
-            if ($text->lineflags($no) & Text::NOMARKDOWN) continue;
+        foreach($text as $no => $line) {
+            if ($line->flags() & Line::NOMARKDOWN) continue;
 
-            $line = preg_replace(
+            $text[$no] = preg_replace(
                 '/^(?:[*-_]\s*){2,}$/uS',
                 '<hr />',
                 $line

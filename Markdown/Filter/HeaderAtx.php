@@ -51,14 +51,14 @@ class Filter_HeaderAtx extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($text as $no => &$line) {
-            if ($text->lineflags($no) & Text::NOMARKDOWN) continue;
-            if (empty($line[0])) continue;
+        foreach($text as $no => $line) {
+            if ($line->flags() & Line::NOMARKDOWN) continue;
 
-            if (@$line[0] == '#') {
+            if (isset($line[0]) && $line[0] == '#') {
                 $line = rtrim($line, '#');
                 $level = substr_count($line, '#', 0, min(6, strlen($line)));
                 $line = "<h$level>" . trim(substr($line, $level)) . "</h$level>";
+                $text[$no] = $line;
             }
         }
     }

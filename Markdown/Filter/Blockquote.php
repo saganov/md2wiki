@@ -54,7 +54,7 @@ class Filter_Blockquote extends Filter
     {
         $quote = null;
 
-        foreach($text as $no => &$line) {
+        foreach($text as $no => $line) {
             $prevLine = isset($text[$no - 1]) ? $text[$no - 1] : null;
             $nextLine = isset($text[$no + 1]) ? $text[$no + 1] : null;
 

@@ -45,11 +45,12 @@ class ListStack extends \SplStack
             }
 
             foreach ($item as $no => $line) {
+                $line = new Line($line);
+                $line->flags(Line::LISTS);
                 $text[$no] = $line;
-                $text->lineflags($no, Text::LISTS);
             }
         }
-        $text[$no] .= '</ul>';
+        $text[$no] = new Line($text[$no] . '</ul>');
 
         $this->reset();
 
