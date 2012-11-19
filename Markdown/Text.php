@@ -68,7 +68,7 @@ class Text extends \ArrayObject
 
     /**
      * Array of custom filters.
-     * Default filters is used if not set.
+     * Default filters are used if not set.
      *
      * @var array
      */
