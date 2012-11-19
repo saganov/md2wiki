@@ -77,6 +77,28 @@ MD;
         return $data;
     }
 
+    public function testInsert()
+    {
+        $md =<<<TEXT
+First line
+Second line
+Third line
+TEXT;
+
+        $html =<<<TEXT
+<p>First line
+inserted line
+Second line
+Third line</p>
+TEXT;
+
+        $text = new Text($md);
+        $text[1]->flags(Line::NOMARKDOWN);
+        $text->insert(1, 'inserted line');
+
+        $this->assertEquals($html, (string) $text);
+    }
+
     public function testGetDefaultFiltersNonEmpty()
     {
         $this->assertNotEmpty(Text::getDefaultFilters());

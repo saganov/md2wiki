@@ -179,6 +179,24 @@ class Text extends \ArrayObject
         return self::$_factoryDefaultFilters;
     }
 
+    public function insert($offset, $lines)
+    {
+        if (!is_array($lines)) {
+            $lines = array($lines);
+        }
+
+        $result = (array) $this;
+
+        $slice = array_splice($result, $offset);
+        $result = array_merge($result, $lines, $slice);
+
+        foreach ($result as $key => $val) {
+            $this[$key] = $val;
+        }
+
+        return $this;
+    }
+
     /**
      * @return array
      */
