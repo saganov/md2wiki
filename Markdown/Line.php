@@ -31,32 +31,44 @@ namespace Markdown;
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Line extends \ArrayObject
+class Line implements \ArrayAccess
 {
     const NONE        = 0;
     const NOMARKDOWN  = 1;
     const CODEBLOCK   = 2;
     const LISTS       = 4;
 
+    protected $_line = '';
     protected $_flags = self::NONE;
 
     public function __construct($line)
     {
-        if (is_string($line) || method_exists($line, '__toString')) {
-            $line = str_split((string) $line);
-        }
-
-        if (is_array($line)) {
-            parent::__construct($line);
-        }
-        else {
-            throw new \InvalidArgumentException('Line constructor expects array, string or stringable object.');
-        }
+        $this->_line = (string) $line;
     }
 
     public function __toString()
     {
-        return implode('', (array) $this);
+        return $this->_line;
+    }
+
+    public function offsetExists($offset)
+    {
+        return isset($this->_line[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->_line[$offset];
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->_line[$offset] = $value;
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->_line[$offset]);
     }
 
     /**
