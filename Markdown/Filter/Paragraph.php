@@ -84,6 +84,32 @@ class Filter_Paragraph extends Filter
      */
     public function filter(Text $text)
     {
+        // FIXME
+        // code below flags HTML blocks again
+        $ex = sprintf('/^<(%s)/iuS', implode('|', self::$_blockTags));
+
+        $inHtml = false;
+        foreach($text as $no => $line) {
+            $prevline = isset($text[$no - 1]) ? $text[$no - 1] : null;
+            $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
+
+            if (!$inHtml) {
+                if (self::isBlank($prevline)) {
+                    if (preg_match($ex, $line, $matches)) {
+                        $inHtml = $matches[1];
+                    }
+                }
+            }
+
+            if ($inHtml) {
+                $line->flags(Line::NOMARKDOWN);
+                if (self::isBlank($nextline)) {
+                    $inHtml = false;
+                }
+            }
+        }
+
+
         $inParagraph = false;
 
         foreach($text as $no => $line) {
