@@ -43,6 +43,10 @@ class Line implements \ArrayAccess
 
     public function __construct($line)
     {
+        if (strpos($line, "\n") !== false) {
+            throw new \InvalidArgumentException('Newline characters in argument.');
+        }
+
         $this->_line = (string) $line;
     }
 
