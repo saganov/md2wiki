@@ -23,7 +23,7 @@
 
 namespace Markdown;
 
-require_once __DIR__ . '/Filter.php';
+require_once __DIR__ . '/Line.php';
 
 /**
  * Represents a piece of text.
@@ -91,7 +91,7 @@ class Text extends \ArrayObject
     {
         if (is_string($markdown) || method_exists($markdown, '__toString')) {
             $markdown = explode("\n", (string) $markdown);
-            $markdown = array_map(function($markdown) { return trim($markdown, "\r"); }, $markdown);
+            $markdown = array_map(function($markdown) { return new Line(trim($markdown, "\r")); }, $markdown);
         }
         if (is_array($markdown)) {
             parent::__construct($markdown);
