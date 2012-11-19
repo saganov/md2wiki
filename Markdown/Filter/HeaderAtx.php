@@ -54,7 +54,7 @@ class Filter_HeaderAtx extends Filter
         foreach($text as $no => $line) {
             if ($line->flags() & Line::NOMARKDOWN) continue;
 
-            if (isset($line[0]) && $line[0] == '#') {
+            if (preg_match('/^#+\s*\w/uS', $line)) {
                 $line = rtrim($line, '#');
                 $level = substr_count($line, '#', 0, min(6, strlen($line)));
                 $line = "<h$level>" . trim(substr($line, $level)) . "</h$level>";
