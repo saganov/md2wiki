@@ -52,7 +52,7 @@ class Filter_HeaderAtx extends Filter
     public function filter(Text $text)
     {
         foreach($text as $no => $line) {
-            if ($line->flags() & Line::NOMARKDOWN) continue;
+            if ($line->flags & Line::NOMARKDOWN) continue;
 
             if (preg_match('/^#+\s*\w/uS', $line)) {
                 $line = rtrim($line, '#');

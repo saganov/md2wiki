@@ -55,7 +55,7 @@ class Filter_Emphasis extends Filter
     public function filter(Text $text)
     {
         foreach ($text as $no => $line) {
-            if ($line->flags() & Line::NOMARKDOWN) continue;
+            if ($line->flags & Line::NOMARKDOWN) continue;
 
             // strong
             $text[$no] = preg_replace(

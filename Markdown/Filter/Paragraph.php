@@ -67,7 +67,7 @@ class Filter_Paragraph extends Filter
             }
 
             if ($inHtml) {
-                $line->flags(Line::NOMARKDOWN);
+                $line->flags |= Line::NOMARKDOWN;
                 if (self::isBlank($nextline)) {
                     $inHtml = false;
                 }
@@ -102,7 +102,7 @@ class Filter_Paragraph extends Filter
             }
 
             if ($inHtml) {
-                $line->flags(Line::NOMARKDOWN);
+                $line->flags |= Line::NOMARKDOWN;
                 if (self::isBlank($nextline)) {
                     $inHtml = false;
                 }
@@ -113,7 +113,7 @@ class Filter_Paragraph extends Filter
         $inParagraph = false;
 
         foreach($text as $no => $line) {
-            if ($line->flags() & Line::NOMARKDOWN + Line::LISTS) continue;
+            if ($line->flags & Line::NOMARKDOWN + Line::LISTS) continue;
             if (self::isBlank($line)) continue;
 
             $prevline = isset($text[$no - 1]) ? $text[$no - 1] : null;

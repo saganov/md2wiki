@@ -62,7 +62,7 @@ class Filter_Code extends Filter
     {
         foreach($text as $no => $line) {
             if (self::isIndented($line)) {
-                $line->flags(Line::NOMARKDOWN | Line::CODEBLOCK);
+                $line->flags |= Line::NOMARKDOWN + Line::CODEBLOCK;
             }
         }
     }

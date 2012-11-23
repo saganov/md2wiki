@@ -53,7 +53,7 @@ class Filter_HeaderSetext extends Filter
     {
         foreach($text as $no => $line) {
             if ($no == 0) continue; // processing 1st line makes no sense
-            if ($line->flags() & Line::NOMARKDOWN) continue;
+            if ($line->flags & Line::NOMARKDOWN) continue;
 
             if (preg_match('/^=+$/uS', $line)) {
                 $text[$no - 1] = '<h1>' . $text[$no - 1] . '</h1>';

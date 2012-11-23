@@ -93,7 +93,7 @@ Third line</p>
 TEXT;
 
         $text = new Text($md);
-        $text[1]->flags(Line::NOMARKDOWN);
+        $text[1]->flags |= Line::NOMARKDOWN;
         $text->insert(1, 'inserted line');
 
         $this->assertEquals($html, (string) $text);

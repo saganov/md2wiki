@@ -46,7 +46,7 @@ class ListStack extends \SplStack
 
             foreach ($item as $no => $line) {
                 $line = new Line($line);
-                $line->flags(Line::LISTS);
+                $line->flags |= Line::LISTS;
                 $text[$no] = $line;
             }
         }

@@ -38,8 +38,9 @@ class Line implements \ArrayAccess
     const CODEBLOCK   = 2;
     const LISTS       = 4;
 
+    public $flags = self::NONE;
+
     protected $_line = '';
-    protected $_flags = self::NONE;
 
     public function __construct($line)
     {
@@ -73,24 +74,5 @@ class Line implements \ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->_line[$offset]);
-    }
-
-    /**
-     * Get or set flags.
-     *
-     * @param int $flags
-     */
-    public function flags($flags = null)
-    {
-        if ($flags !== null) {
-            if (is_integer($flags)) {
-                $this->_flags = $flags;
-            }
-            else {
-                throw new \InvalidArgumentException('Flags must be an integer value.');
-            }
-        }
-
-        return $this->_flags;
     }
 }
