@@ -34,8 +34,15 @@ class Line implements \ArrayAccess
 {
     const NONE        = 0;
     const NOMARKDOWN  = 1;
-    const CODEBLOCK   = 2;
-    const LISTS       = 4;
+    const BLOCKQUOTE  = 2;
+    const CODEBLOCK   = 4;
+    const HEADER      = 8;
+    const HR          = 16;
+    const IMG         = 32;
+    const LINEBREAK   = 64;
+    const LINK        = 128;
+    const LISTS       = 256;
+    const PARAGRAPH   = 512;
 
     public $gist  = '';
     public $flags = self::NONE;
