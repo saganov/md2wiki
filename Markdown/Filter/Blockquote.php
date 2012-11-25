@@ -52,29 +52,29 @@ class Filter_Blockquote extends Filter
      */
     public function filter(Text $text)
     {
-        $quote = null;
+        $stack = null;
 
         foreach($text as $no => $line) {
+
             $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
-            if (!$quote) {
-                if (isset($line[0]) && $line[0] == '>') {
-                    $quote = new Text(array($no => new Line(preg_replace('/^> ?/uS', '', $line))));
+            if (!$stack) {
+                if (isset($line->gist[0]) && $line->gist[0] == '>') {
+                    $stack = new Text();
                 }
             }
 
-            if($quote) {
-                $quote[$no] = new Line(preg_replace('/^> ?/uS', '', $line));
+            if($stack) {
+                $line->flags |= Line::BLOCKQUOTE;
+                $line->gist   = preg_replace('/^> ?/u', '', $line->gist);
+                $stack[$no]   = $line;
 
                 if (!isset($nextline) || $nextline->isBlank()) {
-                    $quote = $this->filter($quote);
-                    $quote[ key($quote) ]->prepend('<blockquote>');
-                    end($quote);
-                    $quote[ key($quote) ]->append('</blockquote>');
-                    foreach ($quote as $key => $val) {
-                        $text[$key] = $val;
-                    }
-                    $quote = null;
+                    $stack = $this->filter($stack);
+                    $stack[ key($stack) ]->prepend('<blockquote>');
+                    end($stack);
+                    $stack[ key($stack) ]->append('</blockquote>');
+                    $stack = null;
                 }
             }
         }
