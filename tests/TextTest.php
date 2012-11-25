@@ -43,6 +43,33 @@ MD;
             $text->setFilters($text::getDefaultFilters()),
             'Default filters are returned when custom filters are not set.'
         );
+
+        try {
+            $text = new Text(null);
+            $this->fail('Text constructor accepts null silently.');
+        }
+        catch (\InvalidArgumentException $e) {
+            $this->addToAssertionCount(1);
+        }
+
+        try {
+            $text = new Text(array('foo' => 'bar', 1 => 2, array()));
+            $this->fail('Text constructor accepts mailformed array silently.');
+        }
+        catch (\InvalidArgumentException $e) {
+            $this->addToAssertionCount(1);
+        }
+
+        try {
+            $text = new Text(new \stdClass());
+            $this->fail('Text constructor accepts object without __toString() silently.');
+        }
+        catch (\InvalidArgumentException $e) {
+            $this->addToAssertionCount(1);
+        }
+
+        $text = new Text(array('foo' => 'first', 'bar' => 'second'));
+        $this->assertEquals("<p>first\nsecond</p>", (string) $text, 'Key are ignored.');
     }
 
     public function testSetFilter()

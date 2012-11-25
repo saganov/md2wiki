@@ -40,16 +40,29 @@ class Line implements \ArrayAccess
     public $gist  = '';
     public $flags = self::NONE;
 
+    /**
+     * Constructor.
+     *
+     * @param string|object $gist
+     * @throws \InvalidArgumentException
+     */
     public function __construct($gist = null)
     {
         if ($gist !== null) {
-            $this->gist = $gist;
+            if (is_string($gist) || method_exists($gist, '__toString')) {
+                $this->gist = (string) $gist;
+            }
+            else {
+                throw new \InvalidArgumentException(
+                    'Line constructor expects string or a stringable object.'
+                );
+            }
         }
     }
 
     public function __toString()
     {
-        return (string) $this->gist;
+        return $this->gist;
     }
 
     public function append($gist)

@@ -70,20 +70,33 @@ class Text extends \ArrayObject
     protected $_filters = array();
 
     /**
+     * Constructor.
      *
-     * @param array|string $markdown
+     * @param mixed $markdown  String, array or stringable object.
+     * @param array $filters   Optional filters instead of defaults.
+     * @throws \InvalidArgumentException
      */
     public function __construct($markdown, array $filters = null)
     {
+        // break string by newlines, platform-independent
         if (is_string($markdown) || method_exists($markdown, '__toString')) {
             $markdown = explode("\n", (string) $markdown);
-            $markdown = array_map(function($markdown) { return new Line(trim($markdown, "\r")); }, $markdown);
+            $markdown = array_map(
+                function($markdown) { return trim($markdown, "\r"); },
+                $markdown
+            );
         }
+        // any keys are ignored
         if (is_array($markdown)) {
-            parent::__construct($markdown);
+            // save memory, we assume there is no null values in the array
+            while(($value = array_shift($markdown)) !== null) {
+                $this[] = new Line($value);
+            }
         }
         else {
-            throw new \InvalidArgumentException('Text constructor expects array, string or stringable object.');
+            throw new \InvalidArgumentException(
+                'Text constructor expects array, string or stringable object.'
+            );
         }
 
         if ($filters !== null) {
