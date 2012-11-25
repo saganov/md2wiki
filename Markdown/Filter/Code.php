@@ -80,7 +80,7 @@ class Filter_Code extends Filter
 
         foreach ($text as $no => $line)
         {
-            $nextLine = isset($text[$no + 1]) ? $text[$no + 1] : null;
+            $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
             $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
 

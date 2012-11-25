@@ -59,13 +59,13 @@ abstract class Filter_List extends Filter
 
         foreach ($text as $no => $line)
         {
-            $prevLine = isset($text[$no - 1]) ? $text[$no - 1] : null;
-            $nextLine = isset($text[$no + 1]) ? $text[$no + 1] : null;
+            $prevline = isset($text[$no - 1]) ? $text[$no - 1] : null;
+            $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
             // match list marker, add a new list item
             if (($marker = $this->matchMarker($line)) !== false)
             {
-                if (!$stack->isEmpty() && $prevLine !== null && (!isset($nextLine) || $nextLine->isBlank())) {
+                if (!$stack->isEmpty() && $prevline !== null && (!isset($nextline) || $nextline->isBlank())) {
                     $stack->paragraphize();
                 }
 
@@ -80,7 +80,7 @@ abstract class Filter_List extends Filter
                 // a blank line
                 if ($line->isBlank()) {
                     // two blank lines in a row
-                    if ($prevLine !== null && $prevLine->isBlank()) {
+                    if ($prevline !== null && $prevline->isBlank()) {
                         // end of list
                         $stack->apply($text, static::TAG);
                     }
@@ -91,24 +91,24 @@ abstract class Filter_List extends Filter
                         // blockquote
                         if (substr(ltrim($line), 0, 1) == '>') {
                             $line->gist = substr(ltrim($line), 1);
-                            if (substr(ltrim($prevLine), 0, 1) != '>') {
+                            if (substr(ltrim($prevline), 0, 1) != '>') {
                                 $line->prepend('<blockquote>');
                             }
-                            if (substr(ltrim($nextLine), 0, 1) != '>') {
+                            if (substr(ltrim($nextline), 0, 1) != '>') {
                                 $line->append('</blockquote>');
                             }
                         }
                         // codeblock
                         else if (substr($line, 0, 2) == "\t\t" || substr($line, 0, 8) == '        ') {
                             $line->gist = ltrim(htmlspecialchars($line, ENT_NOQUOTES));
-                            if (!(substr($prevLine, 0, 2) == "\t\t" || substr($prevLine, 0, 8) == '        ')) {
+                            if (!(substr($prevline, 0, 2) == "\t\t" || substr($prevline, 0, 8) == '        ')) {
                                 $line->prepend('<pre><code>');
                             }
-                            if (!(substr($nextLine, 0, 2) == "\t\t" || substr($nextLine, 0, 8) == '        ')) {
+                            if (!(substr($nextline, 0, 2) == "\t\t" || substr($nextline, 0, 8) == '        ')) {
                                 $line->append('</code></pre>');
                             }
                         }
-                        else if (!isset($prevLine) || $prevLine->isBlank()) {
+                        else if (!isset($prevline) || $prevline->isBlank()) {
                             // new paragraph inside a list item
                             $line->gist = '</p><p>' . ltrim($line);
                         }
@@ -116,7 +116,7 @@ abstract class Filter_List extends Filter
                             $line->gist = ltrim($line);
                         }
                     }
-                    else if (!isset($prevLine) || $prevLine->isBlank()) {
+                    else if (!isset($prevline) || $prevline->isBlank()) {
                         // end of list
                         $stack->apply($text, static::TAG);
                         continue;
