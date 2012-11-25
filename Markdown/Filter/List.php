@@ -65,7 +65,7 @@ abstract class Filter_List extends Filter
             // match list marker, add a new list item
             if (($marker = $this->matchMarker($line)) !== false)
             {
-                if (!$stack->isEmpty() && $prevLine !== null && self::isBlank($prevLine)) {
+                if (!$stack->isEmpty() && $prevLine !== null && (!isset($nextLine) || $nextLine->isBlank())) {
                     $stack->paragraphize();
                 }
 
@@ -78,9 +78,9 @@ abstract class Filter_List extends Filter
             if (!$stack->isEmpty())
             {
                 // a blank line
-                if (self::isBlank($line)) {
+                if ($line->isBlank()) {
                     // two blank lines in a row
-                    if ($prevLine !== null && self::isBlank($prevLine)) {
+                    if ($prevLine !== null && $prevLine->isBlank()) {
                         // end of list
                         $stack->apply($text, static::TAG);
                     }
@@ -108,7 +108,7 @@ abstract class Filter_List extends Filter
                                 $line->append('</code></pre>');
                             }
                         }
-                        else if (self::isBlank($prevLine)) {
+                        else if (!isset($prevLine) || $prevLine->isBlank()) {
                             // new paragraph inside a list item
                             $line->gist = '</p><p>' . ltrim($line);
                         }
@@ -116,7 +116,7 @@ abstract class Filter_List extends Filter
                             $line->gist = ltrim($line);
                         }
                     }
-                    else if (self::isBlank($prevLine)) {
+                    else if (!isset($prevLine) || $prevLine->isBlank()) {
                         // end of list
                         $stack->apply($text, static::TAG);
                         continue;

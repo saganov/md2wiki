@@ -97,6 +97,11 @@ class Line implements \ArrayAccess
         return $this;
     }
 
+    public function isBlank()
+    {
+        return empty($this->gist) || preg_match('/^\s*$/u', $this->gist);
+    }
+
     public function isIndented()
     {
         if (isset($this->gist[0]) && $this->gist[0] == "\t") {

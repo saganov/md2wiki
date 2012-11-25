@@ -59,7 +59,7 @@ class Filter_Paragraph extends Filter
             $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
             if (!$inHtml) {
-                if (self::isBlank($prevline)) {
+                if (!isset($prevline) || $prevline->isBlank()) {
                     if (preg_match($ex, $line, $matches)) {
                         $inHtml = $matches[1];
                     }
@@ -68,7 +68,7 @@ class Filter_Paragraph extends Filter
 
             if ($inHtml) {
                 $line->flags |= Line::NOMARKDOWN;
-                if (self::isBlank($nextline)) {
+                if (!isset($nextline) || $nextline->isBlank()) {
                     $inHtml = false;
                 }
             }
@@ -94,7 +94,7 @@ class Filter_Paragraph extends Filter
             $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
             if (!$inHtml) {
-                if (self::isBlank($prevline)) {
+                if (!isset($prevline) || $prevline->isBlank()) {
                     if (preg_match($ex, $line, $matches)) {
                         $inHtml = $matches[1];
                     }
@@ -103,7 +103,7 @@ class Filter_Paragraph extends Filter
 
             if ($inHtml) {
                 $line->flags |= Line::NOMARKDOWN;
-                if (self::isBlank($nextline)) {
+                if (!isset($nextline) || $nextline->isBlank()) {
                     $inHtml = false;
                 }
             }
@@ -114,16 +114,16 @@ class Filter_Paragraph extends Filter
 
         foreach($text as $no => $line) {
             if ($line->flags & Line::NOMARKDOWN + Line::LISTS) continue;
-            if (self::isBlank($line)) continue;
+            if ($line->isBlank()) continue;
 
             $prevline = isset($text[$no - 1]) ? $text[$no - 1] : null;
             $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
-            if (!$inParagraph && self::isBlank($prevline)) {
+            if (!$inParagraph && (!isset($prevline) || $prevline->isBlank())) {
                 $line->gist = '<p>' . $line;
                 $inParagraph = true;
             }
-            if ($inParagraph && self::isBlank($nextline)) {
+            if ($inParagraph && (!isset($nextline) || $nextline->isBlank())) {
                 $line->gist = $line . '</p>';
                 $inParagraph = false;
             }

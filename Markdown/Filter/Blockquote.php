@@ -66,7 +66,7 @@ class Filter_Blockquote extends Filter
             if($quote) {
                 $quote[$no] = new Line(preg_replace('/^> ?/uS', '', $line));
 
-                if (self::isBlank($nextline)) {
+                if (!isset($nextline) || $nextline->isBlank()) {
                     $quote = $this->filter($quote);
                     $quote[ key($quote) ]->prepend('<blockquote>');
                     end($quote);

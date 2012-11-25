@@ -60,9 +60,4 @@ abstract class Filter
     abstract public function filter(Text $text);
     public function preFilter(Text $text) {}
     public function postFilter(Text $text) {}
-
-    protected static function isBlank($line)
-    {
-        return (empty($line) || preg_match('/^\s*$/uS', $line));
-    }
 }
