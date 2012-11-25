@@ -58,7 +58,7 @@ class Filter_HeaderAtx extends Filter
                 $html = rtrim($line, '#');
                 $level = substr_count($html, '#', 0, min(6, strlen($html)));
                 $html = "<h$level>" . trim(substr($html, $level)) . "</h$level>";
-                $line->setText($html);
+                $line->gist = $html;
             }
         }
     }

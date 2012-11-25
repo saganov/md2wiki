@@ -27,7 +27,6 @@ namespace Markdown;
  * Text consist of lines. This is a line.
  *
  * @package Markdown
- * @subpackage Text
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
@@ -38,42 +37,30 @@ class Line implements \ArrayAccess
     const CODEBLOCK   = 2;
     const LISTS       = 4;
 
+    public $gist  = '';
     public $flags = self::NONE;
 
-    protected $_text = '';
-
-    public function __construct($text = null)
+    public function __construct($gist = null)
     {
-        if ($text !== null) {
-            $this->setText($text);
+        if ($gist !== null) {
+            $this->gist = $gist;
         }
     }
 
     public function __toString()
     {
-        return $this->_text;
+        return (string) $this->gist;
     }
 
-    public function setText($text)
+    public function append($gist)
     {
-        if (strpos($text, "\n") !== false) {
-            throw new \InvalidArgumentException('Newline characters in argument.');
-        }
-
-        $this->_text = (string) $text;
-
+        $this->gist .= $gist;
         return $this;
     }
 
-    public function append($text)
+    public function prepend($gist)
     {
-        $this->_text .= $text;
-        return $this;
-    }
-
-    public function prepend($text)
-    {
-        $this->_text = $text . $this->_text;
+        $this->gist = $gist . $this->gist;
         return $this;
     }
 
@@ -86,16 +73,16 @@ class Line implements \ArrayAccess
 
     public function outdent()
     {
-        $this->_text = preg_replace('/^(\t| {1,4})/uS', '', $this->_text);
+        $this->gist = preg_replace('/^(\t| {1,4})/uS', '', $this->gist);
         return $this;
     }
 
     public function isIndented()
     {
-        if (isset($this->_text[0]) && $this->_text[0] == "\t") {
+        if (isset($this->gist[0]) && $this->gist[0] == "\t") {
             return true;
         }
-        if (substr($this->_text, 0, 4) == '    ') {
+        if (substr($this->gist, 0, 4) == '    ') {
             return true;
         }
         else {
@@ -105,21 +92,21 @@ class Line implements \ArrayAccess
 
     public function offsetExists($offset)
     {
-        return isset($this->_text[$offset]);
+        return isset($this->gist[$offset]);
     }
 
     public function offsetGet($offset)
     {
-        return $this->_text[$offset];
+        return $this->gist[$offset];
     }
 
     public function offsetSet($offset, $value)
     {
-        $this->_text[$offset] = $value;
+        $this->gist[$offset] = $value;
     }
 
     public function offsetUnset($offset)
     {
-        unset($this->_text[$offset]);
+        unset($this->gist[$offset]);
     }
 }

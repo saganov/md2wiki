@@ -48,11 +48,11 @@ class Filter_Unescape extends Filter
     public function filter(Text $text)
     {
         foreach($text as $no => $line) {
-            $line->setText(preg_replace(
+            $line->gist = preg_replace(
                 '/\\\\([' . preg_quote(implode('', self::$_escapableChars), '/') . '])/uS',
                 '$1',
                 $line
-            ));
+            );
         }
 
         return $text;

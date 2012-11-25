@@ -56,12 +56,12 @@ class Filter_HeaderSetext extends Filter
             if ($line->flags & Line::NOMARKDOWN) continue;
 
             if (preg_match('/^=+$/uS', $line)) {
-                $text[$no - 1]->setText('<h1>' . $text[$no - 1] . '</h1>');
-                $line->setText('');
+                $text[$no - 1]->gist = '<h1>' . $text[$no - 1] . '</h1>';
+                $line->gist = '';
             }
             else if (preg_match('/^-+$/uS', $line)) {
-                $text[$no - 1]->setText('<h2>' . $text[$no - 1] . '</h2>');
-                $line->setText('');
+                $text[$no - 1]->gist = '<h2>' . $text[$no - 1] . '</h2>';
+                $line->gist = '';
             }
         }
 

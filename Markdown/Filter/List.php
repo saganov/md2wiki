@@ -90,7 +90,7 @@ abstract class Filter_List extends Filter
                     if ($line->isIndented()) {
                         // blockquote
                         if (substr(ltrim($line), 0, 1) == '>') {
-                            $line->setText(substr(ltrim($line), 1));
+                            $line->gist = substr(ltrim($line), 1);
                             if (substr(ltrim($prevLine), 0, 1) != '>') {
                                 $line->prepend('<blockquote>');
                             }
@@ -100,7 +100,7 @@ abstract class Filter_List extends Filter
                         }
                         // codeblock
                         else if (substr($line, 0, 2) == "\t\t" || substr($line, 0, 8) == '        ') {
-                            $line->setText(ltrim(htmlspecialchars($line, ENT_NOQUOTES)));
+                            $line->gist = ltrim(htmlspecialchars($line, ENT_NOQUOTES));
                             if (!(substr($prevLine, 0, 2) == "\t\t" || substr($prevLine, 0, 8) == '        ')) {
                                 $line->prepend('<pre><code>');
                             }
@@ -110,10 +110,10 @@ abstract class Filter_List extends Filter
                         }
                         else if (self::isBlank($prevLine)) {
                             // new paragraph inside a list item
-                            $line->setText('</p><p>' . ltrim($line));
+                            $line->gist = '</p><p>' . ltrim($line);
                         }
                         else {
-                            $line->setText(ltrim($line));
+                            $line->gist = ltrim($line);
                         }
                     }
                     else if (self::isBlank($prevLine)) {
@@ -124,7 +124,7 @@ abstract class Filter_List extends Filter
                     // unbroken text inside a list item
                     else {
                         // add text to current list item
-                        $line->setText(ltrim($line));
+                        $line->gist = ltrim($line);
                     }
 
                     $stack->appendLine(array($no => $line));

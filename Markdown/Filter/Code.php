@@ -86,7 +86,7 @@ class Filter_Code extends Filter
 
             if ($line->flags & Line::CODEBLOCK) {
                 $line->outdent();
-                $line->setText(htmlspecialchars($line, ENT_NOQUOTES));
+                $line->gist = htmlspecialchars($line, ENT_NOQUOTES);
                 if (!$insideCodeBlock) {
                     $line->prepend('<pre><code>');
                     $insideCodeBlock = true;
@@ -97,15 +97,15 @@ class Filter_Code extends Filter
                 }
             }
             else {
-                $line->setText(preg_replace_callback(
+                $line->gist = preg_replace_callback(
                     '/(?<!\\\)(`+)(?!`)(?P<code>.+?)(?<!`)\1(?!`)/u',
                     function($values) {
                         $line = trim($values['code']);
                         $line = htmlspecialchars($line, ENT_NOQUOTES);
                         return '<code>' . $line . '</code>';
                     },
-                    $line
-                ));
+                    $line->gist
+                );
             }
         }
 
