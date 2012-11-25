@@ -5,7 +5,7 @@ require_once __DIR__ . '/../Markdown/Text.php';
 
 use Markdown\Text;
 
-if (@$_SERVER['argv'][1]) {
+if (isset($_SERVER['argv'][1])) {
     if (is_readable($_SERVER['argv'][1]) && is_file($_SERVER['argv'][1])) {
         $md = file_get_contents($_SERVER['argv'][1]);
     }
