@@ -89,7 +89,12 @@ class Text extends \ArrayObject
 
         if (is_array($markdown)) {
             foreach ($markdown as $no => $value) {
-                $this[$no] = new Line($value);
+                if ($value instanceof Line) {
+                    $this[$no] = $value;
+                }
+                else {
+                    $this[$no] = new Line($value);
+                }
             }
         }
         else {
