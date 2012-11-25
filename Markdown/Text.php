@@ -125,13 +125,17 @@ class Text extends \ArrayObject
         return $this->_filters;
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($index, $newval)
     {
-        if (!$value instanceof Line) {
-            throw new \InvalidArgumentException('Text element must be instance of Line');
+        if ($index !== null && isset($this[$index]) && $this[$index] instanceof Line) {
+            $this[$index]->gist = $newval;
         }
-
-        parent::offsetSet($offset, $value);
+        elseif (!$newval instanceof Line) {
+            parent::offsetSet($index, new Line($newval));
+        }
+        else {
+            parent::offsetSet($index, $newval);
+        }
     }
 
     /**
