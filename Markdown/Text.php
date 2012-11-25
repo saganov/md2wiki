@@ -86,10 +86,9 @@ class Text extends \ArrayObject
                 $markdown
             );
         }
-        // any keys are ignored
+        // keys are ignored
         if (is_array($markdown)) {
-            // save memory, we assume there is no null values in the array
-            while(($value = array_shift($markdown)) !== null) {
+            foreach ($markdown as $value) {
                 $this[] = new Line($value);
             }
         }
