@@ -87,33 +87,33 @@ abstract class Filter_List extends Filter
                 }
                 // not blank line
                 else {
-                    if (self::isIndented($line)) {
+                    if ($line->isIndented()) {
                         // blockquote
                         if (substr(ltrim($line), 0, 1) == '>') {
-                            $text[$no] = substr(ltrim($line), 1);
+                            $line->setText(substr(ltrim($line), 1));
                             if (substr(ltrim($prevLine), 0, 1) != '>') {
-                                $text[$no] = '<blockquote>' . $line;
+                                $line->prepend('<blockquote>');
                             }
                             if (substr(ltrim($nextLine), 0, 1) != '>') {
-                                $line .= '</blockquote>';
+                                $line->append('</blockquote>');
                             }
                         }
                         // codeblock
                         else if (substr($line, 0, 2) == "\t\t" || substr($line, 0, 8) == '        ') {
-                            $text[$no] = ltrim(htmlspecialchars($line, ENT_NOQUOTES));
+                            $line->setText(ltrim(htmlspecialchars($line, ENT_NOQUOTES)));
                             if (!(substr($prevLine, 0, 2) == "\t\t" || substr($prevLine, 0, 8) == '        ')) {
-                                $text[$no] = '<pre><code>' . $line;
+                                $line->prepend('<pre><code>');
                             }
                             if (!(substr($nextLine, 0, 2) == "\t\t" || substr($nextLine, 0, 8) == '        ')) {
-                                $line .= '</code></pre>';
+                                $line->append('</code></pre>');
                             }
                         }
                         else if (self::isBlank($prevLine)) {
                             // new paragraph inside a list item
-                            $text[$no] = '</p><p>' . ltrim($line);
+                            $line->setText('</p><p>' . ltrim($line));
                         }
                         else {
-                            $text[$no] = ltrim($line);
+                            $line->setText(ltrim($line));
                         }
                     }
                     else if (self::isBlank($prevLine)) {
@@ -124,7 +124,7 @@ abstract class Filter_List extends Filter
                     // unbroken text inside a list item
                     else {
                         // add text to current list item
-                        $text[$no] = ltrim($line);
+                        $line->setText(ltrim($line));
                     }
 
                     $stack->appendLine(array($no => $line));

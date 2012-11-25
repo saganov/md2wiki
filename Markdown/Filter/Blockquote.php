@@ -55,23 +55,22 @@ class Filter_Blockquote extends Filter
         $quote = null;
 
         foreach($text as $no => $line) {
-            $prevLine = isset($text[$no - 1]) ? $text[$no - 1] : null;
-            $nextLine = isset($text[$no + 1]) ? $text[$no + 1] : null;
+            $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
             if (!$quote) {
                 if (isset($line[0]) && $line[0] == '>') {
-                    $quote = new Text(array($no => preg_replace('/^> ?/uS', '', $line)));
+                    $quote = new Text(array($no => new Line(preg_replace('/^> ?/uS', '', $line))));
                 }
             }
 
             if($quote) {
-                $quote[$no] = preg_replace('/^> ?/uS', '', $line);
+                $quote[$no] = new Line(preg_replace('/^> ?/uS', '', $line));
 
-                if (self::isBlank($nextLine)) {
+                if (self::isBlank($nextline)) {
                     $quote = $this->filter($quote);
-                    $quote[ key($quote) ] = '<blockquote>' . current($quote);
+                    $quote[ key($quote) ]->prepend('<blockquote>');
                     end($quote);
-                    $quote[ key($quote) ] .= '</blockquote>';
+                    $quote[ key($quote) ]->append('</blockquote>');
                     foreach ($quote as $key => $val) {
                         $text[$key] = $val;
                     }

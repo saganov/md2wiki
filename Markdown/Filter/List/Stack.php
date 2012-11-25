@@ -50,7 +50,7 @@ class ListStack extends \SplStack
                 $text[$no] = $line;
             }
         }
-        $text[$no] = new Line($text[$no] . '</ul>');
+        $text[$no]->setText($text[$no] . '</ul>');
 
         $this->reset();
 

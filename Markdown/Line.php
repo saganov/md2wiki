@@ -40,39 +40,86 @@ class Line implements \ArrayAccess
 
     public $flags = self::NONE;
 
-    protected $_line = '';
+    protected $_text = '';
 
-    public function __construct($line)
+    public function __construct($text = null)
     {
-        if (strpos($line, "\n") !== false) {
-            throw new \InvalidArgumentException('Newline characters in argument.');
+        if ($text !== null) {
+            $this->setText($text);
         }
-
-        $this->_line = (string) $line;
     }
 
     public function __toString()
     {
-        return $this->_line;
+        return $this->_text;
+    }
+
+    public function setText($text)
+    {
+        if (strpos($text, "\n") !== false) {
+            throw new \InvalidArgumentException('Newline characters in argument.');
+        }
+
+        $this->_text = (string) $text;
+
+        return $this;
+    }
+
+    public function append($text)
+    {
+        $this->_text .= $text;
+        return $this;
+    }
+
+    public function prepend($text)
+    {
+        $this->_text = $text . $this->_text;
+        return $this;
+    }
+
+    public function decorate($tag)
+    {
+        $this->prepend("<$tag>");
+        $this->append("</$tag>");
+        return $this;
+    }
+
+    public function outdent()
+    {
+        $this->_text = preg_replace('/^(\t| {1,4})/uS', '', $this->_text);
+        return $this;
+    }
+
+    public function isIndented()
+    {
+        if (isset($this->_text[0]) && $this->_text[0] == "\t") {
+            return true;
+        }
+        if (substr($this->_text, 0, 4) == '    ') {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public function offsetExists($offset)
     {
-        return isset($this->_line[$offset]);
+        return isset($this->_text[$offset]);
     }
 
     public function offsetGet($offset)
     {
-        return $this->_line[$offset];
+        return $this->_text[$offset];
     }
 
     public function offsetSet($offset, $value)
     {
-        $this->_line[$offset] = $value;
+        $this->_text[$offset] = $value;
     }
 
     public function offsetUnset($offset)
     {
-        unset($this->_line[$offset]);
+        unset($this->_text[$offset]);
     }
 }

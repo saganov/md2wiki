@@ -128,7 +128,7 @@ class Text extends \ArrayObject
     public function offsetSet($offset, $value)
     {
         if (!$value instanceof Line) {
-            $value = new Line($value);
+            throw new \InvalidArgumentException('Text element must be instance of Line');
         }
 
         parent::offsetSet($offset, $value);
@@ -191,6 +191,9 @@ class Text extends \ArrayObject
         $result = array_merge($result, $lines, $slice);
 
         foreach ($result as $key => $val) {
+            if (!$val instanceof Line) {
+                $val = new Line($val);
+            }
             $this[$key] = $val;
         }
 

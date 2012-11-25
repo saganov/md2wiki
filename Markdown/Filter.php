@@ -61,37 +61,8 @@ abstract class Filter
     public function preFilter(Text $text) {}
     public function postFilter(Text $text) {}
 
-    /**
-     * Remove one level of indentation
-     *
-     * @static
-     * @param string
-     * @return string
-     */
-    protected static function outdent($text)
-    {
-        return preg_replace('/^(\t| {1,4})/m', '', $text);
-    }
-
     protected static function isBlank($line)
     {
         return (empty($line) || preg_match('/^\s*$/uS', $line));
     }
-
-    protected static function isIndented($line)
-    {
-        if (!is_string($line)) {
-            return false;
-        }
-        if (isset($line[0]) && $line[0] == "\t") {
-            return true;
-        }
-        if (substr($line, 0, 4) == '    ') {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
 }

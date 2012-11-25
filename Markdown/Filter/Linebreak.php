@@ -52,7 +52,7 @@ class Filter_Linebreak extends Filter
     {
         foreach($text as $no => $line) {
             if (substr($line, -2) === '  ') {
-                $text[$no] = substr($line, 0, -2) . '<br />';
+                $line->setText(substr($line, 0, -2) . '<br />');
             }
         }
 

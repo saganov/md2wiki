@@ -120,11 +120,11 @@ class Filter_Paragraph extends Filter
             $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
             if (!$inParagraph && self::isBlank($prevline)) {
-                $text[$no] = '<p>' . $line;
+                $line->setText('<p>' . $line);
                 $inParagraph = true;
             }
             if ($inParagraph && self::isBlank($nextline)) {
-                $text[$no] .= '</p>';
+                $line->setText($line . '</p>');
                 $inParagraph = false;
             }
         }

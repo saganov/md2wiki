@@ -66,24 +66,24 @@ class Filter_Link extends Filter
                 else if (isset($text[$no + 1])) {
                     if (preg_match('/^ {0,3}[\'"(].*?[\'")]\s*$/uS', $text[$no + 1], $match)) {
                         $link['title'] = trim($match[0], ' \'"()');
-                        $text[$no + 1] = '';
+                        $text[$no + 1]->setText('');
                     }
                 }
                 // erase line
-                $text[$no] = '';
+                $line->setText('');
             }
         }
         unset($link, $match, $no, $line);
 
         foreach($text as $no => $line) {
-            $text[$no] = preg_replace_callback(
+            $line->setText(preg_replace_callback(
                 '/\[(.*?)\]\((.*?)(\s+"[\w ]+")?\)/uS',
                 function($match) {
                     if (!isset($match[3])) $match[3] = null;
                     return $this->buildHtml($match[1], $match[2], $match[3]);
                 },
                 $line
-            );
+            ));
 
             if (preg_match_all('/\[(.+?)\] ?\[([\w ]*)\]/uS', $line, $matches, PREG_SET_ORDER)) {
                 foreach($matches as &$match) {
@@ -92,7 +92,7 @@ class Filter_Link extends Filter
                     if (isset($links[$ref])) {
                         $link =& $links[$ref];
                         $html = $this->buildHtml($match[1], $link['href'], $link['title']);
-                        $text[$no] = str_replace($match[0], $html, $line);
+                        $line->setText(str_replace($match[0], $html, $line));
                     }
                 }
             }

@@ -96,7 +96,7 @@ TEXT;
         $text[1]->flags |= Line::NOMARKDOWN;
         $text->insert(1, 'inserted line');
 
-        $this->assertEquals($html, (string) $text);
+        $this->assertEquals($html, $text->getHtml());
     }
 
     public function testGetDefaultFiltersNonEmpty()
@@ -120,7 +120,8 @@ TEXT;
      */
     public function testWithDataFiles($md, $html)
     {
-        $this->assertEquals($html, (string) new Text($md));
+        $text = new Text($md);
+        $this->assertEquals($html, $text->getHtml());
     }
 
 }

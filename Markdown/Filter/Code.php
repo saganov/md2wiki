@@ -61,7 +61,7 @@ class Filter_Code extends Filter
     public function preFilter(Text $text)
     {
         foreach($text as $no => $line) {
-            if (self::isIndented($line)) {
+            if ($line->isIndented()) {
                 $line->flags |= Line::NOMARKDOWN + Line::CODEBLOCK;
             }
         }
@@ -82,20 +82,22 @@ class Filter_Code extends Filter
         {
             $nextLine = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
-            if (self::isIndented($line)) {
-                $text[$no] = self::outdent($line);
-                $text[$no] = htmlspecialchars($line, ENT_NOQUOTES);
+            $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
+
+            if ($line->flags & Line::CODEBLOCK) {
+                $line->outdent();
+                $line->setText(htmlspecialchars($line, ENT_NOQUOTES));
                 if (!$insideCodeBlock) {
-                    $text[$no] = '<pre><code>' . $line;
+                    $line->prepend('<pre><code>');
                     $insideCodeBlock = true;
                 }
-                if (!$nextLine || !self::isIndented($nextLine)) {
-                    $line .= '</code></pre>';
+                if (!$nextline || !$nextline->isIndented()) {
+                    $line->append('</code></pre>');
                     $insideCodeBlock = false;
                 }
             }
             else {
-                $text[$no] = preg_replace_callback(
+                $line->setText(preg_replace_callback(
                     '/(?<!\\\)(`+)(?!`)(?P<code>.+?)(?<!`)\1(?!`)/u',
                     function($values) {
                         $line = trim($values['code']);
@@ -103,7 +105,7 @@ class Filter_Code extends Filter
                         return '<code>' . $line . '</code>';
                     },
                     $line
-                );
+                ));
             }
         }
 
