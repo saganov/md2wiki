@@ -144,14 +144,19 @@ class Text extends \ArrayObject
 
     public function offsetSet($index, $newval)
     {
-        if ($index !== null && isset($this[$index]) && $this[$index] instanceof Line) {
-            $this[$index]->gist = $newval;
-        }
-        elseif (!$newval instanceof Line) {
-            parent::offsetSet($index, new Line($newval));
+        if ($newval instanceof Line) {
+            parent::offsetSet($index, $newval);
         }
         else {
-            parent::offsetSet($index, $newval);
+            $newval = (string) $newval;
+            if ($index !== null && isset($this[$index])) {
+                // keep existing object
+                $this[$index]->gist = $newval;
+            }
+            else {
+                // add new element
+                parent::offsetSet($index, new Line($newval));
+            }
         }
     }
 
