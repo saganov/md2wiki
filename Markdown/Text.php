@@ -76,7 +76,7 @@ class Text extends \ArrayObject
      * @param array $filters   Optional filters instead of defaults.
      * @throws \InvalidArgumentException
      */
-    public function __construct($markdown, array $filters = null)
+    public function __construct($markdown = array(), array $filters = null)
     {
         // break string by newlines, platform-independent
         if (is_string($markdown) || method_exists($markdown, '__toString')) {
