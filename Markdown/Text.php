@@ -222,7 +222,7 @@ class Text extends \ArrayObject
     public static function getDefaultFilters()
     {
         if (!self::$_defaultFilters) {
-            self::$_defaultFilters = self::getFactoryDefaultFilters();
+            self::$_defaultFilters = self::$_factoryDefaultFilters;
         }
 
         return self::$_defaultFilters;
