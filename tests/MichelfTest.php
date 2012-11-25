@@ -54,19 +54,19 @@ class MichelfTest extends \PHPUnit_Framework_TestCase
     public function testPerformance()
     {
         $start = microtime(true);
-        \Markdown($this->_markdown);
+        (string) new Text($this->_markdown);
         $end1 = microtime(true) - $start;
 
         $start = microtime(true);
-        (string) new Text($this->_markdown);
+        \Markdown($this->_markdown);
         $end2 = microtime(true) - $start;
 
         echo PHP_EOL . PHP_EOL;
         echo 'Performance results' . PHP_EOL;
         echo '-------------------' . PHP_EOL;
-        printf('Michelf: %.4f', $end1);
+        printf('Michelf: %.4f', $end2);
         echo PHP_EOL;
-        printf('Self:    %.4f', $end2);
+        printf('Self:    %.4f', $end1);
 
         $this->addToAssertionCount(1);
     }
