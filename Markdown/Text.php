@@ -86,10 +86,10 @@ class Text extends \ArrayObject
                 $markdown
             );
         }
-        // keys are ignored
+
         if (is_array($markdown)) {
-            foreach ($markdown as $value) {
-                $this[] = new Line($value);
+            foreach ($markdown as $no => $value) {
+                $this[$no] = new Line($value);
             }
         }
         else {
