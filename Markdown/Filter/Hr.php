@@ -55,7 +55,7 @@ class Filter_Hr extends Filter
             if ($line->flags & Line::NOMARKDOWN) continue;
 
             $line->gist = preg_replace(
-                '/^(?:[*-_]\s*){2,}$/u',
+                '/^(?:[*\-_]\s*){2,}$/u',
                 '<hr />',
                 $line->gist
             );
