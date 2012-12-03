@@ -3,13 +3,11 @@
     "description": "Markdown implementation forked from https://github.com/garygolden/markdown-oo-php",
     "homepage": "https://github.com/garygolden/markdown-oo-php",
     "license": "MIT",
-    "version": "0.0.0-dev",
     "autoload": {
         "psr-0": {
             "Markdown\\": "./"
         }
     },
-    "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.3"
     }
