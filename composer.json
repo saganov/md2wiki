@@ -1,0 +1,13 @@
+{
+    "name": "ctrl-f5/markdown-oo-php",
+    "description": "Markdown implementation forked from https://github.com/garygolden/markdown-oo-php",
+    "homepage": "https://github.com/garygolden/markdown-oo-php",
+    "autoload": {
+        "psr-0": {
+            "Markdown\\": "./"
+        }
+    },
+    "require": {
+        "php": ">=5.3.3",
+    }
+}
