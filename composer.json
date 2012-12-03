@@ -1,6 +1,6 @@
 {
     "name": "ctrl-f5/markdown-oo-php",
-    "description": "Markdown implementation forked from https://github.com/garygolden/markdown-oo-php",
+    "description": "Markdown implementation forked from garygolden",
     "homepage": "https://github.com/garygolden/markdown-oo-php",
     "license": "MIT",
     "autoload": {
