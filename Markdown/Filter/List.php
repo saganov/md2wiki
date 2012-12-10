@@ -65,7 +65,7 @@ abstract class Filter_List extends Filter
             // match list marker, add a new list item
             if (($marker = $this->matchMarker($line)) !== false)
             {
-                if (!$stack->isEmpty() && $prevline !== null && (!isset($nextline) || $nextline->isBlank())) {
+                if (!$stack->isEmpty() && $prevline->isBlank() && (!isset($nextline) || $nextline->isBlank())) {
                     $stack->paragraphize();
                 }
 
