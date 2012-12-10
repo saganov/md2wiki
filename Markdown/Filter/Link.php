@@ -54,6 +54,9 @@ class Filter_Link extends Filter
      */
     public function filter(Text $text)
     {
+        # If this is the image filter, parse the mark.
+        $this->_mark = isset($this->_mark) ? $this->_mark : null;
+
         $links = array();
         foreach($text as $no => $line) {
             if (preg_match('/^ {0,3}\[([\w ]+)\]:\s+<?(.+?)>?(\s+[\'"(].*?[\'")])?\s*$/uS', $line, $match)) {
@@ -77,7 +80,7 @@ class Filter_Link extends Filter
 
         foreach($text as $no => $line) {
             $line->gist = preg_replace_callback(
-                '/\[(.*?)\]\((.*?)(\s+"[\w ]+")?\)/uS',
+                '/'.$this->_mark.'\[(.*?)\]\((.*?)(\s+"[\w ]+")?\)/uS',
                 function($match) {
                     if (!isset($match[3])) $match[3] = null;
                     return $this->buildHtml($match[1], $match[2], $match[3]);
@@ -103,12 +106,13 @@ class Filter_Link extends Filter
 
     protected function buildHtml($content, $href, $title = null)
     {
-        $link = '<a href="' . trim($href) . '"';
-        if (!empty($title)) {
-            $link .= ' title="' . trim($title, ' "') . '"';
-        }
-        $link .= '>' . trim($content) . '</a>';
+        # If this is the image filter, then the format is already given.
+        $this->_format = isset($this->_format) ? $this->_format : '<a href="%s"%s>%s</a>';
 
-        return $link;
+        $href = trim($href);
+        $title = !empty($title) ? ' title="'.trim($title,' "').'"' : null;
+        $content = trim($content);
+
+        return sprintf($this->_format, $href, $title, $content);
     }
 }
