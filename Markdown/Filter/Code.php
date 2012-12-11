@@ -63,7 +63,24 @@ class Filter_Code extends Filter
         foreach($text as $no => $line) {
             if ($line->isIndented()) {
                 $line->flags |= Line::NOMARKDOWN + Line::CODEBLOCK;
+            } else if( $line->isBlank() ) {
+                $prev_no = $no;
+                do {
+                    $prev_no -= 1;
+                    $prevline = isset($text[$prev_no]) ? $text[$prev_no] : null;
+                } while (!is_null($prevline) && $prevline->isBlank());
+
+                $next_no = $no;
+                do {
+                    $next_no += 1;
+                    $nextline = isset($text[$next_no]) ? $text[$next_no] : null;
+                } while (!is_null($nextline) && $nextline->isBlank());
+
+                if( !is_null($prevline) && $prevline->isIndented() && !is_null($nextline) && $nextline->isIndented() ) {
+                    $line->flags |= Line::NOMARKDOWN + Line::CODEBLOCK;
+                }
             }
+
         }
     }
 
@@ -91,7 +108,7 @@ class Filter_Code extends Filter
                     $line->prepend('<pre><code>');
                     $insideCodeBlock = true;
                 }
-                if (!$nextline || !$nextline->isIndented()) {
+                if (!$nextline || !($nextline->flags & Line::CODEBLOCK)) {
                     $line->append('</code></pre>');
                     $insideCodeBlock = false;
                 }
