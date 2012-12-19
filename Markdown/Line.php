@@ -84,10 +84,10 @@ class Line implements \ArrayAccess
         return $this;
     }
 
-    public function decorate($tag)
+    public function wrap($tag)
     {
-        $this->prepend("<$tag>");
-        $this->append("</$tag>");
+        $this->gist = "<$tag>" . $this->gist . "</$tag>";
+
         return $this;
     }
 
