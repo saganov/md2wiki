@@ -55,12 +55,14 @@ class Filter_HeaderSetext extends Filter
             if ($no == 0) continue; // processing 1st line makes no sense
             if ($line->flags & Line::NOMARKDOWN) continue;
 
-            if (preg_match('/^=+$/uS', $line)) {
-                $text[$no - 1]->gist = '<h1>' . $text[$no - 1] . '</h1>';
+            $prevline = isset($text[$no - 1]) ? $text[$no - 1] : null;
+
+            if (preg_match('/^=+$/uS', $line) && $prevline !== null && !$prevline->isBlank()) {
+                $prevline->wrap('h1');
                 $line->gist = '';
             }
-            else if (preg_match('/^-+$/uS', $line)) {
-                $text[$no - 1]->gist = '<h2>' . $text[$no - 1] . '</h2>';
+            else if (preg_match('/^-+$/uS', $line) && $prevline !== null && !$prevline->isBlank()) {
+                $prevline->wrap('h2');
                 $line->gist = '';
             }
         }
