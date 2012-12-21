@@ -21,52 +21,43 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
-
-require_once __DIR__ . '/../Filter.php';
+namespace MaxTsepkov\Markdown;
 
 /**
- * Translates ==== style headers.
+ * Superclass of all filters.
  *
- * Definitions:
- * <ul>
- *   <li>first-level headers are "underlined" using =</li>
- *   <li>second-level headers are "underlined" using -</li>
- *   <li>any number of underlining =’s or -’s will work.</li>
- * </ul>
+ * Provides static methods to configure and use filtering system.
  *
  * @package Markdown
  * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_HeaderSetext extends Filter
+abstract class Filter
 {
     /**
-     * Pass given text through the filter and return result.
+     * List of characters which copies as is after \ char.
      *
-     * @see Filter::filter()
-     * @param string $text
-     * @return string $text
+     * @var array
      */
-    public function filter(Text $text)
-    {
-        foreach($text as $no => $line) {
-            if ($no == 0) continue; // processing 1st line makes no sense
-            if ($line->flags & Line::NOMARKDOWN) continue;
+    protected static $_escapableChars = array(
+        '\\', '`', '*', '_', '{', '}', '[', ']',
+        '(' , ')', '#', '+', '-', '.', '!'
+    );
 
-            $prevline = isset($text[$no - 1]) ? $text[$no - 1] : null;
+    /**
+     * Block-level HTML tags.
+     *
+     * @var array
+     */
+    protected static $_blockTags = array(
+        'p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre',
+        'table', 'dl', 'ol', 'ul', 'script', 'noscript', 'form', 'fieldset',
+        'iframe', 'math', 'ins', 'del', 'article', 'aside', 'header', 'hgroup',
+        'footer', 'nav', 'section', 'figure', 'figcaption'
+    );
 
-            if (preg_match('/^=+$/uS', $line) && $prevline !== null && !$prevline->isBlank()) {
-                $prevline->wrap('h1');
-                $line->gist = '';
-            }
-            else if (preg_match('/^-+$/uS', $line) && $prevline !== null && !$prevline->isBlank()) {
-                $prevline->wrap('h2');
-                $line->gist = '';
-            }
-        }
-
-        return $text;
-    }
+    abstract public function filter(Text $text);
+    public function preFilter(Text $text) {}
+    public function postFilter(Text $text) {}
 }

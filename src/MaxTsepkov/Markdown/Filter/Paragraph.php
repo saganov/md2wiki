@@ -21,9 +21,11 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/../Filter.php';
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 /**
  * Translates paragraphs.
@@ -42,7 +44,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_Paragraph extends Filter
+class Paragraph extends Filter
 {
     /**
      * Flag block-level HTML with NOMARKDOWN.

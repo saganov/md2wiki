@@ -21,35 +21,41 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/List.php';
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text;
 
 /**
- * Translates numbered lists.
+ * Removes backslashes (\) before special symbols.
  *
- * Definitions:
- * <ul>
- *   <li>ordered lists use numbers followed by periods</li>
- *   <li>actual numbers in the list have no effect on the HTML output</li>
- * </ul>
+ * This filter should be run latest,
+ * to let other filters be aware of backslashes.
  *
  * @package Markdown
  * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_ListNumbered extends Filter_List
+class Unescape extends Filter
 {
-    const TAG = 'ol';
-
-    protected function matchMarker($line)
+    /**
+     * Pass given text through the filter and return result.
+     *
+     * @see Filter::filter()
+     * @param string $text
+     * @return string $text
+     */
+    public function filter(Text $text)
     {
-        if (preg_match('/^ {0,3}\d+\.\s+/uS', $line, $matches)) {
-            return $matches[0];
+        foreach($text as $no => $line) {
+            $line->gist = preg_replace(
+                '/\\\\([' . preg_quote(implode('', self::$_escapableChars), '/') . '])/uS',
+                '$1',
+                $line
+            );
         }
-        else {
-            return false;
-        }
+
+        return $text;
     }
 }

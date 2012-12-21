@@ -21,26 +21,29 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/../Filter.php';
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 /**
- * Translates horizontal rules.
+ * Translates images.
  *
  * Definitions:
  * <ul>
- *   <li>horizontal rule produced by placing three or more
- *      hyphens, asterisks, or underscores on a line by themselves</li>
- *   <li>spaces can be used between the hyphens or asterisks</li>
+ *   <li>image syntax is resemble the syntax for links
+ *      but with an exclamation mark (!) before first bracket</li>
+ *   <li>brackets contain alt attribute</li>
+ *   <li>Markdown has no syntax for specifying the dimensions of an image</li>
  * </ul>
  *
  * @package Markdown
  * @subpackage Filter
- * @author Max Tsepkov <max@garygolden.me>
+ * @author Igor Gaponov <jiminy96@gmail.com>
  * @version 1.0
  */
-class Filter_Hr extends Filter
+class Img extends Link
 {
     /**
      * Pass given text through the filter and return result.
@@ -51,16 +54,9 @@ class Filter_Hr extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($text as $no => $line) {
-            if ($line->flags & Line::NOMARKDOWN) continue;
+        $this->_mark = '!';
+        $this->_format = '<img src="%s"%s alt="%s" />';
 
-            $line->gist = preg_replace(
-                '/^(?:[*\-_]\s*){2,}$/u',
-                '<hr />',
-                $line->gist
-            );
-        }
-
-        return $text;
+        return parent::filter($text);
     }
 }

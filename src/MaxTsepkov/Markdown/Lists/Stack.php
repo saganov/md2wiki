@@ -1,13 +1,13 @@
 <?php
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Lists;
 
 /**
  *
  * @author Max Tsepkov <max@garygolden.me>
  *
  */
-class ListStack extends \SplStack
+class Stack extends \SplStack
 {
     const PARAGRAPH  = 1;
     const BLOCKQUOTE = 2;
@@ -20,8 +20,7 @@ class ListStack extends \SplStack
         $listOpened = false;
         $itemOpened = false;
 
-        while(!$this->isEmpty())
-        {
+        while (!$this->isEmpty()) {
             $item = $this->shift();
 
             // process paragraphs
@@ -82,7 +81,9 @@ class ListStack extends \SplStack
 
     public function reset()
     {
-        while(!$this->isEmpty()) $this->pop();
+        while (!$this->isEmpty()) {
+            $this->pop();
+        }
 
         $this->_paragraphs = false;
 

@@ -21,19 +21,18 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/../Filter.php';
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text;
 
 /**
- * Translates & and &lt; to &amp;amp; and &amp;lt;
+ * Translates linebreaks.
  *
  * Definitions:
  * <ul>
- *   <li>Transform & to &amp;amp; and < to &amp;lt;</li>
- *   <li>do NOT transform if & is part of html entity, e.g. &amp;copy;</li>
- *   <li>do NOT transform < if it's part of html tag</li>
- *   <li>ALWAYS transfrom & and < within code spans and blocks</li>
+ *   <li>linebreak is indicated by two or more spaces and (\n)
+ *      at the end of line</li>
  * </ul>
  *
  * @package Markdown
@@ -41,7 +40,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_Entities extends Filter
+class Linebreak extends Filter
 {
     /**
      * Pass given text through the filter and return result.
@@ -53,11 +52,11 @@ class Filter_Entities extends Filter
     public function filter(Text $text)
     {
         foreach($text as $no => $line) {
-            // escape & outside of html entity
-            $line->gist = preg_replace('/&(?![A-z]+;)/uS', '&amp;', $line);
-
-            // escape < outside of html tag
-            $line->gist = preg_replace('/<(?![A-z\\/])/uS', '&lt;', $line);
+            if (substr($line, -2) === '  ') {
+                $line->gist = substr($line, 0, -2) . '<br />';
+            }
         }
+
+        return $text;
     }
 }

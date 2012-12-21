@@ -21,9 +21,11 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/../Filter.php';
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 /**
  * Translate email-style blockquotes.
@@ -41,7 +43,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_Blockquote extends Filter
+class Blockquote extends Filter
 {
     /**
      * Pass given text through the filter and return result.

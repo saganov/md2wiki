@@ -21,18 +21,20 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/../Filter.php';
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 /**
- * Translates ### style headers.
+ * Translates ==== style headers.
  *
  * Definitions:
  * <ul>
- *   <li>use 1-6 hash characters at the start of the line</li>
- *   <li>number of opening hashes determines the header level</li>
- *   <li>closing hashes don’t need to match the number of hashes used to open</li>
+ *   <li>first-level headers are "underlined" using =</li>
+ *   <li>second-level headers are "underlined" using -</li>
+ *   <li>any number of underlining =’s or -’s will work.</li>
  * </ul>
  *
  * @package Markdown
@@ -40,7 +42,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_HeaderAtx extends Filter
+class HeaderSetext extends Filter
 {
     /**
      * Pass given text through the filter and return result.
@@ -52,14 +54,21 @@ class Filter_HeaderAtx extends Filter
     public function filter(Text $text)
     {
         foreach($text as $no => $line) {
+            if ($no == 0) continue; // processing 1st line makes no sense
             if ($line->flags & Line::NOMARKDOWN) continue;
 
-            if (preg_match('/^#+\s*\w/uS', $line)) {
-                $html = rtrim($line, '#');
-                $level = substr_count($html, '#', 0, min(6, strlen($html)));
-                $html = "<h$level>" . trim(substr($html, $level)) . "</h$level>";
-                $line->gist = $html;
+            $prevline = isset($text[$no - 1]) ? $text[$no - 1] : null;
+
+            if (preg_match('/^=+$/uS', $line) && $prevline !== null && !$prevline->isBlank()) {
+                $prevline->wrap('h1');
+                $line->gist = '';
+            }
+            else if (preg_match('/^-+$/uS', $line) && $prevline !== null && !$prevline->isBlank()) {
+                $prevline->wrap('h2');
+                $line->gist = '';
             }
         }
+
+        return $text;
     }
 }

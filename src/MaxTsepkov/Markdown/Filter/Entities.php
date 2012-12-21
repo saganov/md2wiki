@@ -21,43 +21,44 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
+
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text;
 
 /**
- * Superclass of all filters.
+ * Translates & and &lt; to &amp;amp; and &amp;lt;
  *
- * Provides static methods to configure and use filtering system.
+ * Definitions:
+ * <ul>
+ *   <li>Transform & to &amp;amp; and < to &amp;lt;</li>
+ *   <li>do NOT transform if & is part of html entity, e.g. &amp;copy;</li>
+ *   <li>do NOT transform < if it's part of html tag</li>
+ *   <li>ALWAYS transfrom & and < within code spans and blocks</li>
+ * </ul>
  *
  * @package Markdown
  * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-abstract class Filter
+class Entities extends Filter
 {
     /**
-     * List of characters which copies as is after \ char.
+     * Pass given text through the filter and return result.
      *
-     * @var array
+     * @see Filter::filter()
+     * @param string $text
+     * @return string $text
      */
-    protected static $_escapableChars = array(
-        '\\', '`', '*', '_', '{', '}', '[', ']',
-        '(' , ')', '#', '+', '-', '.', '!'
-	);
+    public function filter(Text $text)
+    {
+        foreach($text as $no => $line) {
+            // escape & outside of html entity
+            $line->gist = preg_replace('/&(?![A-z]+;)/uS', '&amp;', $line);
 
-    /**
-     * Block-level HTML tags.
-     *
-     * @var array
-     */
-    protected static $_blockTags = array(
-        'p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre',
-        'table', 'dl', 'ol', 'ul', 'script', 'noscript', 'form', 'fieldset',
-        'iframe', 'math', 'ins', 'del', 'article', 'aside', 'header', 'hgroup',
-        'footer', 'nav', 'section', 'figure', 'figcaption'
-    );
-
-    abstract public function filter(Text $text);
-    public function preFilter(Text $text) {}
-    public function postFilter(Text $text) {}
+            // escape < outside of html tag
+            $line->gist = preg_replace('/<(?![A-z\\/])/uS', '&lt;', $line);
+        }
+    }
 }

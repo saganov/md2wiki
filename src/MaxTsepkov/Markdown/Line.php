@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown;
 
 /**
  * Text consist of lines. This is a line.
@@ -58,8 +58,7 @@ class Line implements \ArrayAccess
         if ($gist !== null) {
             if (is_string($gist) || method_exists($gist, '__toString')) {
                 $this->gist = (string) $gist;
-            }
-            else {
+            } else {
                 throw new \InvalidArgumentException(
                     'Line constructor expects string or a stringable object.'
                 );
@@ -109,8 +108,7 @@ class Line implements \ArrayAccess
         }
         if (substr($this->gist, 0, 4) == '    ') {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }

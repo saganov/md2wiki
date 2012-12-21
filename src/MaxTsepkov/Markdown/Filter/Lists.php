@@ -21,11 +21,12 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-use Markdown\ListStack;
-
-require_once __DIR__ . '/../Filter.php';
+use MaxTsepkov\Markdown\Lists\Stack,
+    MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 /**
  * Abstract class for all list's types
@@ -43,7 +44,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-abstract class Filter_List extends Filter
+abstract class Lists extends Filter
 {
     /**
      * Pass given text through the filter and return result.
@@ -54,18 +55,18 @@ abstract class Filter_List extends Filter
      */
     public function filter(Text $text)
     {
-        require_once __DIR__ . '/List/Stack.php';
-        $stack = new ListStack();
+        $stack = new Stack();
 
-        foreach ($text as $no => $line)
-        {
+        foreach ($text as $no => $line) {
             $prevline = isset($text[$no - 1]) ? $text[$no - 1] : null;
             $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
             // match list marker, add a new list item
-            if (($marker = $this->matchMarker($line)) !== false)
-            {
-                if (!$stack->isEmpty() && $prevline !== null && (!isset($nextline) || $nextline->isBlank())) {
+            if (($marker = $this->matchMarker($line)) !== false) {
+                if (!$stack->isEmpty()
+                    && $prevline !== null
+                    && (!isset($nextline) || $nextline->isBlank())
+                ) {
                     $stack->paragraphize();
                 }
 
@@ -75,8 +76,7 @@ abstract class Filter_List extends Filter
             }
 
             // we are inside a list
-            if (!$stack->isEmpty())
-            {
+            if (!$stack->isEmpty()) {
                 // a blank line
                 if ($line->isBlank()) {
                     // two blank lines in a row
@@ -84,9 +84,7 @@ abstract class Filter_List extends Filter
                         // end of list
                         $stack->apply($text, static::TAG);
                     }
-                }
-                // not blank line
-                else {
+                } else { // not blank line
                     if ($line->isIndented()) {
                         // blockquote
                         if (substr(ltrim($line), 0, 1) == '>') {
@@ -97,9 +95,8 @@ abstract class Filter_List extends Filter
                             if (substr(ltrim($nextline), 0, 1) != '>') {
                                 $line->append('</blockquote>');
                             }
-                        }
                         // codeblock
-                        else if (substr($line, 0, 2) == "\t\t" || substr($line, 0, 8) == '        ') {
+                        } else if (substr($line, 0, 2) == "\t\t" || substr($line, 0, 8) == '        ') {
                             $line->gist = ltrim(htmlspecialchars($line, ENT_NOQUOTES));
                             if (!(substr($prevline, 0, 2) == "\t\t" || substr($prevline, 0, 8) == '        ')) {
                                 $line->prepend('<pre><code>');
@@ -107,22 +104,17 @@ abstract class Filter_List extends Filter
                             if (!(substr($nextline, 0, 2) == "\t\t" || substr($nextline, 0, 8) == '        ')) {
                                 $line->append('</code></pre>');
                             }
-                        }
-                        else if (!isset($prevline) || $prevline->isBlank()) {
+                        } elseif (!isset($prevline) || $prevline->isBlank()) {
                             // new paragraph inside a list item
                             $line->gist = '</p><p>' . ltrim($line);
-                        }
-                        else {
+                        } else {
                             $line->gist = ltrim($line);
                         }
-                    }
-                    else if (!isset($prevline) || $prevline->isBlank()) {
+                    } elseif (!isset($prevline) || $prevline->isBlank()) {
                         // end of list
                         $stack->apply($text, static::TAG);
                         continue;
-                    }
-                    // unbroken text inside a list item
-                    else {
+                    } else { // unbroken text inside a list item
                         // add text to current list item
                         $line->gist = ltrim($line);
                     }

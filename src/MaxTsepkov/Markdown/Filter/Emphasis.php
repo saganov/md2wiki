@@ -21,17 +21,23 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/../Filter.php';
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 /**
- * Translates linebreaks.
+ * Implements &lt;em&gt; and &lt;strong&gt;
  *
  * Definitions:
  * <ul>
- *   <li>linebreak is indicated by two or more spaces and (\n)
- *      at the end of line</li>
+ *   <li>text wrapped with one * or _ will be wrapped with an HTML &lt;em&gt; tag</li>
+ *   <li>double *’s or _’s will be wrapped with an HTML &lt;strong&gt; tag</li>
+ *   <li>the same character must be used to open and close an emphasis span</li>
+ *   <li>emphasis can be used in the middle of a word</li>
+ *   <li>if an * or _ is surrounded by spaces,
+ *      it’ll be treated as a literal asterisk or an underscore</li>
  * </ul>
  *
  * @package Markdown
@@ -39,7 +45,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_Linebreak extends Filter
+class Emphasis extends Filter
 {
     /**
      * Pass given text through the filter and return result.
@@ -50,10 +56,22 @@ class Filter_Linebreak extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($text as $no => $line) {
-            if (substr($line, -2) === '  ') {
-                $line->gist = substr($line, 0, -2) . '<br />';
-            }
+        foreach ($text as $no => $line) {
+            if ($line->flags & Line::NOMARKDOWN) continue;
+
+            // strong
+            $line->gist = preg_replace(
+                '/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/u',
+                '<strong>$2</strong>',
+                $line->gist
+            );
+
+            // emphasis
+            $line->gist = preg_replace(
+                '/(?<!\\\\)([*_])(?!\s)(.+?)(?<![\\\\\s])\1/u',
+                '<em>$2</em>',
+                $line->gist
+            );
         }
 
         return $text;
