@@ -21,46 +21,9 @@
  * THE SOFTWARE.
  */
 
-set_include_path(get_include_path() . PATH_SEPARATOR . realpath(__DIR__ . '/../src'));
+require_once 'FilterTestAbstract.php';
 
-require_once 'SplClassLoader.php';
-$l = new SplClassLoader('MaxTsepkov');
-$l->register();
-
-use MaxTsepkov\Markdown\Text;
-
-/**
- * Filter test case.
- */
-abstract class FilterTestAbstract extends PHPUnit_Framework_TestCase
+class FilterListsNumberedTest extends FilterTestAbstract
 {
-    protected $_className = '';
-
-    public function filesystem()
-    {
-        $data = array();
-        $dataDir = __DIR__ . '/data/' . $this->_className;
-
-        foreach(glob($dataDir .  '/*.html') as $html) {
-            $basename = basename($html);
-            $markdown = dirname($html) . '/' . substr($basename, 0, -5);
-            if (is_readable($markdown)) {
-                $data[] = array(
-                    file_get_contents($markdown),
-                    file_get_contents($html)
-                );
-            }
-        }
-
-        return $data;
-    }
-
-    /**
-     * @dataProvider filesystem
-     */
-    public function testWithData($md, $html)
-    {
-        $text = new Text($md);
-        $this->assertEquals($html, $text->getHtml());
-    }
+    protected $_className = 'ListsNumbered';
 }
