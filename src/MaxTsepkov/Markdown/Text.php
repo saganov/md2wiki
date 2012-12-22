@@ -171,12 +171,7 @@ class Text extends \ArrayObject
 
         foreach ($filters as $key => $filter) {
             if (is_string($filter) && ctype_alnum($filter)) {
-                $classname = __NAMESPACE__ . '\\Filter_'   . $filter;
-                $classfile = __DIR__ . '/Filter/' . $filter . '.php';
-                if (!class_exists($classname, false) && is_readable($classfile)) {
-                    require_once $classfile;
-                }
-
+                $classname = __NAMESPACE__ . '\\Filter\\'   . $filter;
                 $filter = new $classname;
             }
 
