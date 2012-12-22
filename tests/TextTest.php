@@ -21,9 +21,14 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+set_include_path(get_include_path() . PATH_SEPARATOR . realpath(__DIR__ . '/../src'));
 
-require_once __DIR__ . '/../Markdown/Text.php';
+require_once 'SplClassLoader.php';
+$l = new SplClassLoader('MaxTsepkov');
+$l->register();
+
+use MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 class TextTest extends \PHPUnit_Framework_TestCase
 {
