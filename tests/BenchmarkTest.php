@@ -29,7 +29,7 @@ $l->register();
 
 use MaxTsepkov\Markdown\Text;
 
-class BenchmarkTest extends \PHPUnit_Framework_TestCase
+class BenchmarkTest extends PHPUnit_Framework_TestCase
 {
     const MD_SIZE = 1048576; // 1M
     protected static $_markdown;

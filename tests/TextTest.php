@@ -30,7 +30,7 @@ $l->register();
 use MaxTsepkov\Markdown\Text,
     MaxTsepkov\Markdown\Line;
 
-class TextTest extends \PHPUnit_Framework_TestCase
+class TextTest extends PHPUnit_Framework_TestCase
 {
     const SAMPLE_MARKDOWN = <<<MD
 This is a sample markdown
