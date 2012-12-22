@@ -21,9 +21,11 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/../Filter.php';
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 /**
  * Translates links.
@@ -43,7 +45,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_Link extends Filter
+class Link extends Filter
 {
     /**
      * Pass given text through the filter and return result.
@@ -78,8 +80,10 @@ class Filter_Link extends Filter
         foreach($text as $no => $line) {
             $line->gist = preg_replace_callback(
                 '/\[(.*?)\]\((.*?)(\s+"[\w ]+")?\)/uS',
-                function($match) {
-                    if (!isset($match[3])) $match[3] = null;
+                function ($match) {
+                    if (!isset($match[3])) {
+                        $match[3] = null;
+                    }
                     return $this->buildHtml($match[1], $match[2], $match[3]);
                 },
                 $line->gist

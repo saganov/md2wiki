@@ -21,22 +21,28 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/../Filter.php';
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 /**
- * Removes backslashes (\) before special symbols.
+ * Translates ### style headers.
  *
- * This filter should be run latest,
- * to let other filters be aware of backslashes.
+ * Definitions:
+ * <ul>
+ *   <li>use 1-6 hash characters at the start of the line</li>
+ *   <li>number of opening hashes determines the header level</li>
+ *   <li>closing hashes don’t need to match the number of hashes used to open</li>
+ * </ul>
  *
  * @package Markdown
  * @subpackage Filter
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_Unescape extends Filter
+class HeaderAtx extends Filter
 {
     /**
      * Pass given text through the filter and return result.
@@ -48,13 +54,14 @@ class Filter_Unescape extends Filter
     public function filter(Text $text)
     {
         foreach($text as $no => $line) {
-            $line->gist = preg_replace(
-                '/\\\\([' . preg_quote(implode('', self::$_escapableChars), '/') . '])/uS',
-                '$1',
-                $line
-            );
-        }
+            if ($line->flags & Line::NOMARKDOWN) continue;
 
-        return $text;
+            if (preg_match('/^#+\s*\w/uS', $line)) {
+                $html = rtrim($line, '#');
+                $level = substr_count($html, '#', 0, min(6, strlen($html)));
+                $html = "<h$level>" . trim(substr($html, $level)) . "</h$level>";
+                $line->gist = $html;
+            }
+        }
     }
 }

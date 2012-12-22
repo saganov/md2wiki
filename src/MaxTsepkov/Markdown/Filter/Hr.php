@@ -21,21 +21,20 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/../Filter.php';
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 /**
- * Implements &lt;em&gt; and &lt;strong&gt;
+ * Translates horizontal rules.
  *
  * Definitions:
  * <ul>
- *   <li>text wrapped with one * or _ will be wrapped with an HTML &lt;em&gt; tag</li>
- *   <li>double *’s or _’s will be wrapped with an HTML &lt;strong&gt; tag</li>
- *   <li>the same character must be used to open and close an emphasis span</li>
- *   <li>emphasis can be used in the middle of a word</li>
- *   <li>if an * or _ is surrounded by spaces,
- *      it’ll be treated as a literal asterisk or an underscore</li>
+ *   <li>horizontal rule produced by placing three or more
+ *      hyphens, asterisks, or underscores on a line by themselves</li>
+ *   <li>spaces can be used between the hyphens or asterisks</li>
  * </ul>
  *
  * @package Markdown
@@ -43,7 +42,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_Emphasis extends Filter
+class Hr extends Filter
 {
     /**
      * Pass given text through the filter and return result.
@@ -54,20 +53,12 @@ class Filter_Emphasis extends Filter
      */
     public function filter(Text $text)
     {
-        foreach ($text as $no => $line) {
+        foreach($text as $no => $line) {
             if ($line->flags & Line::NOMARKDOWN) continue;
 
-            // strong
             $line->gist = preg_replace(
-                '/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/u',
-                '<strong>$2</strong>',
-                $line->gist
-            );
-
-            // emphasis
-            $line->gist = preg_replace(
-                '/(?<!\\\\)([*_])(?!\s)(.+?)(?<![\\\\\s])\1/u',
-                '<em>$2</em>',
+                '/^(?:[*\-_]\s*){2,}$/u',
+                '<hr />',
                 $line->gist
             );
         }

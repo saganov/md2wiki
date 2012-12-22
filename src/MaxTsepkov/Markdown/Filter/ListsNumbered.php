@@ -21,16 +21,17 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/List.php';
+use MaxTsepkov\Markdown\Filter;
 
 /**
- * Translates bulleted lists.
+ * Translates numbered lists.
  *
  * Definitions:
  * <ul>
- *   <li>asterisks, pluses, and hyphens — interchangably — as list markers</li>
+ *   <li>ordered lists use numbers followed by periods</li>
+ *   <li>actual numbers in the list have no effect on the HTML output</li>
  * </ul>
  *
  * @package Markdown
@@ -38,16 +39,14 @@ require_once __DIR__ . '/List.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_ListBulleted extends Filter_List
+class ListsNumbered extends Lists
 {
-    const TAG = 'ul';
+    const TAG = 'ol';
 
-    protected function matchMarker($line)
-    {
-        if (preg_match('/^ {0,3}[*+-]\s+/uS', $line, $matches)) {
+    protected function matchMarker($line){
+        if (preg_match('/^ {0,3}\d+\.\s+/uS', $line, $matches)) {
             return $matches[0];
-        }
-        else {
+        } else {
             return false;
         }
     }

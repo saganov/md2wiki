@@ -21,40 +21,35 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/Link.php';
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 /**
- * Translates images.
+ * Translates bulleted lists.
  *
  * Definitions:
  * <ul>
- *   <li>image syntax is resemble the syntax for links
- *      but with an exclamation mark (!) before first bracket</li>
- *   <li>brackets contain alt attribute</li>
- *   <li>Markdown has no syntax for specifying the dimensions of an image</li>
+ *   <li>asterisks, pluses, and hyphens — interchangably — as list markers</li>
  * </ul>
  *
  * @package Markdown
  * @subpackage Filter
- * @author Igor Gaponov <jiminy96@gmail.com>
+ * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_Img extends Filter_Link
+class ListsBulleted extends Lists
 {
-    /**
-     * Pass given text through the filter and return result.
-     *
-     * @see Filter::filter()
-     * @param string $text
-     * @return string $text
-     */
-    public function filter(Text $text)
-    {
-        $this->_mark = '!';
-        $this->_format = '<img src="%s"%s alt="%s" />';
+    const TAG = 'ul';
 
-        return parent::filter($text);
+    protected function matchMarker($line)
+    {
+        if (preg_match('/^ {0,3}[*+-]\s+/uS', $line, $matches)) {
+            return $matches[0];
+        } else {
+            return false;
+        }
     }
 }

@@ -21,9 +21,11 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+namespace MaxTsepkov\Markdown\Filter;
 
-require_once __DIR__ . '/../Filter.php';
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 /**
  * Translate code blocks and spans.
@@ -50,7 +52,7 @@ require_once __DIR__ . '/../Filter.php';
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class Filter_Code extends Filter
+class Code extends Filter
 {
     /**
      * Flags lines containing codeblocks.
@@ -78,8 +80,7 @@ class Filter_Code extends Filter
     {
         $insideCodeBlock = false;
 
-        foreach ($text as $no => $line)
-        {
+        foreach ($text as $no => $line) {
             $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
             $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
@@ -95,8 +96,7 @@ class Filter_Code extends Filter
                     $line->append('</code></pre>');
                     $insideCodeBlock = false;
                 }
-            }
-            else {
+            } else {
                 $line->gist = preg_replace_callback(
                     '/(?<!\\\)(`+)(?!`)(?P<code>.+?)(?<!`)\1(?!`)/u',
                     function($values) {

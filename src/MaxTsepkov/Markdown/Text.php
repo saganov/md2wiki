@@ -21,9 +21,7 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
-
-require_once __DIR__ . '/Line.php';
+namespace MaxTsepkov\Markdown;
 
 /**
  * Represents a piece of text.
@@ -46,8 +44,8 @@ class Text extends \ArrayObject
 
     protected static $_factoryDefaultFilters = array(
         'Hr',
-        'ListBulleted',
-        'ListNumbered',
+        'ListsBulleted',
+        'ListsNumbered',
         'Blockquote',
         'Code',
         'Emphasis',
@@ -82,7 +80,7 @@ class Text extends \ArrayObject
         if (is_string($markdown) || method_exists($markdown, '__toString')) {
             $markdown = explode("\n", (string) $markdown);
             $markdown = array_map(
-                function($markdown) { return trim($markdown, "\r"); },
+                function ($markdown) { return trim($markdown, "\r"); },
                 $markdown
             );
         }
@@ -91,13 +89,11 @@ class Text extends \ArrayObject
             foreach ($markdown as $no => $value) {
                 if ($value instanceof Line) {
                     $this[$no] = $value;
-                }
-                else {
+                } else {
                     $this[$no] = new Line($value);
                 }
             }
-        }
-        else {
+        } else {
             throw new \InvalidArgumentException(
                 'Text constructor expects array, string or stringable object.'
             );
@@ -105,8 +101,7 @@ class Text extends \ArrayObject
 
         if ($filters !== null) {
             $this->setFilters($filters);
-        }
-        else {
+        } else {
             $this->setFilters(self::getDefaultFilters());
         }
     }
@@ -146,14 +141,12 @@ class Text extends \ArrayObject
     {
         if ($newval instanceof Line) {
             parent::offsetSet($index, $newval);
-        }
-        else {
+        } else {
             $newval = (string) $newval;
             if ($index !== null && isset($this[$index])) {
                 // keep existing object
                 $this[$index]->gist = $newval;
-            }
-            else {
+            }  else {
                 // add new element
                 parent::offsetSet($index, new Line($newval));
             }
@@ -178,12 +171,7 @@ class Text extends \ArrayObject
 
         foreach ($filters as $key => $filter) {
             if (is_string($filter) && ctype_alnum($filter)) {
-                $classname = __NAMESPACE__ . '\\Filter_'   . $filter;
-                $classfile = __DIR__ . '/Filter/' . $filter . '.php';
-                if (!class_exists($classname, false) && is_readable($classfile)) {
-                    require_once $classfile;
-                }
-
+                $classname = __NAMESPACE__ . '\\Filter\\'   . $filter;
                 $filter = new $classname;
             }
 

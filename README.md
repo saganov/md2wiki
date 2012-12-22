@@ -19,28 +19,21 @@ See [official website](http://daringfireball.net/projects/markdown/syntax) for s
 What is markdown-oo-php?
 ========================
 
-It's an object-oriented PHP library capable of converting markdown text to XHTML.
+It's an object-oriented, PSR compatible PHP library capable of converting markdown text to XHTML.
 
 
 Quick start
 =========
 
-Library has two entities: _Text_ and _Filter_
-_Text_ represents a piece of text.
-_Filter_ is responsible for actual transformation.
-_Text_ is passed through filters resulting into html output.
+    set_include_path(get_include_path() . PATH_SEPARATOR . realpath('src'));
 
-    require_once 'Markdown/Text.php';
+    require_once 'SplClassLoader.php';
+    $l = new SplClassLoader('MaxTsepkov');
+    $l->register();
 
-    echo new \Markdown\Text($markdown);
+    use MaxTsepkov\Markdown\Text;
 
-FAQ
-===
-
-#### Can your library process very large documents?
-
-Yes. There is known problem with other markdown implementations when PCRE engine fails with very large files.
-My library parses input line by line, so as long as you keep lines less than ~1M you'll be okay.
+    echo new Text($markdown);
 
 Requirements
 ===========

@@ -1,9 +1,17 @@
 #!/usr/bin/env php
 <?php
 
-require_once __DIR__ . '/../Markdown/Text.php';
+set_include_path(
+    get_include_path() .
+    PATH_SEPARATOR .
+    __DIR__ . '/../src'
+);
 
-use Markdown\Text;
+require_once 'SplClassLoader.php';
+$l = new SplClassLoader('MaxTsepkov');
+$l->register();
+
+use MaxTsepkov\Markdown\Text;
 
 if (isset($_SERVER['argv'][1])) {
     if (is_readable($_SERVER['argv'][1]) && is_file($_SERVER['argv'][1])) {
