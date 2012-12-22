@@ -100,8 +100,8 @@ MD;
             $markdown = dirname($html) . '/' . substr($basename, 0, -5);
             if (is_readable($markdown)) {
                 $data[] = array(
-                        file_get_contents($markdown),
-                        file_get_contents($html)
+                    file_get_contents($markdown),
+                    file_get_contents($html)
                 );
             }
         }
