@@ -2,6 +2,9 @@
 
 namespace MaxTsepkov\Markdown\Lists;
 
+use MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
+
 /**
  *
  * @author Max Tsepkov <max@garygolden.me>
