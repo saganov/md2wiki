@@ -48,13 +48,13 @@ class Text extends \ArrayObject
         'ListsNumbered',
         'Blockquote',
         'Code',
-        'Emphasis',
         'Entities',
         'HeaderAtx',
         'HeaderSetext',
         'Img',
         'Linebreak',
         'Link',
+        'Emphasis',
         'Paragraph',
         'Unescape'
     );

@@ -57,21 +57,32 @@ class Emphasis extends Filter
     public function filter(Text $text)
     {
         foreach ($text as $no => $line) {
-            if ($line->flags & Line::NOMARKDOWN) continue;
+            if ($line->flags & Line::NOMARKDOWN) {
+                continue;
+            }
+
+            // avoid parsing markdown within a tag
+            $noTags = strip_tags($line->gist);
 
             // strong
-            $line->gist = preg_replace(
-                '/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/u',
-                '<strong>$2</strong>',
-                $line->gist
-            );
+            $matches = array();
+            $pattern = '/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/u';
+            preg_match_all($pattern, $noTags, $matches);
+            foreach($matches[0] as $match) {
+                $replace = '<strong>' . substr($match, 2);
+                $replace = substr($replace, 0, -2) . '</strong>';
+                $line->gist = str_replace($match, $replace, $line->gist);
+            }
 
             // emphasis
-            $line->gist = preg_replace(
-                '/(?<!\\\\)([*_])(?!\s)(.+?)(?<![\\\\\s])\1/u',
-                '<em>$2</em>',
-                $line->gist
-            );
+            $matches = array();
+            $pattern = '/(?<!\\\\)([*_])(?!\s)(.+?)(?<![\\\\\s])\1/u';
+            preg_match_all($pattern, $noTags, $matches);
+            foreach($matches[0] as $match) {
+                $replace = '<em>' . substr($match, 1);
+                $replace = substr($replace, 0, -1) . '</em>';
+                $line->gist = str_replace($match, $replace, $line->gist);
+            }
         }
 
         return $text;
