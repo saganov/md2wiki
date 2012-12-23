@@ -21,9 +21,15 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+set_include_path(get_include_path() . PATH_SEPARATOR . realpath(__DIR__ . '/../src'));
 
-class BenchmarkTest extends \PHPUnit_Framework_TestCase
+require_once 'SplClassLoader.php';
+$l = new SplClassLoader('MaxTsepkov');
+$l->register();
+
+use MaxTsepkov\Markdown\Text;
+
+class BenchmarkTest extends PHPUnit_Framework_TestCase
 {
     const MD_SIZE = 1048576; // 1M
     protected static $_markdown;
@@ -59,8 +65,6 @@ class BenchmarkTest extends \PHPUnit_Framework_TestCase
 
     public function testSelf()
     {
-        require_once __DIR__ . '/../Markdown/Text.php';
-
         $filters = null;
 
         $start = microtime(true);

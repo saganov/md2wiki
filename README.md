@@ -19,47 +19,21 @@ See [official website](http://daringfireball.net/projects/markdown/syntax) for s
 What is markdown-oo-php?
 ========================
 
-It's an object-oriented PHP library capable of converting markdown text to XHTML.
+It's an object-oriented, PSR compatible PHP library capable of converting markdown text to XHTML.
 
 
 Quick start
 =========
 
-Library has two entities: _Text_ and _Filter_
-_Text_ represents a piece of text.
-_Filter_ is responsible for actual transformation.
-_Text_ is passed through filters resulting into html output.
+    set_include_path(get_include_path() . PATH_SEPARATOR . realpath('src'));
 
-    require_once 'Markdown/Filter.php';
+    require_once 'SplClassLoader.php';
+    $l = new SplClassLoader('MaxTsepkov');
+    $l->register();
 
-    echo Markdown_Filter::run($markdown);
+    use MaxTsepkov\Markdown\Text;
 
-Advanced usage
-==============
-
-Internally, _Filter_ uses a set of filters which extends Markdown_Filter.
-A filter is an object which can accept markdown text and return html.
-You can write your own filters and use like this:
-
-    $filters = array(
-        'Linebreak',            // a built-in filter
-        new MyCustomFilter(),   // child of Markdown_Filter
-    );
-    Markdown_Filter::setDefaultFilters($filters);
-
-    // all transformations now use the custom filter
-    echo new Markdown_Text('**Markdown is great!**');
-
-    // you can get current filters set
-    Markdown_Filter::getDefaultFilters();
-
-FAQ
-===
-
-#### Can your library process very large documents?
-
-Yes. There is known problem with other markdown implementations when PCRE engine fails with very large files.
-My library parses input line by line, so as long as you keep lines less than ~1M you'll be okay.
+    echo new Text($markdown);
 
 Requirements
 ===========

@@ -21,11 +21,16 @@
  * THE SOFTWARE.
  */
 
-namespace Markdown;
+set_include_path(get_include_path() . PATH_SEPARATOR . realpath(__DIR__ . '/../src'));
 
-require_once __DIR__ . '/../Markdown/Text.php';
+require_once 'SplClassLoader.php';
+$l = new SplClassLoader('MaxTsepkov');
+$l->register();
 
-class TextTest extends \PHPUnit_Framework_TestCase
+use MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
+
+class TextTest extends PHPUnit_Framework_TestCase
 {
     const SAMPLE_MARKDOWN = <<<MD
 This is a sample markdown
@@ -95,8 +100,8 @@ MD;
             $markdown = dirname($html) . '/' . substr($basename, 0, -5);
             if (is_readable($markdown)) {
                 $data[] = array(
-                        file_get_contents($markdown),
-                        file_get_contents($html)
+                    file_get_contents($markdown),
+                    file_get_contents($html)
                 );
             }
         }
