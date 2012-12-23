@@ -76,9 +76,9 @@ class Code extends Filter
                 do {
                     $next_no += 1;
                     $nextline = isset($text[$next_no]) ? $text[$next_no] : null;
-                } while (!is_null($nextline) && $nextline->isBlank());
+                } while ($nextline !== null && $nextline->isBlank());
 
-                if ($prevline !== null && $prevline->isIndented() && !is_null($nextline) && $nextline->isIndented()) {
+                if ($prevline !== null && $prevline->isIndented() && $nextline !== null && $nextline->isIndented()) {
                     $line->flags |= Line::NOMARKDOWN + Line::CODEBLOCK;
                 }
             }
