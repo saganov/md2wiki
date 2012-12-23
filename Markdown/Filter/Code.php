@@ -63,12 +63,12 @@ class Filter_Code extends Filter
         foreach($text as $no => $line) {
             if ($line->isIndented()) {
                 $line->flags |= Line::NOMARKDOWN + Line::CODEBLOCK;
-            } else if( $line->isBlank() ) {
+            } elseif ($line->isBlank()) {
                 $prev_no = $no;
                 do {
                     $prev_no -= 1;
                     $prevline = isset($text[$prev_no]) ? $text[$prev_no] : null;
-                } while (!is_null($prevline) && $prevline->isBlank());
+                } while ($prevline !== null && $prevline->isBlank());
 
                 $next_no = $no;
                 do {
@@ -76,7 +76,7 @@ class Filter_Code extends Filter
                     $nextline = isset($text[$next_no]) ? $text[$next_no] : null;
                 } while (!is_null($nextline) && $nextline->isBlank());
 
-                if( !is_null($prevline) && $prevline->isIndented() && !is_null($nextline) && $nextline->isIndented() ) {
+                if ($prevline !== null && $prevline->isIndented() && !is_null($nextline) && $nextline->isIndented()) {
                     $line->flags |= Line::NOMARKDOWN + Line::CODEBLOCK;
                 }
             }
