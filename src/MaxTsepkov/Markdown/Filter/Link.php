@@ -84,7 +84,7 @@ class Link extends Filter
                     if (!isset($match[3])) {
                         $match[3] = null;
                     }
-                    return $this->buildHtml($match[1], $match[2], $match[3]);
+                    return Link::buildHtml($match[1], $match[2], $match[3]);
                 },
                 $line->gist
             );
@@ -95,7 +95,7 @@ class Link extends Filter
                     $ref = strtolower(trim($ref));
                     if (isset($links[$ref])) {
                         $link =& $links[$ref];
-                        $html = $this->buildHtml($match[1], $link['href'], $link['title']);
+                        $html = Link::buildHtml($match[1], $link['href'], $link['title']);
                         $line->gist = str_replace($match[0], $html, $line);
                     }
                 }
@@ -105,7 +105,7 @@ class Link extends Filter
         return $text;
     }
 
-    protected function buildHtml($content, $href, $title = null)
+    public static function buildHtml($content, $href, $title = null)
     {
         $link = '<a href="' . trim($href) . '"';
         if (!empty($title)) {
