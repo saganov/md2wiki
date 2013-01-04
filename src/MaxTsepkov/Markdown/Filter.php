@@ -35,6 +35,11 @@ namespace MaxTsepkov\Markdown;
  */
 abstract class Filter
 {
+	/**
+	 * Empty constructor is used to avoid a bug in PHP 5.3.2 
+	 */
+	public function __construct(){}
+	
     /**
      * List of characters which copies as is after \ char.
      *
