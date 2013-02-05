@@ -59,7 +59,7 @@ class HeaderAtx extends Filter
             if (preg_match('/^#+\s*\w/uS', $line)) {
                 $html = rtrim($line, '#');
                 $level = substr_count($html, '#', 0, min(6, strlen($html)));
-                $html = "<h$level>" . trim(substr($html, $level)) . "</h$level>";
+                $html = str_repeat('=', $level) .' '. trim(substr($html, $level)) .' '. str_repeat('=', $level);
                 $line->gist = $html;
             }
         }

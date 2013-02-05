@@ -23,7 +23,9 @@
 
 namespace MaxTsepkov\Markdown\Filter;
 
-use MaxTsepkov\Markdown\Filter;
+use MaxTsepkov\Markdown\Filter,
+    MaxTsepkov\Markdown\Text,
+    MaxTsepkov\Markdown\Line;
 
 /**
  * Translates numbered lists.
@@ -41,13 +43,6 @@ use MaxTsepkov\Markdown\Filter;
  */
 class ListsNumbered extends Lists
 {
-    const TAG = 'ol';
-
-    protected function matchMarker($line){
-        if (preg_match('/^ {0,3}\d+\.\s+/uS', $line, $matches)) {
-            return $matches[0];
-        } else {
-            return false;
-        }
-    }
+    const REGEXP = '/^(\s*)(\d+\.)\s+\S/uS';
+    const MARKER = '#';
 }

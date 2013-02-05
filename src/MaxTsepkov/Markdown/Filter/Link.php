@@ -79,7 +79,7 @@ class Link extends Filter
 
         foreach($text as $no => $line) {
             $line->gist = preg_replace_callback(
-                '/\[(.*?)\]\((.*?)(\s+"[\w ]+")?\)/uS',
+                '/\[(.*?)\] ?\((.*?)(\s+"[\w ]+")?\)/uS',
                 function ($match) {
                     if (!isset($match[3])) {
                         $match[3] = null;
@@ -107,11 +107,11 @@ class Link extends Filter
 
     public static function buildHtml($content, $href, $title = null)
     {
-        $link = '<a href="' . trim($href) . '"';
+        $link = '['. trim($href);
         if (!empty($title)) {
-            $link .= ' title="' . trim($title, ' "') . '"';
+            //$link .= ' title="' . trim($title, ' "') . '"';
         }
-        $link .= '>' . trim($content) . '</a>';
+        $link .= ' ' . trim($content) . ']';
 
         return $link;
     }

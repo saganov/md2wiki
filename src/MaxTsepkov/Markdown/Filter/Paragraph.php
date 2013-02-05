@@ -122,11 +122,11 @@ class Paragraph extends Filter
             $nextline = isset($text[$no + 1]) ? $text[$no + 1] : null;
 
             if (!$inParagraph && (!isset($prevline) || $prevline->isBlank())) {
-                $line->gist = '<p>' . $line;
+                $line->gist = '' . $line;
                 $inParagraph = true;
             }
             if ($inParagraph && (!isset($nextline) || $nextline->isBlank())) {
-                $line->gist = $line . '</p>';
+                $line->gist = $line . '';
                 $inParagraph = false;
             }
         }

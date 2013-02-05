@@ -42,14 +42,6 @@ use MaxTsepkov\Markdown\Filter,
  */
 class ListsBulleted extends Lists
 {
-    const TAG = 'ul';
-
-    protected function matchMarker($line)
-    {
-        if (preg_match('/^ {0,3}[*+-]\s+/uS', $line, $matches)) {
-            return $matches[0];
-        } else {
-            return false;
-        }
-    }
+    const REGEXP = '/^(\s*)([*+-])\s*\S/uS';
+    const MARKER = '*';
 }

@@ -66,21 +66,39 @@ class Emphasis extends Filter
 
             // strong
             $matches = array();
-            $pattern = '/(?<!\\\\)(\*\*|__)(?=\S)(.+?[*_]*)(?<=\S)(?<!\\\\)\1/u';
+            $pattern = '/(?<![\\\\\w\d])(\*\*)(?=\S)(.+?[*]*)(?<=\S)(?<!\\\\)\1/u';
             preg_match_all($pattern, $noTags, $matches);
             foreach($matches[0] as $match) {
-                $replace = '<strong>' . substr($match, 2);
-                $replace = substr($replace, 0, -2) . '</strong>';
+                $replace = "'''" . substr($match, 2);
+                $replace = substr($replace, 0, -2) . "'''";
+                $line->gist = str_replace($match, $replace, $line->gist);
+            }
+
+            $pattern = '/(?<![\\\\\w\d])(__)(?=\S)(.+?[_]*)(?<=\S)(?<!\\\\)\1/u';
+            preg_match_all($pattern, $noTags, $matches);
+            foreach($matches[0] as $match) {
+                $replace = "''" . substr($match, 2);
+                $replace = substr($replace, 0, -2) . "''";
                 $line->gist = str_replace($match, $replace, $line->gist);
             }
 
             // emphasis
             $matches = array();
-            $pattern = '/(?<!\\\\)([*_])(?!\s)(.+?)(?<![\\\\\s])\1/u';
+            $pattern = '/(?<![\\\\\w\d})])(\*)(?!\s)(.+?)(?<![\\\\\s{(])\1/u';
             preg_match_all($pattern, $noTags, $matches);
             foreach($matches[0] as $match) {
-                $replace = '<em>' . substr($match, 1);
-                $replace = substr($replace, 0, -1) . '</em>';
+                $replace = "'''" . substr($match, 1);
+                $replace = substr($replace, 0, -1) . "'''";
+                $line->gist = str_replace($match, $replace, $line->gist);
+            }
+
+            // emphasis
+            $matches = array();
+            $pattern = '/(?<![\\\\\w\d})])(_)(?!\s)(.+?)(?<![\\\\\s{(])\1/u';
+            preg_match_all($pattern, $noTags, $matches);
+            foreach($matches[0] as $match) {
+                $replace = "''" . substr($match, 1);
+                $replace = substr($replace, 0, -1) . "''";
                 $line->gist = str_replace($match, $replace, $line->gist);
             }
         }

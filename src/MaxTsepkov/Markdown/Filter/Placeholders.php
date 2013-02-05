@@ -24,17 +24,17 @@
 namespace MaxTsepkov\Markdown\Filter;
 
 use MaxTsepkov\Markdown\Filter,
-    MaxTsepkov\Markdown\Text,
-    MaxTsepkov\Markdown\Line;
+    MaxTsepkov\Markdown\Text;
 
 /**
- * Translates ==== style headers.
+ * Translates & and &lt; to &amp;amp; and &amp;lt;
  *
  * Definitions:
  * <ul>
- *   <li>first-level headers are "underlined" using =</li>
- *   <li>second-level headers are "underlined" using -</li>
- *   <li>any number of underlining =’s or -’s will work.</li>
+ *   <li>Transform & to &amp;amp; and < to &amp;lt;</li>
+ *   <li>do NOT transform if & is part of html entity, e.g. &amp;copy;</li>
+ *   <li>do NOT transform < if it's part of html tag</li>
+ *   <li>ALWAYS transfrom & and < within code spans and blocks</li>
  * </ul>
  *
  * @package Markdown
@@ -42,7 +42,7 @@ use MaxTsepkov\Markdown\Filter,
  * @author Max Tsepkov <max@garygolden.me>
  * @version 1.0
  */
-class HeaderSetext extends Filter
+class Placeholders extends Filter
 {
     /**
      * Pass given text through the filter and return result.
@@ -53,23 +53,21 @@ class HeaderSetext extends Filter
      */
     public function filter(Text $text)
     {
-        foreach($text as $no => $line) {
-            //var_dump($no, $line);
-            if ($no == 0) continue; // processing 1st line makes no sense
-            if ($line->flags & Line::NOMARKDOWN) continue;
-
-            $prevline = isset($text[$no - 1]) ? $text[$no - 1] : null;
-
-            if (preg_match('/^=+$/uS', $line) && $prevline !== null && !$prevline->isBlank()) {
-                $prevline->prepend('= ')->append(' =');
-                $line->gist = '';
-            }
-            else if (preg_match('/^-+$/uS', $line) && $prevline !== null && !$prevline->isBlank()) {
-                $prevline->prepend('== ')->append(' ==');            
-                $line->gist = '';
-            }
+        foreach($text as $no => $line)
+        {
+            $line->gist = preg_replace_callback(
+                '/(\{\{(?P<variable>[\w\d_]+)\}\})/u', 
+                function($values){
+                    if($placeholder = Text::getPlaceholder($values['variable']))
+                    {
+                        return $placeholder;
+                    }
+                    else
+                    {
+                        return $values[0];
+                    }
+                },
+                $line);
         }
-
-        return $text;
     }
 }
