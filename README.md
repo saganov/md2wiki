@@ -16,10 +16,10 @@ without looking like it’s been marked up with tags or formatting instructions.
 See [official website](http://daringfireball.net/projects/markdown/syntax) for syntax.
 
 
-What is markdown-oo-php?
+What is md2wiki?
 ========================
 
-It's an object-oriented, PSR compatible PHP library capable of converting markdown text to XHTML.
+It's an object-oriented, PSR compatible PHP library capable of converting markdown text to MediaWiki fromat.
 
 
 Quick start
@@ -43,7 +43,5 @@ Requirements
 Contribution
 ==========
 
-  1.  [Fork me](https://github.com/garygolden/markdown-oo-php)
-  2.  [Mail me](mailto:max@garygolden.me)
-
-http://www.garygolden.me
+  1.  [Fork me](https://github.com/saganov/md2wiki)
+  2.  [Mail me](mailto:saganoff@gmail.com)
