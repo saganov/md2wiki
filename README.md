@@ -43,5 +43,5 @@ Requirements
 Contribution
 ==========
 
-  1.  [Fork me](https://github.com/saganov/md2wiki)
+  1.  [Fork me](https://github.com/saganov/md2wiki/fork)
   2.  [Mail me](mailto:saganoff@gmail.com)
