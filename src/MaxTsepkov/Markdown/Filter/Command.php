@@ -100,7 +100,7 @@ class Command extends Filter
             $md = file_get_contents($file);
             if((bool)$start_marker || (bool)$stop_marker)
             {
-                $regexp = '/'. $start_marker. '(.*)'. $stop_marker .'/Ams';
+                $regexp = '/'. $start_marker. '(.*)'. $stop_marker .'/Ums';
                 if(preg_match($regexp, $md, $matches))
                 {
                     $md = trim($matches[1]);
